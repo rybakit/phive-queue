@@ -1,0 +1,27 @@
+{
+    "name": "rybakit/phive-queue",
+    "description": "Lightweight priority queue",
+    "keywords": ["queue scheduler priority delayed"],
+    "homepage": "https://github.com/rybakit/phive-queue",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eugene Leonovich",
+            "email": "gen.work@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "suggest": {
+        "ext-pdo": "*",
+        "ext-mongodb": "*",
+        "ext-phpredis": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Phive": "src/"
+        }
+    }
+}
