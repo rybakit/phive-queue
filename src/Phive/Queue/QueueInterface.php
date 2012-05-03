@@ -6,7 +6,7 @@ interface QueueInterface
 {
     /**
      * @param mixed $item
-     * @param \DateTime|null $eta
+     * @param \DateTime|string|int|null $eta
      */
     function push($item, $eta = null);
 
