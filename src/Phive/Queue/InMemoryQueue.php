@@ -27,8 +27,8 @@ class InMemoryQueue extends AbstractQueue implements AdvancedQueueInterface
      */
     public function push($item, $eta = null)
     {
-        $eta = $eta ? $this->normalizeDate($eta) : new \DateTime();
-        $this->innerQueue->insert($item, array(-$eta->getTimestamp(), $this->queueOrder--));
+        $eta = $eta ? $this->normalizeEta($eta) : time();
+        $this->innerQueue->insert($item, array(-$eta, $this->queueOrder--));
     }
 
     /**

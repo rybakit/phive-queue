@@ -4,18 +4,18 @@ namespace Phive\Queue;
 
 abstract class AbstractQueue
 {
-    protected function normalizeDate($date)
+    protected function normalizeEta($eta)
     {
-        if (is_string($date)) {
-            $date = new \DateTime($date);
-        } else if (is_numeric($date)) {
-            $date = new \DateTime('@'.$date);
-        } else if (!$date instanceof \DateTime) {
-            throw new \InvalidArgumentException(
-                '$date must be a string, integer or \DateTime instance.'
-            );
+        if (is_string($eta)) {
+            $eta = new \DateTime($eta);
+        }
+        if ($eta instanceof \DateTime) {
+            return $eta->getTimestamp();
+        }
+        if (is_numeric($eta)) {
+            return $eta;
         }
 
-        return $date;
+        throw new \InvalidArgumentException('$eta must be a string, integer or \DateTime instance.');
     }
 }
