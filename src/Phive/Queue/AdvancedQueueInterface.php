@@ -15,7 +15,7 @@ interface AdvancedQueueInterface extends QueueInterface, \Countable
     function peek($limit = 1, $skip = 0);
 
     /**
-     * Removes all tasks from the queue.
+     * Removes all items from the queue.
      */
     function clear();
 }
