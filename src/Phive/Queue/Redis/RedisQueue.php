@@ -8,8 +8,6 @@ use Phive\PhpSerializer;
 
 class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
 {
-    const LOCK_TIMEOUT = 10;
-
     /**
      * @var \Redis
      */
@@ -28,7 +26,7 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
     public function __construct(\Redis $redis)
     {
         $this->redis = $redis;
-        $this->serializer = new PhpSerializer();
+        $this->serializer = $this->createSerializer();
     }
 
     /**
@@ -58,29 +56,40 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
     }
 
     /**
+     * TODO
+     * Implement zpop using lua scripting (available since redis 2.6):
+     *
+     * @link http://grokbase.com/t/gg/redis-db/123vpe6070/zpop-atomic
+     *
+     *     val = redis.call('zrange', KEYS[1], 0, 0)
+     *     if val then redis.call('zremrangebyrank', KEYS[1], 0, 0) end
+     *     return val
+     *
+     * For now it's not supported by phpredis (@link https://github.com/nicolasff/phpredis/issues/97)
+     *
      * @see QueueInterface::pop()
      */
     public function pop()
     {
         while (true) {
-            if ($this->tryLock()) {
-                $range = $this->redis->zRangeByScore('items', '-inf', time(), array('limit' => array(0, 1)));
-                if (empty($range)) {
-                    $this->releaseLock();
-                    return false;
-                }
+            $this->redis->watch('items');
+            $range = $this->redis->zRangeByScore('items', '-inf', time(), array('limit' => array(0, 1)));
 
-                $key = reset($range);
-                $this->redis->zRem('items', $key);
-                $this->releaseLock();
+            if (empty($range)) {
+                $this->redis->unwatch();
+                return false;
+            }
 
+            $key = reset($range);
+            $result = $this->redis->multi()
+                ->zRem('items', $key)
+                ->exec();
+
+            if (!empty($result[0])) {
                 $data = substr($key, strpos($key, '@') + 1);
 
                 return $this->serializer->unserialize($data);
             }
-
-            // the lock failed to be released by the client
-             $this->releaseLock();
         }
     }
 
@@ -125,19 +134,11 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
         $this->redis->del(array('items', 'sequence'));
     }
 
-    protected function tryLock()
+    /**
+     * @return \Phive\PhpSerializer
+     */
+    protected function createSerializer()
     {
-        $this->redis->watch('lock');
-        $result = $this->redis->blPop(array('lock'), static::LOCK_TIMEOUT);
-
-        return !empty($result);
-    }
-
-    protected function releaseLock()
-    {
-        $this->redis->multi()
-            ->del('lock')
-            ->lPush('lock', 1)
-            ->exec();
+        return new PhpSerializer();
     }
 }
