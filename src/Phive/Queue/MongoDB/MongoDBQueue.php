@@ -4,7 +4,7 @@ namespace Phive\Queue\MongoDB;
 
 use Phive\Queue\AdvancedQueueInterface;
 use Phive\Queue\AbstractQueue;
-use Phive\PhpSerializer;
+use Phive\CallbackIterator;
 
 class MongoDBQueue extends AbstractQueue implements AdvancedQueueInterface
 {
@@ -14,11 +14,6 @@ class MongoDBQueue extends AbstractQueue implements AdvancedQueueInterface
     protected $collection;
 
     /**
-     * @var \Phive\PhpSerializer
-     */
-    protected $serializer;
-
-    /**
      * Constructor.
      *
      * @param \MongoCollection $collection
@@ -26,7 +21,6 @@ class MongoDBQueue extends AbstractQueue implements AdvancedQueueInterface
     public function __construct(\MongoCollection $collection)
     {
         $this->collection = $collection;
-        $this->serializer = $this->createSerializer();
     }
 
     /**
@@ -48,7 +42,7 @@ class MongoDBQueue extends AbstractQueue implements AdvancedQueueInterface
 
         $data = array(
             'eta'  => $eta,
-            'item' => $this->serializer->serialize($item),
+            'item' => $item,
         );
 
         $result = $this->collection->insert($data, array('safe' => true));
@@ -77,7 +71,7 @@ class MongoDBQueue extends AbstractQueue implements AdvancedQueueInterface
 
         $data = $result['value'];
 
-        return $data ? $this->serializer->unserialize($data['item']) : false;
+        return $data ? $data['item'] : false;
     }
 
     /**
@@ -104,9 +98,8 @@ class MongoDBQueue extends AbstractQueue implements AdvancedQueueInterface
             $cursor->skip($skip);
         }
 
-        $serializer = $this->serializer;
-        return new IterableResult($cursor, function ($data) use ($serializer) {
-            return $serializer->unserialize($data['item']);
+        return new CallbackIterator($cursor, function ($data) {
+            return $data['item'];
         });
     }
 
@@ -124,13 +117,5 @@ class MongoDBQueue extends AbstractQueue implements AdvancedQueueInterface
     public function clear()
     {
         $this->collection->remove(array(), array('safe' => true));
-    }
-
-    /**
-     * @return \Phive\PhpSerializer
-     */
-    protected function createSerializer()
-    {
-        return new PhpSerializer();
     }
 }
