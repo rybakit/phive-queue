@@ -48,7 +48,7 @@ class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
         $sql = 'INSERT INTO '.$this->tableName.' (eta, item) VALUES (:eta, :item)';
 
         $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', $eta);
+        $stmt->bindValue(':eta', $eta, \PDO::PARAM_INT);
         $stmt->bindValue(':item', $item);
 
         if (!$stmt->execute()) {
@@ -65,7 +65,7 @@ class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
         $sql = 'SELECT item FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id LIMIT 1';
 
         $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', time());
+        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         if (!$stmt->execute()) {
             $err = $stmt->errorInfo();
@@ -98,7 +98,7 @@ class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
         }
 
         $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', time());
+        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         if (!$stmt->execute()) {
             $err = $stmt->errorInfo();

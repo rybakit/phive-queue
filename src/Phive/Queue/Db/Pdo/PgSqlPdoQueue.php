@@ -23,7 +23,7 @@ class PgSqlPdoQueue extends PdoQueue
         $sql = 'DELETE FROM '.$this->tableName.' WHERE id = ('.$sql.') RETURNING item';
 
         $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', time());
+        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         $this->conn->beginTransaction();
         $this->conn->exec('LOCK TABLE '.$this->tableName.' IN ACCESS EXCLUSIVE MODE');
