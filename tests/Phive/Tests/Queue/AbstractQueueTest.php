@@ -1,9 +1,27 @@
 <?php
 
-namespace Phive\Queue\Tests;
+namespace Phive\Tests\Queue;
 
 abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 {
+    /*
+    public function testIterator()
+    {
+        $queue = $this->createQueue();
+        $queue->push('1', '-1 day');
+        $queue->push('2', '-1 day');
+        $queue->push('3', '-1 day');
+
+        $items = $queue->peek(100);
+
+        foreach ($items as $item) {
+            echo PHP_EOL, json_encode($item);
+        }
+        echo PHP_EOL;
+        exit;
+    }
+    */
+
     public function testPushPop()
     {
         $item = $this->createUniqueItem();

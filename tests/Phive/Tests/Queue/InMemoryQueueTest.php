@@ -1,6 +1,6 @@
 <?php
 
-namespace Phive\Queue\Tests;
+namespace Phive\Tests\Queue;
 
 use Phive\Queue\InMemoryQueue;
 
