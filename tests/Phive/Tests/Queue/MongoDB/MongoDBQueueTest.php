@@ -1,8 +1,8 @@
 <?php
 
-namespace Phive\Queue\Tests\MongoDB;
+namespace Phive\Tests\Queue\MongoDB;
 
-use Phive\Queue\Tests\AbstractQueueTest;
+use Phive\Tests\Queue\AbstractQueueTest;
 use Phive\Queue\MongoDB\MongoDBQueue;
 
 class MongoDBQueueTest extends AbstractQueueTest

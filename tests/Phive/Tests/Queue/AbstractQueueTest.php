@@ -1,6 +1,6 @@
 <?php
 
-namespace Phive\Queue\Tests;
+namespace Phive\Tests\Queue;
 
 abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,7 +2,7 @@
 
 namespace Phive\Tests\Queue\Redis\PhpRedis;
 
-use Phive\Queue\Tests\AbstractQueueTest;
+use Phive\Tests\Queue\AbstractQueueTest;
 use Phive\Queue\Redis\RedisQueue;
 
 class RedisQueueTest extends AbstractQueueTest

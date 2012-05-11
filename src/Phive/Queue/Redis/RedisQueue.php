@@ -4,7 +4,7 @@ namespace Phive\Queue\Redis;
 
 use Phive\Queue\AdvancedQueueInterface;
 use Phive\Queue\AbstractQueue;
-use Phive\PhpSerializer;
+use Phive\CallbackIterator;
 
 class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
 {
@@ -14,11 +14,6 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
     protected $redis;
 
     /**
-     * @var \Phive\PhpSerializer
-     */
-    protected $serializer;
-
-    /**
      * Constructor.
      *
      * @param \Redis $redis
@@ -26,7 +21,6 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
     public function __construct(\Redis $redis)
     {
         $this->redis = $redis;
-        $this->serializer = $this->createSerializer();
     }
 
     /**
@@ -47,7 +41,7 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
         $eta = $eta ? $this->normalizeEta($eta) : time();
 
         $unique = $this->redis->incr('sequence');
-        $member = $unique.'@'.$this->serializer->serialize($item);
+        $member = $unique.'@'.$item;
 
         $result = $this->redis->zAdd('items', $eta, $member);
         if (!$result) {
@@ -86,9 +80,7 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
                 ->exec();
 
             if (!empty($result[0])) {
-                $data = substr($key, strpos($key, '@') + 1);
-
-                return $this->serializer->unserialize($data);
+                return substr($key, strpos($key, '@') + 1);
             }
         }
     }
@@ -111,10 +103,8 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
             return false;
         }
 
-        $serializer = $this->serializer;
-        return new IterableResult($range, function ($data) use ($serializer) {
-            $data = substr($data, strpos($data, '@') + 1);
-            return $serializer->unserialize($data);
+        return new CallbackIterator(new \ArrayIterator($range), function ($data) {
+            return substr($data, strpos($data, '@') + 1);
         });
     }
 
@@ -132,13 +122,5 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
     public function clear()
     {
         $this->redis->del(array('items', 'sequence'));
-    }
-
-    /**
-     * @return \Phive\PhpSerializer
-     */
-    protected function createSerializer()
-    {
-        return new PhpSerializer();
     }
 }
