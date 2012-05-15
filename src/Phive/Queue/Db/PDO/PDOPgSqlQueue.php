@@ -1,8 +1,8 @@
 <?php
 
-namespace Phive\Queue\Db\Pdo;
+namespace Phive\Queue\Db\PDO;
 
-class PgSqlPdoQueue extends PdoQueue
+class PDOPgSqlQueue extends PDOQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {
@@ -26,7 +26,7 @@ class PgSqlPdoQueue extends PdoQueue
         $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         $this->conn->beginTransaction();
-        $this->conn->exec('LOCK TABLE '.$this->tableName.' IN ACCESS EXCLUSIVE MODE');
+        $this->conn->exec('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
         try {
             if (!$stmt->execute()) {
                 $err = $stmt->errorInfo();

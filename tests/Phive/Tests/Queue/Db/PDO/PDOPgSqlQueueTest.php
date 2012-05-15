@@ -1,11 +1,11 @@
 <?php
 
-namespace Phive\Tests\Queue\Db\Pdo;
+namespace Phive\Tests\Queue\Db\PDO;
 
 use Phive\Tests\Queue\AbstractQueueTest;
-use Phive\Queue\Db\Pdo\PgSqlPdoQueue;
+use Phive\Queue\Db\PDO\PDOPgSqlQueue;
 
-class PgSqlPdoQueueTest extends AbstractQueueTest
+class PDOPgSqlQueueTest extends AbstractQueueTest
 {
     /**
      * @var \PDO
@@ -38,7 +38,7 @@ class PgSqlPdoQueueTest extends AbstractQueueTest
 
     protected function createQueue()
     {
-        return new PgSqlPdoQueue(self::$conn, 'phive_queue');
+        return new PDOPgSqlQueue(self::$conn, 'phive_queue');
     }
 
     protected static function createConnection()

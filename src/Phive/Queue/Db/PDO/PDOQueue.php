@@ -1,11 +1,11 @@
 <?php
 
-namespace Phive\Queue\Db\Pdo;
+namespace Phive\Queue\Db\PDO;
 
 use Phive\Queue\AdvancedQueueInterface;
 use Phive\Queue\AbstractQueue;
 
-class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
+class PDOQueue extends AbstractQueue implements AdvancedQueueInterface
 {
     /**
      * @var \PDO
