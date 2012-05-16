@@ -15,7 +15,7 @@ class PDOPgSqlQueue extends PDOQueue
 
     /**
      * @see QueueInterface::pop()
-     * @see http://stackoverflow.com/questions/6507475/job-queue-as-sql-table-with-multiple-consumers-postgresql
+     * @link http://stackoverflow.com/questions/6507475/job-queue-as-sql-table-with-multiple-consumers-postgresql
      */
     public function pop()
     {
