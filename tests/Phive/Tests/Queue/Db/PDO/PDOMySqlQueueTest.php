@@ -52,6 +52,6 @@ class PDOMySqlQueueTest extends AbstractQueueTest
         $username = isset($GLOBALS['db_my_username']) ? $GLOBALS['db_my_username'] : 'root';
         $password = isset($GLOBALS['db_my_password']) ? $GLOBALS['db_my_password'] : '';
 
-        return new \Pdo($dsn, $username, $password);
+        return new \PDO($dsn, $username, $password);
     }
 }

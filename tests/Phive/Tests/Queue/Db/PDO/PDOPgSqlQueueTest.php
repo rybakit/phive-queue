@@ -51,6 +51,6 @@ class PDOPgSqlQueueTest extends AbstractQueueTest
             isset($GLOBALS['db_pg_password']) ? $GLOBALS['db_pg_password'] : ''
         );
 
-        return new \Pdo($dsn);
+        return new \PDO($dsn);
     }
 }
