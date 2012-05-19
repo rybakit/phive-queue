@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Db\PDO;
 
-class PDOPgSqlQueue extends PDOQueue
+class PDOPgSqlQueue extends AbstractPDOQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {
