@@ -20,7 +20,7 @@ class RedisHandler extends AbstractHandler
     {
         self::$conn = new \Redis();
         self::$conn->connect('127.0.0.1', 6379);
-        self::$conn->setOption(\Redis::OPT_PREFIX, 'phive_queue_tests:');
+        self::$conn->setOption(\Redis::OPT_PREFIX, 'phive_tests:queue:');
     }
 
     protected function createQueue()

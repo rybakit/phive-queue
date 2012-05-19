@@ -24,7 +24,7 @@ class MongoDBHandler extends AbstractHandler
 
     protected function createQueue()
     {
-        $collection = self::$conn->selectCollection('phive_tests', 'phive_queue');
+        $collection = self::$conn->selectCollection('phive_tests', 'queue');
 
         return new MongoDBQueue($collection);
     }

@@ -8,13 +8,13 @@ class PDOMySqlHandler extends AbstractHandler
 
     public function prepare()
     {
-        self::$conn->exec('DROP TABLE IF EXISTS phive_queue');
-        self::$conn->exec('CREATE TABLE phive_queue(id SERIAL, eta integer NOT NULL, item text NOT NULL) ENGINE=InnoDB');
+        self::$conn->exec('DROP TABLE IF EXISTS queue');
+        self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL) ENGINE=InnoDB');
     }
 
     public function shutdown()
     {
-        self::$conn->exec('DROP TABLE IF EXISTS phive_queue');
+        self::$conn->exec('DROP TABLE IF EXISTS queue');
         self::$conn = null;
     }
 
@@ -25,6 +25,6 @@ class PDOMySqlHandler extends AbstractHandler
 
     protected function createQueue()
     {
-        return new PDOMySqlQueue(self::$conn, 'phive_queue');
+        return new PDOMySqlQueue(self::$conn, 'queue');
     }
 }

@@ -17,15 +17,15 @@ class PDOPgSqlQueueTest extends AbstractQueueTest
         parent::setUpBeforeClass();
 
         self::$conn = self::createConnection();
-        self::$conn->exec('DROP TABLE IF EXISTS phive_queue');
-        self::$conn->exec('CREATE TABLE phive_queue(id SERIAL, eta integer NOT NULL, item text NOT NULL)');
+        self::$conn->exec('DROP TABLE IF EXISTS queue');
+        self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL)');
     }
 
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
 
-        self::$conn->exec('DROP TABLE IF EXISTS phive_queue');
+        self::$conn->exec('DROP TABLE IF EXISTS queue');
         self::$conn = null;
     }
 
@@ -33,12 +33,12 @@ class PDOPgSqlQueueTest extends AbstractQueueTest
     {
         parent::setUp();
 
-        self::$conn->exec('TRUNCATE phive_queue RESTART IDENTITY');
+        self::$conn->exec('TRUNCATE queue RESTART IDENTITY');
     }
 
     protected function createQueue()
     {
-        return new PDOPgSqlQueue(self::$conn, 'phive_queue');
+        return new PDOPgSqlQueue(self::$conn, 'queue');
     }
 
     protected static function createConnection()
