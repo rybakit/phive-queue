@@ -1,11 +1,11 @@
 <?php
 
-namespace Phive\Tests\Queue\Db\Pdo;
+namespace Phive\Tests\Queue\Db\PDO;
 
 use Phive\Tests\Queue\AbstractQueueTest;
-use Phive\Queue\Db\Pdo\PgSqlPdoQueue;
+use Phive\Queue\Db\PDO\PDOPgSqlQueue;
 
-class PgSqlPdoQueueTest extends AbstractQueueTest
+class PDOPgSqlQueueTest extends AbstractQueueTest
 {
     /**
      * @var \PDO
@@ -17,15 +17,15 @@ class PgSqlPdoQueueTest extends AbstractQueueTest
         parent::setUpBeforeClass();
 
         self::$conn = self::createConnection();
-        self::$conn->exec('DROP TABLE IF EXISTS phive_queue');
-        self::$conn->exec('CREATE TABLE phive_queue(id SERIAL, eta integer NOT NULL, item text NOT NULL)');
+        self::$conn->exec('DROP TABLE IF EXISTS queue');
+        self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL)');
     }
 
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
 
-        self::$conn->exec('DROP TABLE IF EXISTS phive_queue');
+        self::$conn->exec('DROP TABLE IF EXISTS queue');
         self::$conn = null;
     }
 
@@ -33,12 +33,12 @@ class PgSqlPdoQueueTest extends AbstractQueueTest
     {
         parent::setUp();
 
-        self::$conn->exec('TRUNCATE phive_queue RESTART IDENTITY');
+        self::$conn->exec('TRUNCATE queue RESTART IDENTITY');
     }
 
     protected function createQueue()
     {
-        return new PgSqlPdoQueue(self::$conn, 'phive_queue');
+        return new PDOPgSqlQueue(self::$conn, 'queue');
     }
 
     protected static function createConnection()
@@ -51,6 +51,6 @@ class PgSqlPdoQueueTest extends AbstractQueueTest
             isset($GLOBALS['db_pg_password']) ? $GLOBALS['db_pg_password'] : ''
         );
 
-        return new \Pdo($dsn);
+        return new \PDO($dsn);
     }
 }

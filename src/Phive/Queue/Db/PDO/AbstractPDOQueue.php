@@ -1,11 +1,11 @@
 <?php
 
-namespace Phive\Queue\Db\Pdo;
+namespace Phive\Queue\Db\PDO;
 
 use Phive\Queue\AdvancedQueueInterface;
 use Phive\Queue\AbstractQueue;
 
-class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
+abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueInterface
 {
     /**
      * @var \PDO
@@ -47,32 +47,10 @@ class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
         $eta = $eta ? $this->normalizeEta($eta) : time();
         $sql = 'INSERT INTO '.$this->tableName.' (eta, item) VALUES (:eta, :item)';
 
-        $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', $eta, \PDO::PARAM_INT);
-        $stmt->bindValue(':item', $item);
-
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
-            throw new \RuntimeException($err[2]);
-        }
-    }
-
-    /**
-     * @see QueueInterface::pop()
-     */
-    public function pop()
-    {
-        $sql = 'SELECT item FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id LIMIT 1';
-
-        $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
-
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
-            throw new \RuntimeException($err[2]);
-        }
-
-        return $stmt->fetchColumn();
+        $this->execute($sql, array(
+            'eta'   => $eta,
+            'item'  => $item,
+        ));
     }
 
     /**
@@ -97,14 +75,7 @@ class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
             $sql .= ' OFFSET '.(int) $skip;
         }
 
-        $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
-
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
-            throw new \RuntimeException($err[2]);
-        }
-
+        $stmt = $this->execute($sql, array('eta' => time()));
         $stmt->setFetchMode(\PDO::FETCH_COLUMN, 0);
 
         return new \IteratorIterator($stmt);
@@ -117,12 +88,7 @@ class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
     public function count()
     {
         $sql = 'SELECT COUNT(*) FROM '.$this->tableName;
-        $stmt = $this->prepareStatement($sql);
-
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
-            throw new \RuntimeException($err[2]);
-        }
+        $stmt = $this->execute($sql);
 
         return $stmt->fetchColumn();
     }
@@ -133,19 +99,14 @@ class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
     public function clear()
     {
         $sql = 'TRUNCATE TABLE '.$this->tableName;
-        $stmt = $this->prepareStatement($sql);
+        $stmt = $this->execute($sql);
 
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
-            throw new \RuntimeException($err[2]);
-        }
+        //return $stmt->rowCount();
     }
 
     /**
      * @param string $sql
-     *
      * @return \PDOStatement
-     *
      * @throws \RuntimeException
      */
     protected function prepareStatement($sql)
@@ -158,6 +119,29 @@ class PdoQueue extends AbstractQueue implements AdvancedQueueInterface
 
         if (false === $stmt) {
             throw new \RuntimeException('The database cannot successfully prepare the statement.');
+        }
+
+        return $stmt;
+    }
+
+    /**
+     * @param string $sql
+     * @param array $parameters
+     * @return \PDOStatement
+     * @throws \RuntimeException
+     */
+    protected function execute($sql, array $parameters = array())
+    {
+        $stmt = $this->prepareStatement($sql);
+
+        foreach ($parameters as $key => $value) {
+            $type = is_numeric($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
+            $stmt->bindValue(':'.$key, $value, $type);
+        }
+
+        if (!$stmt->execute()) {
+            $err = $stmt->errorInfo();
+            throw new \RuntimeException($err[2]);
         }
 
         return $stmt;

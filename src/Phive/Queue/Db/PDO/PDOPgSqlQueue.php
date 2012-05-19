@@ -1,8 +1,8 @@
 <?php
 
-namespace Phive\Queue\Db\Pdo;
+namespace Phive\Queue\Db\PDO;
 
-class PgSqlPdoQueue extends PdoQueue
+class PDOPgSqlQueue extends AbstractPDOQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {
@@ -15,7 +15,7 @@ class PgSqlPdoQueue extends PdoQueue
 
     /**
      * @see QueueInterface::pop()
-     * @see http://stackoverflow.com/questions/6507475/job-queue-as-sql-table-with-multiple-consumers-postgresql
+     * @link http://stackoverflow.com/questions/6507475/job-queue-as-sql-table-with-multiple-consumers-postgresql
      */
     public function pop()
     {
@@ -26,7 +26,7 @@ class PgSqlPdoQueue extends PdoQueue
         $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         $this->conn->beginTransaction();
-        $this->conn->exec('LOCK TABLE '.$this->tableName.' IN ACCESS EXCLUSIVE MODE');
+        $this->conn->exec('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
         try {
             if (!$stmt->execute()) {
                 $err = $stmt->errorInfo();

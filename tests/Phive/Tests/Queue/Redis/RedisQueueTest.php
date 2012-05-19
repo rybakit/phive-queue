@@ -42,7 +42,7 @@ class RedisQueueTest extends AbstractQueueTest
 
         $redis = new \Redis();
         $redis->connect($host, $port);
-        $redis->setOption(\Redis::OPT_PREFIX, 'phive_queue_tests:');
+        $redis->setOption(\Redis::OPT_PREFIX, 'phive_tests:queue:');
 
         return $redis;
     }
