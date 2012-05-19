@@ -58,10 +58,10 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 
         try {
             $items = $queue->peek(0);
-            $this->fail('peek() throws an \OutOfRangeException if limit less then or equal 0');
+            $this->fail('peek() throws an \OutOfRangeException if limit <= 0 and != -1');
         } catch (\Exception $e) {
-            $this->assertInstanceOf('OutOfRangeException', $e, 'peek() throws an \OutOfRangeException if limit less then or equal 0');
-            $this->assertEquals('Parameter limit must be greater than 0.', $e->getMessage());
+            $this->assertInstanceOf('OutOfRangeException', $e, 'peek() throws an \OutOfRangeException if limit <=0 and != -1');
+            $this->assertEquals('Parameter limit must either be -1 or a value greater than 0.', $e->getMessage());
         }
     }
 

@@ -54,13 +54,7 @@ class InMemoryQueue extends AbstractQueue implements AdvancedQueueInterface
      */
     public function peek($limit = 1, $skip = 0)
     {
-        if ($limit <= 0) {
-            // Parameter limit must either be -1 or a value greater than or equal 0
-            throw new \OutOfRangeException('Parameter limit must be greater than 0.');
-        }
-        if ($skip < 0) {
-            throw new \OutOfRangeException('Parameter skip must be greater than or equal 0.');
-        }
+        $this->assertLimit($limit, $skip);
 
         return new \LimitIterator(clone $this->innerQueue, $skip, $limit);
     }
