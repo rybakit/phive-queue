@@ -33,7 +33,7 @@ class PDOMySqlQueueTest extends AbstractQueueTest
     {
         parent::setUp();
 
-        self::$conn->exec('TRUNCATE queue');
+        self::$conn->exec('TRUNCATE TABLE queue');
     }
 
     protected function createQueue()

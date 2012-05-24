@@ -33,7 +33,7 @@ class PDOPgSqlQueueTest extends AbstractQueueTest
     {
         parent::setUp();
 
-        self::$conn->exec('TRUNCATE queue RESTART IDENTITY');
+        self::$conn->exec('TRUNCATE TABLE queue RESTART IDENTITY');
     }
 
     protected function createQueue()
