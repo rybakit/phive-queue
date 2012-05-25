@@ -14,6 +14,10 @@ class PDOPgSqlQueueTest extends AbstractQueueTest
 
     public static function setUpBeforeClass()
     {
+        if (!class_exists('PDO') || !in_array('pgsql', \PDO::getAvailableDrivers())) {
+            return;
+        }
+
         parent::setUpBeforeClass();
 
         self::$conn = self::createConnection();
@@ -25,12 +29,18 @@ class PDOPgSqlQueueTest extends AbstractQueueTest
     {
         parent::tearDownAfterClass();
 
-        self::$conn->exec('DROP TABLE IF EXISTS queue');
-        self::$conn = null;
+        if (self::$conn) {
+            self::$conn->exec('DROP TABLE IF EXISTS queue');
+            self::$conn = null;
+        }
     }
 
     public function setUp()
     {
+        if (!self::$conn) {
+            $this->markTestSkipped('PDOPgSqlQueue requires pgsql PDO driver support in your environment.');
+        }
+
         parent::setUp();
 
         self::$conn->exec('TRUNCATE TABLE queue RESTART IDENTITY');

@@ -45,7 +45,7 @@ class MongoDBQueueTest extends AbstractQueueTest
     public function setUp()
     {
         if (!self::$collection) {
-            $this->markTestSkipped('MongoDBQueue requires the php "mongo" extension');
+            $this->markTestSkipped('MongoDBQueue requires the php "mongo" extension.');
         }
 
         parent::setUp();
