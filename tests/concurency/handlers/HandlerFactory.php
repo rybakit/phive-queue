@@ -7,7 +7,7 @@ class HandlerFactory
         'redis'         => 'RedisHandler',
         'pdo_pgsql'     => 'PgSqlPDOHandler',
         'pdo_mysql'     => 'MySqlPDOHandler',
-        'pdo_sqlite'    => 'MySqlPDOHandler',
+        'pdo_sqlite'    => 'SQLitePDOHandler',
     );
 
     public static function create($alias, $namespace = null, $size = null)
