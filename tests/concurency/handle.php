@@ -8,12 +8,12 @@ spl_autoload_register(function($class) {
 
     if (file_exists($file)) {
         require_once $file;
+
         return true;
     }
 
     return false;
 });
-
 
 $alias = empty($argv[1]) ? null : $argv[1];
 $action = empty($argv[2]) ? null : $argv[2];
