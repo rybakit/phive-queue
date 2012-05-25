@@ -4,7 +4,6 @@ namespace Phive\Queue;
 
 use Phive\CallbackIterator;
 use Phive\Serializer\SerializerInterface;
-use Phive\Serializer\PhpSerializer;
 
 class SerializerAwareAdvancedQueue extends SerializerAwareQueue implements AdvancedQueueInterface
 {

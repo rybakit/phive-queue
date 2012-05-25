@@ -71,6 +71,7 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
 
             if (empty($range)) {
                 $this->redis->unwatch();
+
                 return false;
             }
 

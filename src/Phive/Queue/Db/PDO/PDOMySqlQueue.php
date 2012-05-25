@@ -3,7 +3,6 @@
 namespace Phive\Queue\Db\PDO;
 
 use Phive\Queue\AdvancedQueueInterface;
-use Phive\Queue\AbstractQueue;
 
 class PDOMySqlQueue extends AbstractPDOQueue implements AdvancedQueueInterface
 {

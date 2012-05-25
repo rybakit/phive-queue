@@ -19,7 +19,7 @@ class CallbackIterator implements \OuterIterator
     /**
      * Constructor.
      *
-     * @param \Iterator $iterator
+     * @param \Iterator             $iterator
      * @param \Closure|string|array $callback
      *
      * @throws \InvalidArgumentException

@@ -5,7 +5,7 @@ namespace Phive\Queue;
 interface QueueInterface
 {
     /**
-     * @param mixed $item
+     * @param mixed                     $item
      * @param \DateTime|string|int|null $eta
      */
     function push($item, $eta = null);

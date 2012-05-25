@@ -20,7 +20,7 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
     /**
      * Constructor.
      *
-     * @param \PDO $conn
+     * @param \PDO   $conn
      * @param string $tableName
      */
     public function __construct(\PDO $conn, $tableName)
@@ -100,7 +100,9 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
 
     /**
      * @param string $sql
+     *
      * @return \PDOStatement
+     *
      * @throws \RuntimeException
      */
     protected function prepareStatement($sql)
@@ -120,8 +122,10 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
 
     /**
      * @param string $sql
-     * @param array $parameters
+     * @param array  $parameters
+     *
      * @return \PDOStatement
+     *
      * @throws \RuntimeException
      */
     protected function execute($sql, array $parameters = array())
