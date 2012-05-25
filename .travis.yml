@@ -7,5 +7,3 @@ php:
 before_script:
   - mysql -e 'create database phive_tests;'
   - psql -c 'create database phive_tests;' -U postgres
-
-script: phpunit -v
