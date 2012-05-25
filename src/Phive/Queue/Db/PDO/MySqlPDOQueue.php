@@ -4,7 +4,7 @@ namespace Phive\Queue\Db\PDO;
 
 use Phive\Queue\AdvancedQueueInterface;
 
-class PDOMySqlQueue extends AbstractPDOQueue implements AdvancedQueueInterface
+class MySqlPDOQueue extends AbstractPDOQueue implements AdvancedQueueInterface
 {
     public function __construct(\PDO $conn, $tableName)
     {

@@ -1,9 +1,12 @@
 <?php
 
-use Phive\Queue\Db\PDO\PDOPgSqlQueue;
+use Phive\Queue\Db\PDO\PgSqlPDOQueue;
 
-class PDOPgSqlHandler extends AbstractHandler
+class PgSqlPDOHandler extends AbstractHandler
 {
+    /**
+     * @var \PDO
+     */
     protected static $conn;
 
     public function prepare()
@@ -25,6 +28,6 @@ class PDOPgSqlHandler extends AbstractHandler
 
     protected function createQueue()
     {
-        return new PDOPgSqlQueue(self::$conn, 'queue');
+        return new PgSqlPDOQueue(self::$conn, 'queue');
     }
 }

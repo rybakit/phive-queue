@@ -3,7 +3,7 @@
 namespace Phive\Tests\Queue\Db\PDO;
 
 use Phive\Tests\Queue\AbstractQueueTest;
-use Phive\Queue\Db\PDO\PDOPgSqlQueue;
+use Phive\Queue\Db\PDO\PgSqlPDOQueue;
 
 class PDOPgSqlQueueTest extends AbstractQueueTest
 {
@@ -38,7 +38,7 @@ class PDOPgSqlQueueTest extends AbstractQueueTest
     public function setUp()
     {
         if (!self::$conn) {
-            $this->markTestSkipped('PDOPgSqlQueue requires pgsql PDO driver support in your environment.');
+            $this->markTestSkipped('PgSqlPDOQueue requires pgsql PDO driver support in your environment.');
         }
 
         parent::setUp();
@@ -48,7 +48,7 @@ class PDOPgSqlQueueTest extends AbstractQueueTest
 
     protected function createQueue()
     {
-        return new PDOPgSqlQueue(self::$conn, 'queue');
+        return new PgSqlPDOQueue(self::$conn, 'queue');
     }
 
     protected static function createConnection()

@@ -1,9 +1,12 @@
 <?php
 
-use Phive\Queue\Db\PDO\PDOMySqlQueue;
+use Phive\Queue\Db\PDO\MySqlPDOQueue;
 
-class PDOMySqlHandler extends AbstractHandler
+class MySqlPDOHandler extends AbstractHandler
 {
+    /**
+     * @var \PDO
+     */
     protected static $conn;
 
     public function prepare()
@@ -25,6 +28,6 @@ class PDOMySqlHandler extends AbstractHandler
 
     protected function createQueue()
     {
-        return new PDOMySqlQueue(self::$conn, 'queue');
+        return new MySqlPDOQueue(self::$conn, 'queue');
     }
 }

@@ -3,9 +3,9 @@
 namespace Phive\Tests\Queue\Db\PDO;
 
 use Phive\Tests\Queue\AbstractQueueTest;
-use Phive\Queue\Db\PDO\PDOMySqlQueue;
+use Phive\Queue\Db\PDO\MySqlPDOQueue;
 
-class PDOMySqlQueueTest extends AbstractQueueTest
+class MySqlPDOQueueTest extends AbstractQueueTest
 {
     /**
      * @var \PDO
@@ -38,7 +38,7 @@ class PDOMySqlQueueTest extends AbstractQueueTest
     public function setUp()
     {
         if (!self::$conn) {
-            $this->markTestSkipped('PDOMySqlQueue requires mysql PDO driver support in your environment.');
+            $this->markTestSkipped('MySqlPDOQueue requires mysql PDO driver support in your environment.');
         }
 
         parent::setUp();
@@ -48,7 +48,7 @@ class PDOMySqlQueueTest extends AbstractQueueTest
 
     protected function createQueue()
     {
-        return new PDOMySqlQueue(self::$conn, 'queue');
+        return new MySqlPDOQueue(self::$conn, 'queue');
     }
 
     protected static function createConnection()

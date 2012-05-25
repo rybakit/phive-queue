@@ -3,8 +3,8 @@
 class HandlerFactory
 {
     protected static $classMap = array(
-        'pdo_pgsql' => 'PDOPgSqlHandler',
-        'pdo_mysql' => 'PDOMySqlHandler',
+        'pdo_pgsql' => 'PgSqlPDOHandler',
+        'pdo_mysql' => 'MySqlPDOHandler',
         'mongo'     => 'MongoDBHandler',
         'redis'     => 'RedisHandler',
     );
