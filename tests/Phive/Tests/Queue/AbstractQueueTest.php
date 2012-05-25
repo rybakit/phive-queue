@@ -78,6 +78,23 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testPeekWithoutLimitAndSkip()
+    {
+        $count = 5;
+        $queue = $this->createQueue();
+        
+        for ($i = 0; $i < $count; $i++) {
+            $queue->push($i);
+        }
+
+        $i = 0;
+        foreach ($queue->peek(-1, 0) as $item) {
+            $i++;
+        }
+
+        $this->assertEquals($count, $i);
+    }
+
     public function testCountAndClear()
     {
         $queue = $this->createQueue();
