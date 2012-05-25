@@ -3,10 +3,11 @@
 class HandlerFactory
 {
     protected static $classMap = array(
-        'pdo_pgsql' => 'PgSqlPDOHandler',
-        'pdo_mysql' => 'MySqlPDOHandler',
-        'mongo'     => 'MongoDBHandler',
-        'redis'     => 'RedisHandler',
+        'mongo'         => 'MongoDBHandler',
+        'redis'         => 'RedisHandler',
+        'pdo_pgsql'     => 'PgSqlPDOHandler',
+        'pdo_mysql'     => 'MySqlPDOHandler',
+        'pdo_sqlite'    => 'MySqlPDOHandler',
     );
 
     public static function create($alias, $namespace = null, $size = null)

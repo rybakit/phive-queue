@@ -26,12 +26,11 @@ class PgSqlPDOQueue extends AbstractPDOQueue
         $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         $this->conn->beginTransaction();
-        $this->conn->exec('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
+
         try {
-            if (!$stmt->execute()) {
-                $err = $stmt->errorInfo();
-                throw new \RuntimeException($err[2]);
-            }
+            $this->execute('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
+            $this->executeStatement($stmt);
+
             $this->conn->commit();
         } catch (\Exception $e) {
             $this->conn->rollBack();

@@ -47,10 +47,11 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
         $eta = $eta ? $this->normalizeEta($eta) : time();
         $sql = 'INSERT INTO '.$this->tableName.' (eta, item) VALUES (:eta, :item)';
 
-        $this->execute($sql, array(
-            'eta'   => $eta,
-            'item'  => $item,
-        ));
+        $stmt = $this->prepareStatement($sql);
+        $stmt->bindValue(':eta', $eta, \PDO::PARAM_INT);
+        $stmt->bindValue(':item', $item);
+
+        $this->executeStatement($stmt);
     }
 
     /**
@@ -65,11 +66,15 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
         if ($limit > 0) {
             $sql .= ' LIMIT '.(int) $limit;
         }
-        if ($skip) {
+        if ($skip > 0) {
             $sql .= ' OFFSET '.(int) $skip;
         }
 
-        $stmt = $this->execute($sql, array('eta' => time()));
+        $stmt = $this->prepareStatement($sql);
+        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
+
+        $this->executeStatement($stmt);
+
         $stmt->setFetchMode(\PDO::FETCH_COLUMN, 0);
 
         return new \IteratorIterator($stmt);
@@ -82,7 +87,7 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
     public function count()
     {
         $sql = 'SELECT COUNT(*) FROM '.$this->tableName;
-        $stmt = $this->execute($sql);
+        $stmt = $this->query($sql);
 
         return $stmt->fetchColumn();
     }
@@ -93,9 +98,8 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
     public function clear()
     {
         $sql = 'TRUNCATE TABLE '.$this->tableName;
-        $stmt = $this->execute($sql);
 
-        //return $stmt->rowCount();
+        return $this->execute($sql);
     }
 
     /**
@@ -121,27 +125,49 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
     }
 
     /**
+     * @param \PDOStatement $stmt
+     *
+     * @throws \RuntimeException
+     */
+    protected function executeStatement(\PDOStatement $stmt)
+    {
+        if (!$stmt->execute()) {
+            $err = $stmt->errorInfo();
+            throw new \RuntimeException($err[2]);
+        }
+    }
+
+    /**
      * @param string $sql
-     * @param array  $parameters
+     *
+     * @return int
+     *
+     * @throws \RuntimeException
+     */
+    protected function execute($sql)
+    {
+        if (false === $result = $this->conn->exec($sql)) {
+            $err = $this->conn->errorInfo();
+            throw new \RuntimeException($err[2]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $sql
      *
      * @return \PDOStatement
      *
      * @throws \RuntimeException
      */
-    protected function execute($sql, array $parameters = array())
+    protected function query($sql)
     {
-        $stmt = $this->prepareStatement($sql);
-
-        foreach ($parameters as $key => $value) {
-            $type = is_numeric($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
-            $stmt->bindValue(':'.$key, $value, $type);
-        }
-
-        if (!$stmt->execute()) {
-            $err = $stmt->errorInfo();
+        if (false === $result = $this->conn->query($sql)) {
+            $err = $this->conn->errorInfo();
             throw new \RuntimeException($err[2]);
         }
 
-        return $stmt;
+        return $result;
     }
 }

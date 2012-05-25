@@ -2,13 +2,11 @@
 
 namespace Phive\Queue\Db\PDO;
 
-use Phive\Queue\AdvancedQueueInterface;
-
-class MySqlPDOQueue extends AbstractPDOQueue
+class SQLitePDOQueue extends AbstractPDOQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {
-        if ('mysql' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
+        if ('sqlite' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
             throw new \InvalidArgumentException('Invalid PDO driver specified.');
         }
 
@@ -20,13 +18,12 @@ class MySqlPDOQueue extends AbstractPDOQueue
      */
     public function pop()
     {
-        $sql = 'SELECT id, item FROM '.$this->tableName
-            .' WHERE eta <= :eta ORDER BY eta, id LIMIT 1 FOR UPDATE';
+        $sql = 'SELECT id, item FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id LIMIT 1';
 
         $stmt = $this->prepareStatement($sql);
         $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
-        $this->conn->beginTransaction();
+        $this->execute('BEGIN IMMEDIATE');
 
         try {
             $this->executeStatement($stmt);
@@ -42,12 +39,22 @@ class MySqlPDOQueue extends AbstractPDOQueue
                 $this->executeStatement($stmt);
             }
 
-            $this->conn->commit();
+            $this->execute('COMMIT');
         } catch (\Exception $e) {
-            $this->conn->rollBack();
+            $this->execute('ROLLBACK');
             throw $e;
         }
 
         return $row ? $row['item'] : false;
+    }
+
+    /**
+     * @see QueueInterface::clear()
+     */
+    public function clear()
+    {
+        $sql = 'DELETE FROM '.$this->tableName;
+
+        return $this->execute($sql);
     }
 }
