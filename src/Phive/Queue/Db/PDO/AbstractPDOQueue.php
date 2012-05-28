@@ -18,6 +18,11 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
     protected $tableName;
 
     /**
+     * @var \PDOStatement
+     */
+    protected $insertStatement;
+
+    /**
      * Constructor.
      *
      * @param \PDO   $conn
@@ -45,13 +50,16 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
     public function push($item, $eta = null)
     {
         $eta = $eta ? $this->normalizeEta($eta) : time();
-        $sql = 'INSERT INTO '.$this->tableName.' (eta, item) VALUES (:eta, :item)';
 
-        $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', $eta, \PDO::PARAM_INT);
-        $stmt->bindValue(':item', $item);
+        if (!$this->insertStatement) {
+            $sql = 'INSERT INTO '.$this->tableName.' (eta, item) VALUES (:eta, :item)';
+            $this->insertStatement = $this->prepareStatement($sql);
+        }
 
-        $this->executeStatement($stmt);
+        $this->insertStatement->bindValue(':eta', $eta, \PDO::PARAM_INT);
+        $this->insertStatement->bindValue(':item', $item);
+
+        $this->executeStatement($this->insertStatement);
     }
 
     /**
@@ -61,7 +69,8 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
     {
         $this->assertLimit($limit, $skip);
 
-        $sql = 'SELECT item FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id';
+        $eta = time();
+        $sql = "SELECT item FROM $this->tableName WHERE eta <= $eta ORDER BY eta, id";
 
         if ($limit > 0) {
             $sql .= ' LIMIT '.(int) $limit;
@@ -70,11 +79,7 @@ abstract class AbstractPDOQueue extends AbstractQueue implements AdvancedQueueIn
             $sql .= ' OFFSET '.(int) $skip;
         }
 
-        $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
-
-        $this->executeStatement($stmt);
-
+        $stmt = $this->query($sql);
         $stmt->setFetchMode(\PDO::FETCH_COLUMN, 0);
 
         return new \IteratorIterator($stmt);

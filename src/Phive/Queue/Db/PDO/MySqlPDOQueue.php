@@ -6,6 +6,16 @@ use Phive\Queue\AdvancedQueueInterface;
 
 class MySqlPDOQueue extends AbstractPDOQueue
 {
+    /**
+     * @var \PDOStatement
+     */
+    protected $popSelectStatement;
+
+    /**
+     * @var \PDOStatement
+     */
+    protected $popDeleteStatement;
+
     public function __construct(\PDO $conn, $tableName)
     {
         if ('mysql' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
@@ -20,26 +30,30 @@ class MySqlPDOQueue extends AbstractPDOQueue
      */
     public function pop()
     {
-        $sql = 'SELECT id, item FROM '.$this->tableName
-            .' WHERE eta <= :eta ORDER BY eta, id LIMIT 1 FOR UPDATE';
+        if (!$this->popSelectStatement) {
+            $sql = 'SELECT id, item FROM '.$this->tableName
+                .' WHERE eta <= :eta ORDER BY eta, id LIMIT 1 FOR UPDATE';
 
-        $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
+            $this->popSelectStatement = $this->prepareStatement($sql);
+        }
+
+        $this->popSelectStatement->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         $this->conn->beginTransaction();
 
         try {
-            $this->executeStatement($stmt);
+            $this->executeStatement($this->popSelectStatement);
 
-            if ($row = $stmt->fetch()) {
-                $stmt->closeCursor();
+            if ($row = $this->popSelectStatement->fetch()) {
+                $this->popSelectStatement->closeCursor();
 
-                $sql = 'DELETE FROM '.$this->tableName.' WHERE id = :id';
+                if (!$this->popDeleteStatement) {
+                    $sql = 'DELETE FROM '.$this->tableName.' WHERE id = :id';
+                    $this->popDeleteStatement = $this->prepareStatement($sql);
+                }
+                $this->popDeleteStatement->bindValue(':id', $row['id'], \PDO::PARAM_INT);
 
-                $stmt = $this->prepareStatement($sql);
-                $stmt->bindValue(':id', $row['id'], \PDO::PARAM_INT);
-
-                $this->executeStatement($stmt);
+                $this->executeStatement($this->popDeleteStatement);
             }
 
             $this->conn->commit();
