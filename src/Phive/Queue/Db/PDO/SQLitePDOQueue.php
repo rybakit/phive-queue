@@ -4,6 +4,16 @@ namespace Phive\Queue\Db\PDO;
 
 class SQLitePDOQueue extends AbstractPDOQueue
 {
+    /**
+     * @var \PDOStatement
+     */
+    protected $popSelectStatement;
+
+    /**
+     * @var \PDOStatement
+     */
+    protected $popDeleteStatement;
+
     public function __construct(\PDO $conn, $tableName)
     {
         if ('sqlite' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
@@ -18,25 +28,28 @@ class SQLitePDOQueue extends AbstractPDOQueue
      */
     public function pop()
     {
-        $sql = 'SELECT id, item FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id LIMIT 1';
+        if (!$this->popSelectStatement) {
+            $sql = 'SELECT id, item FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id LIMIT 1';
+            $this->popSelectStatement = $this->prepareStatement($sql);
+        }
 
-        $stmt = $this->prepareStatement($sql);
-        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
+        $this->popSelectStatement->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         $this->execute('BEGIN IMMEDIATE');
 
         try {
-            $this->executeStatement($stmt);
+            $this->executeStatement($this->popSelectStatement);
 
-            if ($row = $stmt->fetch()) {
-                $stmt->closeCursor();
+            if ($row = $this->popSelectStatement->fetch()) {
+                $this->popSelectStatement->closeCursor();
 
-                $sql = 'DELETE FROM '.$this->tableName.' WHERE id = :id';
+                if (!$this->popDeleteStatement) {
+                    $sql = 'DELETE FROM '.$this->tableName.' WHERE id = :id';
+                    $this->popDeleteStatement = $this->prepareStatement($sql);
+                }
 
-                $stmt = $this->prepareStatement($sql);
-                $stmt->bindValue(':id', $row['id'], \PDO::PARAM_INT);
-
-                $this->executeStatement($stmt);
+                $this->popDeleteStatement->bindValue(':id', $row['id'], \PDO::PARAM_INT);
+                $this->executeStatement($this->popDeleteStatement);
             }
 
             $this->execute('COMMIT');

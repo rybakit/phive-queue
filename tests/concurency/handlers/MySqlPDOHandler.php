@@ -24,6 +24,7 @@ class MySqlPDOHandler extends AbstractHandler
     protected function setup()
     {
         self::$conn = new \PDO('mysql:dbname=phive_tests', 'root');
+        //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
     }
 
     protected function createQueue()

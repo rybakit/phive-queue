@@ -24,6 +24,7 @@ class PgSqlPDOHandler extends AbstractHandler
     protected function setup()
     {
         self::$conn = new \PDO('pgsql:dbname=phive_tests', 'postgres');
+        //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
     }
 
     protected function createQueue()

@@ -21,6 +21,8 @@ class PDOPgSqlQueueTest extends AbstractQueueTest
         parent::setUpBeforeClass();
 
         self::$conn = self::createConnection();
+        //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+
         self::$conn->exec('DROP TABLE IF EXISTS queue');
         self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL)');
     }

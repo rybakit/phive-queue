@@ -51,8 +51,8 @@ class MySqlPDOQueue extends AbstractPDOQueue
                     $sql = 'DELETE FROM '.$this->tableName.' WHERE id = :id';
                     $this->popDeleteStatement = $this->prepareStatement($sql);
                 }
-                $this->popDeleteStatement->bindValue(':id', $row['id'], \PDO::PARAM_INT);
 
+                $this->popDeleteStatement->bindValue(':id', $row['id'], \PDO::PARAM_INT);
                 $this->executeStatement($this->popDeleteStatement);
             }
 

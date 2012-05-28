@@ -21,6 +21,8 @@ class SQLitePDOQueueTest extends AbstractQueueTest
         parent::setUpBeforeClass();
 
         self::$conn = self::createConnection();
+        //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+
         self::$conn->exec('DROP TABLE IF EXISTS queue');
         self::$conn->exec('CREATE TABLE queue(id INTEGER PRIMARY KEY AUTOINCREMENT, eta integer NOT NULL, item blob NOT NULL)');
     }
