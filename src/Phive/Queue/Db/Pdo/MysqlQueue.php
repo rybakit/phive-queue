@@ -1,10 +1,8 @@
 <?php
 
-namespace Phive\Queue\Db\PDO;
+namespace Phive\Queue\Db\Pdo;
 
-use Phive\Queue\AdvancedQueueInterface;
-
-class MySqlPDOQueue extends AbstractPDOQueue
+class MysqlQueue extends AbstractQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {
@@ -23,23 +21,22 @@ class MySqlPDOQueue extends AbstractPDOQueue
         $sql = 'SELECT id, item FROM '.$this->tableName
             .' WHERE eta <= :eta ORDER BY eta, id LIMIT 1 FOR UPDATE';
 
-        $stmt = $this->prepareStatement($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         $this->conn->beginTransaction();
 
         try {
-            $this->executeStatement($stmt);
+            $stmt->execute();
+            $row = $stmt->fetch();
+            $stmt->closeCursor();
 
-            if ($row = $stmt->fetch()) {
-                $stmt->closeCursor();
-
+            if ($row) {
                 $sql = 'DELETE FROM '.$this->tableName.' WHERE id = :id';
 
-                $stmt = $this->prepareStatement($sql);
+                $stmt = $this->conn->prepare($sql);
                 $stmt->bindValue(':id', $row['id'], \PDO::PARAM_INT);
-
-                $this->executeStatement($stmt);
+                $stmt->execute();
             }
 
             $this->conn->commit();

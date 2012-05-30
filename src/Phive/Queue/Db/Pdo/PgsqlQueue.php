@@ -1,8 +1,8 @@
 <?php
 
-namespace Phive\Queue\Db\PDO;
+namespace Phive\Queue\Db\Pdo;
 
-class PgSqlPDOQueue extends AbstractPDOQueue
+class PgsqlQueue extends AbstractQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {
@@ -22,21 +22,23 @@ class PgSqlPDOQueue extends AbstractPDOQueue
         $sql = 'SELECT id FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id LIMIT 1';
         $sql = 'DELETE FROM '.$this->tableName.' WHERE id = ('.$sql.') RETURNING item';
 
-        $stmt = $this->prepareStatement($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         $this->conn->beginTransaction();
 
         try {
-            $this->execute('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
-            $this->executeStatement($stmt);
-
+            $this->conn->execute('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
+            $stmt->execute();
             $this->conn->commit();
         } catch (\Exception $e) {
             $this->conn->rollBack();
             throw $e;
         }
 
-        return $stmt->fetchColumn();
+        $result = $stmt->fetchColumn();
+        $stmt->closeCursor();
+
+        return $result;
     }
 }

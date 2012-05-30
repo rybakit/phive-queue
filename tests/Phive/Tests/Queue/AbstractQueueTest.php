@@ -82,7 +82,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     {
         $count = 5;
         $queue = $this->createQueue();
-        
+
         for ($i = 0; $i < $count; $i++) {
             $queue->push($i);
         }

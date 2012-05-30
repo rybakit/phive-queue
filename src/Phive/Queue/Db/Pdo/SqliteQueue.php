@@ -1,8 +1,8 @@
 <?php
 
-namespace Phive\Queue\Db\PDO;
+namespace Phive\Queue\Db\Pdo;
 
-class SQLitePDOQueue extends AbstractPDOQueue
+class SqliteQueue extends AbstractQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {
@@ -20,28 +20,27 @@ class SQLitePDOQueue extends AbstractPDOQueue
     {
         $sql = 'SELECT id, item FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id LIMIT 1';
 
-        $stmt = $this->prepareStatement($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
-        $this->execute('BEGIN IMMEDIATE');
+        $this->conn->execute('BEGIN IMMEDIATE');
 
         try {
-            $this->executeStatement($stmt);
+            $stmt->execute();
+            $row = $stmt->fetch();
+            $stmt->closeCursor();
 
-            if ($row = $stmt->fetch()) {
-                $stmt->closeCursor();
-
+            if ($row) {
                 $sql = 'DELETE FROM '.$this->tableName.' WHERE id = :id';
 
-                $stmt = $this->prepareStatement($sql);
+                $stmt = $this->conn->prepare($sql);
                 $stmt->bindValue(':id', $row['id'], \PDO::PARAM_INT);
-
-                $this->executeStatement($stmt);
+                $stmt->execute();
             }
 
-            $this->execute('COMMIT');
+            $this->conn->execute('COMMIT');
         } catch (\Exception $e) {
-            $this->execute('ROLLBACK');
+            $this->conn->execute('ROLLBACK');
             throw $e;
         }
 
@@ -55,6 +54,6 @@ class SQLitePDOQueue extends AbstractPDOQueue
     {
         $sql = 'DELETE FROM '.$this->tableName;
 
-        return $this->execute($sql);
+        return $this->conn->execute($sql);
     }
 }

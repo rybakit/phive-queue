@@ -1,9 +1,12 @@
 <?php
 
-use Phive\Queue\Db\PDO\SQLitePDOQueue;
+use Phive\Queue\Db\Pdo\SqliteQueue;
 
-class SQLitePDOHandler extends AbstractHandler
+class SqlitePdoHandler extends AbstractHandler
 {
+    /**
+     * @var \PDO
+     */
     protected static $conn;
 
     public function prepare()
@@ -22,10 +25,11 @@ class SQLitePDOHandler extends AbstractHandler
     {
         $dsn = sprintf('sqlite:%s/phive_tests.sq3', sys_get_temp_dir());
         self::$conn = new \PDO($dsn);
+        //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
     }
 
     protected function createQueue()
     {
-        return new SQLItePDOQueue(self::$conn, 'queue');
+        return new SqliteQueue(self::$conn, 'queue');
     }
 }

@@ -5,9 +5,9 @@ class HandlerFactory
     protected static $classMap = array(
         'mongo'         => 'MongoDBHandler',
         'redis'         => 'RedisHandler',
-        'pdo_pgsql'     => 'PgSqlPDOHandler',
-        'pdo_mysql'     => 'MySqlPDOHandler',
-        'pdo_sqlite'    => 'SQLitePDOHandler',
+        'pdo_pgsql'     => 'PgsqlPdoHandler',
+        'pdo_mysql'     => 'MysqlPdoHandler',
+        'pdo_sqlite'    => 'SqlitePdoHandler',
     );
 
     public static function create($alias, $namespace = null, $size = null)

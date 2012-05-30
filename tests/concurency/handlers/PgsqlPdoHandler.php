@@ -1,8 +1,8 @@
 <?php
 
-use Phive\Queue\Db\PDO\MySqlPDOQueue;
+use Phive\Queue\Db\Pdo\PgsqlQueue;
 
-class MySqlPDOHandler extends AbstractHandler
+class PgsqlPdoHandler extends AbstractHandler
 {
     /**
      * @var \PDO
@@ -12,7 +12,7 @@ class MySqlPDOHandler extends AbstractHandler
     public function prepare()
     {
         self::$conn->exec('DROP TABLE IF EXISTS queue');
-        self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL) ENGINE=InnoDB');
+        self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL)');
     }
 
     public function shutdown()
@@ -23,11 +23,12 @@ class MySqlPDOHandler extends AbstractHandler
 
     protected function setup()
     {
-        self::$conn = new \PDO('mysql:dbname=phive_tests', 'root');
+        self::$conn = new \PDO('pgsql:dbname=phive_tests', 'postgres');
+        //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
     }
 
     protected function createQueue()
     {
-        return new MySqlPDOQueue(self::$conn, 'queue');
+        return new PgsqlQueue(self::$conn, 'queue');
     }
 }

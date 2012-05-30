@@ -1,11 +1,11 @@
 <?php
 
-namespace Phive\Tests\Queue\Db\PDO;
+namespace Phive\Tests\Queue\Db\Pdo;
 
 use Phive\Tests\Queue\AbstractQueueTest;
-use Phive\Queue\Db\PDO\MySqlPDOQueue;
+use Phive\Queue\Db\Pdo\MysqlQueue;
 
-class MySqlPDOQueueTest extends AbstractQueueTest
+class MysqlQueueTest extends AbstractQueueTest
 {
     /**
      * @var \PDO
@@ -21,6 +21,8 @@ class MySqlPDOQueueTest extends AbstractQueueTest
         parent::setUpBeforeClass();
 
         self::$conn = self::createConnection();
+        //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+
         self::$conn->exec('DROP TABLE IF EXISTS queue');
         self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL) ENGINE=InnoDB');
     }
@@ -48,7 +50,7 @@ class MySqlPDOQueueTest extends AbstractQueueTest
 
     protected function createQueue()
     {
-        return new MySqlPDOQueue(self::$conn, 'queue');
+        return new MysqlQueue(self::$conn, 'queue');
     }
 
     protected static function createConnection()
