@@ -70,6 +70,9 @@ abstract class AbstractHandler
     {
     }
 
+    /**
+     * @return \Phive\Queue\AdvancedQueueInterface
+     */
     protected function getQueue()
     {
         if (!self::$queue) {

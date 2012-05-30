@@ -1,11 +1,11 @@
 <?php
 
-namespace Phive\Tests\Queue\Db\PDO;
+namespace Phive\Tests\Queue\Db\Pdo;
 
 use Phive\Tests\Queue\AbstractQueueTest;
-use Phive\Queue\Db\PDO\SQLitePDOQueue;
+use Phive\Queue\Db\Pdo\SqliteQueue;
 
-class SQLitePDOQueueTest extends AbstractQueueTest
+class SqliteQueueTest extends AbstractQueueTest
 {
     /**
      * @var \PDO
@@ -50,7 +50,7 @@ class SQLitePDOQueueTest extends AbstractQueueTest
 
     protected function createQueue()
     {
-        return new SQLitePDOQueue(self::$conn, 'queue');
+        return new SqliteQueue(self::$conn, 'queue');
     }
 
     protected static function createConnection()

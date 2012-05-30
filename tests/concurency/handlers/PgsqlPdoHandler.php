@@ -1,15 +1,18 @@
 <?php
 
-use Phive\Queue\Db\PDO\SQLitePDOQueue;
+use Phive\Queue\Db\Pdo\PgsqlQueue;
 
-class SQLitePDOHandler extends AbstractHandler
+class PgsqlPdoHandler extends AbstractHandler
 {
+    /**
+     * @var \PDO
+     */
     protected static $conn;
 
     public function prepare()
     {
         self::$conn->exec('DROP TABLE IF EXISTS queue');
-        self::$conn->exec('CREATE TABLE queue(id INTEGER PRIMARY KEY AUTOINCREMENT, eta integer NOT NULL, item blob NOT NULL)');
+        self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL)');
     }
 
     public function shutdown()
@@ -20,13 +23,12 @@ class SQLitePDOHandler extends AbstractHandler
 
     protected function setup()
     {
-        $dsn = sprintf('sqlite:%s/phive_tests.sq3', sys_get_temp_dir());
-        self::$conn = new \PDO($dsn);
+        self::$conn = new \PDO('pgsql:dbname=phive_tests', 'postgres');
         //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
     }
 
     protected function createQueue()
     {
-        return new SQLItePDOQueue(self::$conn, 'queue');
+        return new PgsqlQueue(self::$conn, 'queue');
     }
 }

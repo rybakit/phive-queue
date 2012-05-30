@@ -1,8 +1,8 @@
 <?php
 
-use Phive\Queue\Db\PDO\MySqlPDOQueue;
+use Phive\Queue\Db\Pdo\SqliteQueue;
 
-class MySqlPDOHandler extends AbstractHandler
+class SqlitePdoHandler extends AbstractHandler
 {
     /**
      * @var \PDO
@@ -12,7 +12,7 @@ class MySqlPDOHandler extends AbstractHandler
     public function prepare()
     {
         self::$conn->exec('DROP TABLE IF EXISTS queue');
-        self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL) ENGINE=InnoDB');
+        self::$conn->exec('CREATE TABLE queue(id INTEGER PRIMARY KEY AUTOINCREMENT, eta integer NOT NULL, item blob NOT NULL)');
     }
 
     public function shutdown()
@@ -23,12 +23,13 @@ class MySqlPDOHandler extends AbstractHandler
 
     protected function setup()
     {
-        self::$conn = new \PDO('mysql:dbname=phive_tests', 'root');
+        $dsn = sprintf('sqlite:%s/phive_tests.sq3', sys_get_temp_dir());
+        self::$conn = new \PDO($dsn);
         //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
     }
 
     protected function createQueue()
     {
-        return new MySqlPDOQueue(self::$conn, 'queue');
+        return new SqliteQueue(self::$conn, 'queue');
     }
 }
