@@ -19,6 +19,9 @@ class ConnectionWrapper
         $this->conn = $conn;
     }
 
+    /**
+     * @return \PDO
+     */
     public function getConnection()
     {
         return $this->conn;
@@ -101,8 +104,19 @@ class ConnectionWrapper
         return $this->conn->commit();
     }
 
+    /**
+     * @return bool
+     */
     public function rollBack()
     {
         return $this->conn->rollBack();
+    }
+
+    /**
+     * Clears any stored prepared statements for this connection.
+     */
+    public function clearStatementCache()
+    {
+        $this->preparedStatements = array();
     }
 }

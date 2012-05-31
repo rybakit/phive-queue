@@ -4,6 +4,9 @@ namespace Phive\Queue\Db\Pdo;
 
 class StatementWrapper
 {
+    /**
+     * @var \PDOStatement
+     */
     protected $statement;
 
     public function __construct(\PDOStatement $statement)
@@ -11,15 +14,18 @@ class StatementWrapper
         $this->statement = $statement;
     }
 
+    /**
+     * @return \PDOStatement
+     */
     public function getStatement()
     {
         return $this->statement;
     }
 
     /**
-     * @param mixed    $parameter
-     * @param mixed    $value
-     * @param int|null $dataType
+     * @param mixed $parameter
+     * @param mixed $value
+     * @param int   $dataType
      *
      * @return bool
      */
@@ -28,6 +34,13 @@ class StatementWrapper
         return $this->statement->bindValue($parameter, $value, $dataType);
     }
 
+    /**
+     * @param array|null $parameters
+     *
+     * @return bool
+     *
+     * @throws \RuntimeException
+     */
     public function execute(array $parameters = null)
     {
         if (!$this->statement->execute($parameters)) {

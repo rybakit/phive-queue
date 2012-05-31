@@ -25,7 +25,7 @@ abstract class AbstractQueue extends BaseAbstractQueue implements AdvancedQueueI
      */
     public function __construct(\PDO $conn, $tableName)
     {
-        $this->conn = new ConnectionWrapper($conn);
+        $this->conn = $this->createConnectionWrapper($conn);
         $this->tableName = (string) $tableName;
     }
 
@@ -74,6 +74,16 @@ abstract class AbstractQueue extends BaseAbstractQueue implements AdvancedQueueI
         $stmt = $this->conn->query($sql);
         $stmt->setFetchMode(\PDO::FETCH_COLUMN, 0);
 
+        /*
+        return new CallbackIterator(new \IteratorIterator($stmt), function ($item) use ($stmt) {
+            if (null === $item) {
+                $stmt->closeCursor();
+            }
+
+            return $item;
+        });
+        */
+
         return new \IteratorIterator($stmt);
         //return new \NoRewindIterator(new \IteratorIterator($stmt));
     }
@@ -100,5 +110,15 @@ abstract class AbstractQueue extends BaseAbstractQueue implements AdvancedQueueI
         $sql = 'TRUNCATE TABLE '.$this->tableName;
 
         return $this->conn->execute($sql);
+    }
+
+    /**
+     * @param \PDO $conn
+     *
+     * @return ConnectionWrapper
+     */
+    protected function createConnectionWrapper(\PDO $conn)
+    {
+        return new ConnectionWrapper($conn);
     }
 }
