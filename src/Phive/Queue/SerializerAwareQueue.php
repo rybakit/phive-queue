@@ -2,12 +2,20 @@
 
 namespace Phive\Queue;
 
+use Phive\CallbackIterator;
 use Phive\Serializer\SerializerInterface;
 use Phive\Serializer\PhpSerializer;
 
 class SerializerAwareQueue implements QueueInterface
 {
+    /**
+     * @var QueueInterface
+     */
     protected $queue;
+
+    /**
+     * @var SerializerInterface
+     */
     protected $serializer;
 
     public function __construct(QueueInterface $queue, SerializerInterface $serializer = null)
@@ -17,7 +25,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @return \Phive\Queue\QueueInterface
+     * @return QueueInterface
      */
     public function getQueue()
     {
@@ -25,7 +33,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @return \Phive\Serializer\PhpSerializer
+     * @return SerializerInterface
      */
     public function getSerializer()
     {
@@ -51,5 +59,31 @@ class SerializerAwareQueue implements QueueInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @see QueueInterface::peek()
+     */
+    public function peek($limit = 1, $skip = 0)
+    {
+        $iterator = $this->queue->peek($limit, $skip);
+
+        return new CallbackIterator($iterator, array($this->serializer, 'unserialize'));
+    }
+
+    /**
+     * @see QueueInterface::count()
+     */
+    public function count()
+    {
+        return $this->queue->count();
+    }
+
+    /**
+     * @see QueueInterface::clear()
+     */
+    public function clear()
+    {
+        $this->queue->clear();
     }
 }
