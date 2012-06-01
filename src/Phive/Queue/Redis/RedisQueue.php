@@ -2,11 +2,11 @@
 
 namespace Phive\Queue\Redis;
 
-use Phive\Queue\AdvancedQueueInterface;
+use Phive\Queue\QueueInterface;
 use Phive\Queue\AbstractQueue;
 use Phive\CallbackIterator;
 
-class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
+class RedisQueue extends AbstractQueue implements QueueInterface
 {
     const SCRIPT_POP = <<<'LUA'
         local item = redis.call('ZRANGEBYSCORE', ARGV[1], '-inf', ARGV[2], 'LIMIT', 0, 1)
@@ -73,7 +73,7 @@ LUA;
     }
 
     /**
-     * @see AdvancedQueueInterface::peek()
+     * @see QueueInterface::peek()
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -90,7 +90,7 @@ LUA;
     }
 
     /**
-     * @see AdvancedQueueInterface::count()
+     * @see QueueInterface::count()
      */
     public function count()
     {
@@ -98,7 +98,7 @@ LUA;
     }
 
     /**
-     * @see AdvancedQueueInterface::clear()
+     * @see QueueInterface::clear()
      */
     public function clear()
     {

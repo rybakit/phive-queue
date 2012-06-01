@@ -2,7 +2,7 @@
 
 namespace Phive\Queue;
 
-class InMemoryQueue extends AbstractQueue implements AdvancedQueueInterface
+class InMemoryQueue extends AbstractQueue implements QueueInterface
 {
     /**
      * @var \SplPriorityQueue
@@ -50,7 +50,7 @@ class InMemoryQueue extends AbstractQueue implements AdvancedQueueInterface
     }
 
     /**
-     * @see AdvancedQueueInterface::peek()
+     * @see QueueInterface::peek()
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -60,7 +60,7 @@ class InMemoryQueue extends AbstractQueue implements AdvancedQueueInterface
     }
 
     /**
-     * @see AdvancedQueueInterface::count()
+     * @see QueueInterface::count()
      */
     public function count()
     {
@@ -68,7 +68,7 @@ class InMemoryQueue extends AbstractQueue implements AdvancedQueueInterface
     }
 
     /**
-     * @see AdvancedQueueInterface::clear()
+     * @see QueueInterface::clear()
      */
     public function clear()
     {

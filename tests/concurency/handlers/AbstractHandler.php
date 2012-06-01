@@ -71,7 +71,7 @@ abstract class AbstractHandler
     }
 
     /**
-     * @return \Phive\Queue\AdvancedQueueInterface
+     * @return \Phive\Queue\QueueInterface
      */
     protected function getQueue()
     {
