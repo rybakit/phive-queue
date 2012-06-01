@@ -1,12 +1,12 @@
 <?php
 
-namespace Phive\Queue\MongoDB;
+namespace Phive\Queue\MongoDb;
 
 use Phive\Queue\AdvancedQueueInterface;
 use Phive\Queue\AbstractQueue;
 use Phive\CallbackIterator;
 
-class MongoDBQueue extends AbstractQueue implements AdvancedQueueInterface
+class MongoDbQueue extends AbstractQueue implements AdvancedQueueInterface
 {
     /**
      * @var \MongoCollection

@@ -1,11 +1,11 @@
 <?php
 
-namespace Phive\Tests\Queue\MongoDB;
+namespace Phive\Tests\Queue\MongoDb;
 
 use Phive\Tests\Queue\AbstractQueueTest;
-use Phive\Queue\MongoDB\MongoDBQueue;
+use Phive\Queue\MongoDb\MongoDbQueue;
 
-class MongoDBQueueTest extends AbstractQueueTest
+class MongoDbQueueTest extends AbstractQueueTest
 {
     /**
      * @var \Mongo
@@ -45,7 +45,7 @@ class MongoDBQueueTest extends AbstractQueueTest
     public function setUp()
     {
         if (!self::$collection) {
-            $this->markTestSkipped('MongoDBQueue requires the php "mongo" extension.');
+            $this->markTestSkipped('MongoDbQueue requires the php "mongo" extension.');
         }
 
         parent::setUp();
@@ -55,6 +55,6 @@ class MongoDBQueueTest extends AbstractQueueTest
 
     protected function createQueue()
     {
-        return new MongoDBQueue(self::$collection);
+        return new MongoDbQueue(self::$collection);
     }
 }

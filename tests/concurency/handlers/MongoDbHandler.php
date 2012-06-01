@@ -1,9 +1,12 @@
 <?php
 
-use Phive\Queue\MongoDB\MongoDBQueue;
+use Phive\Queue\MongoDb\MongoDbQueue;
 
-class MongoDBHandler extends AbstractHandler
+class MongoDbHandler extends AbstractHandler
 {
+    /**
+     * @var \Mongo
+     */
     protected static $conn;
 
     public function prepare()
@@ -26,6 +29,6 @@ class MongoDBHandler extends AbstractHandler
     {
         $collection = self::$conn->selectCollection('phive_tests', 'queue');
 
-        return new MongoDBQueue($collection);
+        return new MongoDbQueue($collection);
     }
 }
