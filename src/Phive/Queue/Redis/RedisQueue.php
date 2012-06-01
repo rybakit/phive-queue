@@ -8,6 +8,14 @@ use Phive\CallbackIterator;
 
 class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
 {
+    const SCRIPT_POP = <<<'LUA'
+        local item = redis.call('ZRANGEBYSCORE', ARGV[1], '-inf', ARGV[2], 'LIMIT', 0, 1)
+        if #item ~= 0 then
+            redis.call('ZREM', ARGV[1], unpack(item))
+        end
+        return unpack(item)
+LUA;
+
     /**
      * @var \Redis
      */
@@ -50,40 +58,18 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
     }
 
     /**
-     * TODO
-     * Implement zpop using lua scripting (available since redis 2.6):
-     *
-     * @link http://grokbase.com/t/gg/redis-db/123vpe6070/zpop-atomic
-     *
-     *     val = redis.call('zrange', KEYS[1], 0, 0)
-     *     if val then redis.call('zremrangebyrank', KEYS[1], 0, 0) end
-     *     return val
-     *
-     * For now it's not supported by phpredis (@link https://github.com/nicolasff/phpredis/issues/97)
-     *
      * @see QueueInterface::pop()
      */
     public function pop()
     {
-        while (true) {
-            $this->redis->watch('items');
-            $range = $this->redis->zRangeByScore('items', '-inf', time(), array('limit' => array(0, 1)));
+        $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
+        $item = $this->redis->eval(static::SCRIPT_POP, array($prefix.'items', time()));
 
-            if (empty($range)) {
-                $this->redis->unwatch();
-
-                return false;
-            }
-
-            $key = reset($range);
-            $result = $this->redis->multi()
-                ->zRem('items', $key)
-                ->exec();
-
-            if (!empty($result[0])) {
-                return substr($key, strpos($key, '@') + 1);
-            }
+        if (false !== $item) {
+            return substr($item, strpos($item, '@') + 1);
         }
+
+        return false;
     }
 
     /**
