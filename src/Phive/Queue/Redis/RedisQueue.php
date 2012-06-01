@@ -10,7 +10,7 @@ class RedisQueue extends AbstractQueue implements AdvancedQueueInterface
 {
     const SCRIPT_POP = <<<'LUA'
         local item = redis.call('ZRANGEBYSCORE', ARGV[1], '-inf', ARGV[2], 'LIMIT', 0, 1)
-        if #item ~= 0 then
+        if 0 ~= #item then
             redis.call('ZREM', ARGV[1], unpack(item))
         end
         return unpack(item)
