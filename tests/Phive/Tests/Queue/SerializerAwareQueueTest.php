@@ -32,7 +32,7 @@ class SerializerAwareQueueTest extends \PHPUnit_Framework_TestCase
         $queue = $this->getMock('Phive\Queue\QueueInterface');
         $queue->expects($this->once())
             ->method('push')
-            ->with($this->isType('string'));
+            ->with($this->equalTo($serializedItem));
 
         $serializer = $this->getMock('Phive\Serializer\SerializerInterface');
         $serializer->expects($this->once())
