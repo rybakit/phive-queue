@@ -40,7 +40,7 @@ class MysqlQueueTest extends AbstractQueueTest
     public function setUp()
     {
         if (!self::$conn) {
-            $this->markTestSkipped('MySqlPDOQueue requires mysql PDO driver support in your environment.');
+            $this->markTestSkipped('MysqlQueue requires mysql PDO driver support in your environment.');
         }
 
         parent::setUp();

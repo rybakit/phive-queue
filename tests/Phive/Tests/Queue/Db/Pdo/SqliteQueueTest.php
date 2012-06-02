@@ -40,7 +40,7 @@ class SqliteQueueTest extends AbstractQueueTest
     public function setUp()
     {
         if (!self::$conn) {
-            $this->markTestSkipped('SQLitePDOQueue requires sqlite PDO driver support in your environment.');
+            $this->markTestSkipped('SqliteQueue requires sqlite PDO driver support in your environment.');
         }
 
         parent::setUp();

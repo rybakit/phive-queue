@@ -40,7 +40,7 @@ class PgsqlQueueTest extends AbstractQueueTest
     public function setUp()
     {
         if (!self::$conn) {
-            $this->markTestSkipped('PgSqlPDOQueue requires pgsql PDO driver support in your environment.');
+            $this->markTestSkipped('PgsqlQueue requires pgsql PDO driver support in your environment.');
         }
 
         parent::setUp();
