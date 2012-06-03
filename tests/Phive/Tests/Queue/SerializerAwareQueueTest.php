@@ -25,8 +25,8 @@ class SerializerAwareQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testPush()
     {
-        $item = array(1, 'text', new \stdClass());
-        $serializedItem = serialize($item);
+        $item = 'item';
+        $serializedItem = 'serialized_item';
 
         $queue = $this->getMock('Phive\Queue\QueueInterface');
         $queue->expects($this->once())
@@ -45,8 +45,8 @@ class SerializerAwareQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testPop()
     {
-        $item = array(1, 'text', new \stdClass());
-        $serializedItem = serialize($item);
+        $item = 'item';
+        $serializedItem = 'serialized_item';
 
         $queue = $this->getMock('Phive\Queue\QueueInterface');
         $queue->expects($this->once())
@@ -57,7 +57,7 @@ class SerializerAwareQueueTest extends \PHPUnit_Framework_TestCase
         $serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedItem)
-            ->will($this->returnValue(unserialize($serializedItem)));
+            ->will($this->returnValue($item));
 
         $outerQueue = new SerializerAwareQueue($queue, $serializer);
         $this->assertEquals($item, $outerQueue->pop($item));
@@ -65,24 +65,22 @@ class SerializerAwareQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testPeek()
     {
-        $i1 = array(1);
-        $i2 = 'text';
-        $i3 = new \stdClass();
+        $i1 = 'i1';
+        $i2 = 'i2';
 
-        $si1 = serialize($i1);
-        $si2 = serialize($i2);
-        $si3 = serialize($i3);
+        $si1 = 'serialized_i1';
+        $si2 = 'serialized_i2';
 
         $queue = $this->getMock('Phive\Queue\QueueInterface');
         $queue->expects($this->once())
             ->method('peek')
-            ->will($this->returnValue(new \ArrayIterator(array($si1, $si2, $si3))));
+            ->will($this->returnValue(new \ArrayIterator(array($si1, $si2))));
 
         $serializer = $this->getMock('Phive\Serializer\SerializerInterface');
-        $serializer->expects($this->exactly(3))
+        $serializer->expects($this->exactly(2))
             ->method('unserialize')
             ->will($this->returnCallback(function($serializedItem) {
-                return unserialize($serializedItem);
+                return str_replace('serialized_', '', $serializedItem);
         }));
 
         $outerQueue = new SerializerAwareQueue($queue, $serializer);
@@ -92,8 +90,6 @@ class SerializerAwareQueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($i1, $items->current());
         $items->next();
         $this->assertEquals($i2, $items->current());
-        $items->next();
-        $this->assertEquals($i3, $items->current());
     }
 
     public function testCount()
