@@ -2,15 +2,15 @@
 
 namespace Phive\Serializer;
 
-class PhpSerializer implements SerializerInterface
+class JsonSerializer implements SerializerInterface
 {
     public function serialize($data)
     {
-        return serialize($data);
+        return json_encode($data);
     }
 
     public function unserialize($data)
     {
-        return unserialize($data);
+        return json_decode($data);
     }
 }
