@@ -2,7 +2,6 @@
 
 namespace Phive\Tests\Queue;
 
-use Phive\Queue\QueueInterface;
 use Phive\Queue\SerializerAwareQueue;
 
 class SerializerAwareQueueTest extends \PHPUnit_Framework_TestCase

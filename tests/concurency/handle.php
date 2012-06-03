@@ -23,5 +23,6 @@ try {
     $handler->handle($action);
 } catch (\Exception $e) {
     echo $e->getMessage(), PHP_EOL;
+    throw $e;
     exit(1);
 }
