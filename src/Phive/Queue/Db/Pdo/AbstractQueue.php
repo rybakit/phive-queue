@@ -2,10 +2,9 @@
 
 namespace Phive\Queue\Db\Pdo;
 
-use Phive\Queue\QueueInterface;
 use Phive\Queue\AbstractQueue as BaseAbstractQueue;
 
-abstract class AbstractQueue extends BaseAbstractQueue implements QueueInterface
+abstract class AbstractQueue extends BaseAbstractQueue
 {
     /**
      * @var ConnectionWrapper
@@ -40,7 +39,7 @@ abstract class AbstractQueue extends BaseAbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::push()
+     * @see \Phive\Queue\QueueInterface::push()
      */
     public function push($item, $eta = null)
     {
@@ -55,7 +54,7 @@ abstract class AbstractQueue extends BaseAbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::peek()
+     * @see \Phive\Queue\QueueInterface::peek()
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -89,7 +88,7 @@ abstract class AbstractQueue extends BaseAbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::count()
+     * @see \Phive\Queue\QueueInterface::count()
      */
     public function count()
     {
@@ -103,7 +102,7 @@ abstract class AbstractQueue extends BaseAbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::clear()
+     * @see \Phive\Queue\QueueInterface::clear()
      */
     public function clear()
     {

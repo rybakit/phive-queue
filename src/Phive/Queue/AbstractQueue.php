@@ -2,7 +2,7 @@
 
 namespace Phive\Queue;
 
-abstract class AbstractQueue
+abstract class AbstractQueue implements QueueInterface
 {
     protected function normalizeEta($eta)
     {
