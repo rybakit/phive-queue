@@ -4,6 +4,12 @@ namespace Phive\Tests\Serializer;
 
 abstract class AbstractSerializerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testSerializerImplementsSerializerInterface()
+    {
+        $serializer = $this->createSerializer();
+        $this->assertInstanceOf('Phive\Serializer\SerializerInterface', $serializer);
+    }
+
     public function testSerializeAndUnserealize()
     {
         $data = array(1, 'text', new \stdClass());
