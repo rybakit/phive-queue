@@ -4,6 +4,12 @@ namespace Phive\Tests\Queue;
 
 abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 {
+    public function testQueueImplementsQueueInterface()
+    {
+        $queue = $this->createQueue();
+        $this->assertInstanceOf('Phive\Queue\QueueInterface', $queue); 
+    }
+
     public function testPushPop()
     {
         $item = $this->createUniqueItem();

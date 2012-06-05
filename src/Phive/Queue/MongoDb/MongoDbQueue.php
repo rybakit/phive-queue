@@ -2,11 +2,10 @@
 
 namespace Phive\Queue\MongoDb;
 
-use Phive\Queue\QueueInterface;
 use Phive\Queue\AbstractQueue;
 use Phive\CallbackIterator;
 
-class MongoDbQueue extends AbstractQueue implements QueueInterface
+class MongoDbQueue extends AbstractQueue
 {
     /**
      * @var \MongoCollection
@@ -34,7 +33,7 @@ class MongoDbQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::push()
+     * @see \Phive\Queue\QueueInterface::push()
      */
     public function push($item, $eta = null)
     {
@@ -52,7 +51,7 @@ class MongoDbQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::pop()
+     * @see \Phive\Queue\QueueInterface::pop()
      */
     public function pop()
     {
@@ -75,7 +74,7 @@ class MongoDbQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::peek()
+     * @see \Phive\Queue\QueueInterface::peek()
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -98,7 +97,7 @@ class MongoDbQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::count()
+     * @see \Phive\Queue\QueueInterface::count()
      */
     public function count()
     {
@@ -106,7 +105,7 @@ class MongoDbQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::clear()
+     * @see \Phive\Queue\QueueInterface::clear()
      */
     public function clear()
     {

@@ -9,12 +9,12 @@ use Phive\Serializer\PhpSerializer;
 class SerializerAwareQueue implements QueueInterface
 {
     /**
-     * @var QueueInterface
+     * @var \Phive\Queue\QueueInterface
      */
     protected $queue;
 
     /**
-     * @var SerializerInterface
+     * @var \Phive\Serializer\SerializerInterface
      */
     protected $serializer;
 
@@ -25,7 +25,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @return QueueInterface
+     * @return \Phive\Queue\QueueInterface
      */
     public function getQueue()
     {
@@ -33,7 +33,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @return SerializerInterface
+     * @return \Phive\Serializer\SerializerInterface
      */
     public function getSerializer()
     {
@@ -41,7 +41,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::push()
+     * @see \Phive\Queue\QueueInterface::push()
      */
     public function push($item, $eta = null)
     {
@@ -50,7 +50,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::pop()
+     * @see \Phive\Queue\QueueInterface::pop()
      */
     public function pop()
     {
@@ -62,7 +62,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::peek()
+     * @see \Phive\Queue\QueueInterface::peek()
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -72,7 +72,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::count()
+     * @see \Phive\Queue\QueueInterface::count()
      */
     public function count()
     {
@@ -80,7 +80,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::clear()
+     * @see \Phive\Queue\QueueInterface::clear()
      */
     public function clear()
     {

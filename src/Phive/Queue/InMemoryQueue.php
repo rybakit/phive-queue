@@ -2,7 +2,7 @@
 
 namespace Phive\Queue;
 
-class InMemoryQueue extends AbstractQueue implements QueueInterface
+class InMemoryQueue extends AbstractQueue
 {
     /**
      * @var \SplPriorityQueue
@@ -23,7 +23,7 @@ class InMemoryQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::push()
+     * @see \Phive\Queue\QueueInterface::push()
      */
     public function push($item, $eta = null)
     {
@@ -32,7 +32,7 @@ class InMemoryQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::pop()
+     * @see \Phive\Queue\QueueInterface::pop()
      */
     public function pop()
     {
@@ -50,7 +50,7 @@ class InMemoryQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::peek()
+     * @see \Phive\Queue\QueueInterface::peek()
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -60,7 +60,7 @@ class InMemoryQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::count()
+     * @see \Phive\Queue\QueueInterface::count()
      */
     public function count()
     {
@@ -68,7 +68,7 @@ class InMemoryQueue extends AbstractQueue implements QueueInterface
     }
 
     /**
-     * @see QueueInterface::clear()
+     * @see \Phive\Queue\QueueInterface::clear()
      */
     public function clear()
     {
