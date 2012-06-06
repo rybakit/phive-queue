@@ -7,7 +7,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     public function testQueueImplementsQueueInterface()
     {
         $queue = $this->createQueue();
-        $this->assertInstanceOf('Phive\Queue\QueueInterface', $queue); 
+        $this->assertInstanceOf('Phive\Queue\QueueInterface', $queue);
     }
 
     public function testPushPop()
@@ -115,6 +115,20 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $queue->clear();
         $this->assertEquals(0, $queue->count());
     }
+
+    /*
+    public function testBinaryDataSupport()
+    {
+        $item = "a\0b;";
+        //$item = file_get_contents('/bin/tailf');
+        //$item = 0x7f454c46020101;
+
+        $queue = $this->createQueue();
+        $queue->push($item);
+
+        $this->assertEquals($item, $pop = $queue->pop());
+    }
+    */
 
     protected function createUniqueItem()
     {
