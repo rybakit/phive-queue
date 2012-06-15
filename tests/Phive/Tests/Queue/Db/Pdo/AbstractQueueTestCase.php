@@ -74,14 +74,14 @@ abstract class AbstractQueueTestCase extends BaseAbstractQueueTestCase
 
         try {
             $queue->clear();
-            static::$tableName = $tableName;
-
-            $this->fail('PDO throws an exception on error');
         } catch (\Exception $e) {
             static::$tableName = $tableName;
-
             $this->assertInstanceOf('Exception', $e, 'PDO throws an exception on error');
+            return;
         }
+
+        static::$tableName = $tableName;
+        $this->fail('PDO throws an exception on error');
     }
 
     public static function execSqlFile($file, \PDO $conn)
