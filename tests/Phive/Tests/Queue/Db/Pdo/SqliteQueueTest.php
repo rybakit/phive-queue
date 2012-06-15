@@ -2,55 +2,13 @@
 
 namespace Phive\Tests\Queue\Db\Pdo;
 
-use Phive\Tests\Queue\AbstractQueueTest;
 use Phive\Queue\Db\Pdo\SqliteQueue;
 
-class SqliteQueueTest extends AbstractQueueTest
+class SqliteQueueTest extends AbstractQueueTestCase
 {
-    /**
-     * @var \PDO
-     */
-    protected static $conn;
-
-    public static function setUpBeforeClass()
+    protected static function getDriverName()
     {
-        if (!class_exists('PDO') || !in_array('sqlite', \PDO::getAvailableDrivers())) {
-            return;
-        }
-
-        parent::setUpBeforeClass();
-
-        self::$conn = self::createConnection();
-        //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-
-        self::$conn->exec('DROP TABLE IF EXISTS queue');
-        self::$conn->exec('CREATE TABLE queue(id INTEGER PRIMARY KEY AUTOINCREMENT, eta integer NOT NULL, item blob NOT NULL)');
-    }
-
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-
-        if (self::$conn) {
-            self::$conn->exec('DROP TABLE IF EXISTS queue');
-            self::$conn = null;
-        }
-    }
-
-    public function setUp()
-    {
-        if (!self::$conn) {
-            $this->markTestSkipped('SqliteQueue requires sqlite PDO driver support in your environment.');
-        }
-
-        parent::setUp();
-
-        self::$conn->exec('DELETE FROM queue');
-    }
-
-    protected function createQueue()
-    {
-        return new SqliteQueue(self::$conn, 'queue');
+        return 'sqlite';
     }
 
     protected static function createConnection()

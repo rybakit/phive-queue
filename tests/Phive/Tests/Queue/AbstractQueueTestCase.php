@@ -2,7 +2,7 @@
 
 namespace Phive\Tests\Queue;
 
-abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractQueueTestCase extends \PHPUnit_Framework_TestCase
 {
     public function testQueueImplementsQueueInterface()
     {
@@ -116,19 +116,26 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $queue->count());
     }
 
-    /*
     public function testBinaryDataSupport()
     {
-        $item = "a\0b;";
+        //$item = "\x04\x00\xa0\x00\x501";
         //$item = file_get_contents('/bin/tailf');
+        //$item = base64_decode('wAD4Af8B/gHuA/4BzgP1A/8P/h//f/xv+z30D9IDSAE=');
         //$item = 0x7f454c46020101;
 
+        $item = array(1, new \stdClass());
+
+
         $queue = $this->createQueue();
+
+        $item = new \Phive\Queue\InMemoryQueue();
+        $queue = new \Phive\Queue\SerializerAwareQueue($queue, new \Phive\Serializer\IgbinarySerializer());
+
         $queue->push($item);
 
-        $this->assertEquals($item, $pop = $queue->pop());
+        //$this->assertEquals(0, strcmp($item, $queue->pop()));
+        $this->assertEquals($item, $queue->pop());
     }
-    */
 
     protected function createUniqueItem()
     {

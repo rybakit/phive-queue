@@ -4,7 +4,7 @@ namespace Phive\Tests\Queue;
 
 use Phive\Queue\InMemoryQueue;
 
-class InMemoryQueueTest extends AbstractQueueTest
+class InMemoryQueueTest extends AbstractQueueTestCase
 {
     protected function createQueue()
     {

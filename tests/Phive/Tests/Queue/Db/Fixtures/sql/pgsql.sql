@@ -1,0 +1,1 @@
+CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item bytea NOT NULL);

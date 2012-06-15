@@ -2,10 +2,10 @@
 
 namespace Phive\Tests\Queue\MongoDb;
 
-use Phive\Tests\Queue\AbstractQueueTest;
+use Phive\Tests\Queue\AbstractQueueTestCase;
 use Phive\Queue\MongoDb\MongoDbQueue;
 
-class MongoDbQueueTest extends AbstractQueueTest
+class MongoDbQueueTest extends AbstractQueueTestCase
 {
     /**
      * @var \Mongo

@@ -2,55 +2,11 @@
 
 namespace Phive\Tests\Queue\Db\Pdo;
 
-use Phive\Tests\Queue\AbstractQueueTest;
-use Phive\Queue\Db\Pdo\MysqlQueue;
-
-class MysqlQueueTest extends AbstractQueueTest
+class MysqlQueueTest extends AbstractQueueTestCase
 {
-    /**
-     * @var \PDO
-     */
-    protected static $conn;
-
-    public static function setUpBeforeClass()
+    protected static function getDriverName()
     {
-        if (!class_exists('PDO') || !in_array('mysql', \PDO::getAvailableDrivers())) {
-            return;
-        }
-
-        parent::setUpBeforeClass();
-
-        self::$conn = self::createConnection();
-        //self::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-
-        self::$conn->exec('DROP TABLE IF EXISTS queue');
-        self::$conn->exec('CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL) ENGINE=InnoDB');
-    }
-
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-
-        if (self::$conn) {
-            self::$conn->exec('DROP TABLE IF EXISTS queue');
-            self::$conn = null;
-        }
-    }
-
-    public function setUp()
-    {
-        if (!self::$conn) {
-            $this->markTestSkipped('MysqlQueue requires mysql PDO driver support in your environment.');
-        }
-
-        parent::setUp();
-
-        self::$conn->exec('TRUNCATE TABLE queue');
-    }
-
-    protected function createQueue()
-    {
-        return new MysqlQueue(self::$conn, 'queue');
+        return 'mysql';
     }
 
     protected static function createConnection()
