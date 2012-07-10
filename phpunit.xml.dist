@@ -11,18 +11,30 @@
          syntaxCheck="false"
          bootstrap="tests/bootstrap.php"
 >
-    <!-- php>
-        <var name="db_pg_host" value="localhost" />
-        <var name="db_pg_port" value="5432"/>
-        <var name="db_pg_username" value="postgres" />
-        <var name="db_pg_password" value="" />
-        <var name="db_pg_db_name" value="phive_tests" />
+    <php>
+        <var name="db_pdo_pgsql_dsn" value="pgsql:host=localhost;port=5432;dbname=phive_tests" />
+        <var name="db_pdo_pgsql_username" value="postgres" />
+        <var name="db_pdo_pgsql_password" value="" />
+        <var name="db_pdo_pgsql_table_name" value="queue" />
+
+        <var name="db_pdo_mysql_dsn" value="mysql:host=localhost;port=3306;dbname=phive_tests" />
+        <var name="db_pdo_mysql_username" value="root" />
+        <var name="db_pdo_mysql_password" value="" />
+        <var name="db_pdo_mysql_table_name" value="queue" />
+
+        <var name="db_pdo_sqlite_dsn" value="sqlite:/tmp/phive_tests.sq3" />
+        <var name="db_pdo_sqlite_username" value="" />
+        <var name="db_pdo_sqlite_password" value="" />
+        <var name="db_pdo_sqlite_table_name" value="queue" />
 
         <var name="mongo_server" value="mongodb://localhost:27017" />
+        <var name="mongo_db_name" value="phive_queue" />
+        <var name="mongo_coll_name" value="queue" />
 
         <var name="redis_host" value="127.0.0.1" />
         <var name="redis_port" value="6379" />
-    </php -->
+        <var name="redis_prefix" value="phive_tests:queue:" />
+    </php>
 
     <testsuites>
         <testsuite name="Phive Queue Test Suite">

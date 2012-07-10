@@ -9,6 +9,13 @@ abstract class AbstractQueueTestCase extends \PHPUnit_Framework_TestCase
      */
     protected $queue;
 
+    /**
+     * @var \GearmanClient
+     */
+    //protected $client;
+
+    //protected $concurencyQueueSize = 100;
+
     public function setUp()
     {
         $this->queue = $this->createQueue();
@@ -122,6 +129,7 @@ abstract class AbstractQueueTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->queue->count());
     }
 
+    /*
     public function testBinaryDataSupport()
     {
         $item = "\x04\x00\xa0\x00\x501";
@@ -139,6 +147,39 @@ abstract class AbstractQueueTestCase extends \PHPUnit_Framework_TestCase
         //$this->assertEquals(0, strcmp($item, $this->queue->pop()));
         $this->assertEquals($item, $this->queue->pop());
     }
+    */
+
+    /*
+    public function testConcurency()
+    {
+        if (!class_exists('GearmanClient', false)) {
+            $this->markTestSkipped('pecl/gearman is required for this test to run.');
+        }
+
+        //$count = 100;
+
+        for ($i = $this->concurencyQueueSize; $i; $i--) {
+            $this->queue->push($i);
+        }
+
+        $this->client = new \GearmanClient();
+        $this->client->addServer();
+
+        $config = $this->getQueueConfig();
+
+        for ($i = 10; $i; $i--) {
+            $this->client->addTask('pop', $config);
+        }
+
+        $this->client->setCompleteCallback(array($this, 'taskCompleted'));
+        $this->client->runTasks();
+    }
+
+    public function taskCompleted($task)
+    {
+        $this->concurencyQueueSize--;
+    }
+    */
 
     protected function createUniqueItem()
     {
@@ -148,5 +189,5 @@ abstract class AbstractQueueTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @return \Phive\Queue\QueueInterface
      */
-    abstract protected function createQueue();
+    abstract public function createQueue();
 }

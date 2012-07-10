@@ -1,1 +1,2 @@
-CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item blob NOT NULL) ENGINE=InnoDB;
+DROP TABLE IF EXISTS queue;
+CREATE TABLE queue(id SERIAL, eta integer NOT NULL, item text NOT NULL) ENGINE=InnoDB;

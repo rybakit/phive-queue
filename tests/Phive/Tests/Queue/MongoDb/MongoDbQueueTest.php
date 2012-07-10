@@ -8,14 +8,9 @@ use Phive\Queue\MongoDb\MongoDbQueue;
 class MongoDbQueueTest extends AbstractQueueTestCase
 {
     /**
-     * @var \Mongo
+     * @var MongoDbQueueManager
      */
-    protected static $conn;
-
-    /**
-     * @var \MongoCollection
-     */
-    protected static $collection;
+    protected static $manager;
 
     public static function setUpBeforeClass()
     {
@@ -25,36 +20,35 @@ class MongoDbQueueTest extends AbstractQueueTestCase
 
         parent::setUpBeforeClass();
 
-        $server = isset($GLOBALS['mongo_server']) ? $GLOBALS['mongo_server'] : 'mongodb://localhost:27017';
-
-        self::$conn = new \Mongo($server);
-        self::$conn->dropDB('phive_tests');
-        self::$collection = self::$conn->selectCollection('phive_tests', 'queue');
-    }
-
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-
-        if (self::$collection) {
-            self::$collection->db->drop();
-            self::$conn->close();
-        }
+        self::$manager = new MongoDbQueueManager(array(
+            'server'        => $GLOBALS['mongo_server'],
+            'db'            => $GLOBALS['mongo_db'],
+            'collection'    => $GLOBALS['mongo_collection'],
+        ));
     }
 
     public function setUp()
     {
-        if (!self::$collection) {
+        if (!self::$manager) {
             $this->markTestSkipped('MongoDbQueue requires the php "mongo" extension.');
         }
 
         parent::setUp();
 
-        self::$collection->remove(array(), array('safe' => true));
+        self::$manager->reset();
     }
 
-    protected function createQueue()
+    /**
+     * @return \Phive\Queue\QueueInterface
+     *
+     * @throws \LogicException
+     */
+    public function createQueue()
     {
-        return new MongoDbQueue(self::$collection);
+        if (self::$manager) {
+            return self::$manager->createQueue();
+        }
+
+        throw new \LogicException('RedisQueueManager is not initialized.');
     }
 }

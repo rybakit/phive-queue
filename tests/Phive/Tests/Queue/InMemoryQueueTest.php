@@ -6,7 +6,7 @@ use Phive\Queue\InMemoryQueue;
 
 class InMemoryQueueTest extends AbstractQueueTestCase
 {
-    protected function createQueue()
+    public function createQueue()
     {
         return new InMemoryQueue();
     }

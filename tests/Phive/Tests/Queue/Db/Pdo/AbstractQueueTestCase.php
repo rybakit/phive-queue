@@ -7,66 +7,42 @@ use Phive\Tests\Queue\AbstractQueueTestCase as BaseAbstractQueueTestCase;
 abstract class AbstractQueueTestCase extends BaseAbstractQueueTestCase
 {
     /**
-     * @var string
+     * @var GenericQueueManager
      */
-    protected static $tableName = 'queue';
-
-    /**
-     * @var \PDO
-     */
-    protected static $conn;
+    protected static $manager;
 
     public static function setUpBeforeClass()
     {
-        $driverName = static::getDriverName();
-
-        if (!class_exists('PDO') || !in_array($driverName, \PDO::getAvailableDrivers())) {
+        if (!class_exists('PDO') || !in_array(static::getDriverName(), \PDO::getAvailableDrivers())) {
             return;
         }
 
         parent::setUpBeforeClass();
 
-        static::$conn = static::createConnection();
-        //static::$conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-        //static::$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
-        static::$conn->exec('DROP TABLE IF EXISTS '.static::$tableName);
-
-        $sqlFile = __DIR__.'/../Fixtures/sql/'.$driverName.'.sql';
-        static::execSqlFile($sqlFile, static::$conn);
+        static::$manager = static::createManager();
     }
 
     public function setUp()
     {
-        if (!static::$conn) {
+        if (!static::$manager) {
             $this->markTestSkipped(sprintf(
                 '%s requires %s PDO driver support in your environment.',
-                $this->getQueueClassName(),
+                get_class($this),
                 static::getDriverName()
             ));
         }
 
         parent::setUp();
 
-        static::$conn->exec('DELETE FROM '.static::$tableName);
-        //'TRUNCATE TABLE queue RESTART IDENTITY'
+        static::$manager->reset();
     }
 
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-
-        if (static::$conn) {
-            static::$conn->exec('DROP TABLE IF EXISTS '.static::$tableName);
-            static::$conn = null;
-        }
-    }
-
+    /*
     public function testPdoThrowsExceptionOnError()
     {
         $tableName = static::$tableName;
 
-        static::$tableName = 'non_existing_table';
+        static::$tableName = uniqid('non_existing_table_name_');
         $queue = $this->createQueue();
 
         $conn = $queue->getConnection();
@@ -83,44 +59,39 @@ abstract class AbstractQueueTestCase extends BaseAbstractQueueTestCase
         static::$tableName = $tableName;
         $this->fail('PDO throws an exception on error');
     }
-
-    public static function execSqlFile($file, \PDO $conn)
-    {
-        $statements = file($file);
-
-        foreach ($statements as $statement) {
-            if (false === $result = $conn->exec($statement)) {
-                $err = $this->conn->errorInfo();
-                throw new \RuntimeException($err[2]);
-            }
-        }
-    }
+    */
 
     /**
      * @return \Phive\Queue\QueueInterface
+     *
+     * @throws \LogicException
      */
-    protected function createQueue()
+    public function createQueue()
     {
-        $queueClassName = $this->getQueueClassName();
+        if (static::$manager) {
+            return static::$manager->createQueue();
+        }
 
-        return new $queueClassName(static::$conn, static::$tableName);
+        throw new \LogicException('RedisQueueManager is not initialized.');
     }
 
     /**
-     * @return string
+     * @return GenericQueueManager
      */
-    protected function getQueueClassName()
+    protected static function createManager()
     {
-        return '\\Phive\\Queue\\Db\\Pdo\\'.ucfirst(static::getDriverName()).'Queue';
+        $prefix = 'db_pdo_'.static::getDriverName();
+
+        return new GenericQueueManager(array(
+            'dsn'           => $GLOBALS[$prefix.'_dsn'],
+            'username'      => $GLOBALS[$prefix.'_username'],
+            'password'      => $GLOBALS[$prefix.'_password'],
+            'table_name'    => $GLOBALS[$prefix.'_table_name'],
+        ));
     }
 
     /**
      * @return string
      */
     abstract protected static function getDriverName();
-
-    /**
-     * @return \PDO
-     */
-    abstract protected static function createConnection();
 }
