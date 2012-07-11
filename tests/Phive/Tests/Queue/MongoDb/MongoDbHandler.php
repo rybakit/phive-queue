@@ -3,19 +3,28 @@
 namespace Phive\Tests\Queue\MongoDb;
 
 use Phive\Queue\MongoDb\MongoDbQueue;
-use Phive\Tests\Queue\AbstractQueueManager;
+use Phive\Tests\Queue\AbstractHandler;
 
-class MongoDbQueueManager extends AbstractQueueManager
+class MongoDbHandler extends AbstractHandler
 {
     /**
      * @var \Mongo
      */
     protected $mongo;
 
+    public function __construct(array $options = array())
+    {
+        if (!class_exists('\Mongo')) {
+            throw new \RuntimeException(__CLASS__.' requires the php "mongo" extension.');
+        }
+
+        parent::__construct($options);
+
+        $this->configure();
+    }
+
     public function createQueue()
     {
-        $this->initMongo();
-
         $collection = $this->mongo->selectCollection(
             $this->getOption('db_name'),
             $this->getOption('coll_name')
@@ -26,16 +35,12 @@ class MongoDbQueueManager extends AbstractQueueManager
 
     public function reset()
     {
-        $this->initMongo();
-
         $this->mongo->dropDB($this->getOption('db_name'));
         //$collection->remove(array(), array('safe' => true));
     }
 
-    protected function initMongo()
+    protected function configure()
     {
-        if (!$this->mongo) {
-            $this->mongo = new \Mongo($this->getOption('mongo_server'));
-        }
+        $this->mongo = new \Mongo($this->getOption('server'));
     }
 }

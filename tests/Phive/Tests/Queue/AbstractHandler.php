@@ -2,7 +2,7 @@
 
 namespace Phive\Tests\Queue;
 
-abstract class AbstractQueueManager
+abstract class AbstractHandler
 {
     /**
      * @var array
@@ -38,10 +38,12 @@ abstract class AbstractQueueManager
         throw new \InvalidArgumentException(sprintf('Option "%s" is not found.', $name));
     }
 
+    public function reset()
+    {
+    }
+
     /**
      * @return \Phive\Queue\QueueInterface
      */
     abstract public function createQueue();
-
-    abstract public function reset();
 }

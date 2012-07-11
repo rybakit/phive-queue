@@ -2,10 +2,15 @@
 
 namespace Phive\Tests\Queue\Db\Pdo;
 
-class SqliteQueueTest extends AbstractQueueTestCase
+class SqliteQueueTest extends HandlerAwareQueueTestCase
 {
-    protected static function getDriverName()
+    public static function createHandler()
     {
-        return 'sqlite';
+        return new PdoHandler(array(
+            'dsn'           => str_replace('%temp_dir%', sys_get_temp_dir(), $GLOBALS['db_pdo_sqlite_dsn']),
+            'username'      => null,
+            'password'      => null,
+            'table_name'    => $GLOBALS['db_pdo_sqlite_table_name'],
+        ));
     }
 }

@@ -22,9 +22,7 @@
         <var name="db_pdo_mysql_password" value="" />
         <var name="db_pdo_mysql_table_name" value="queue" />
 
-        <var name="db_pdo_sqlite_dsn" value="sqlite:/tmp/phive_tests.sq3" />
-        <var name="db_pdo_sqlite_username" value="" />
-        <var name="db_pdo_sqlite_password" value="" />
+        <var name="db_pdo_sqlite_dsn" value="sqlite:%temp_dir%/phive_tests.sq3" />
         <var name="db_pdo_sqlite_table_name" value="queue" />
 
         <var name="mongo_server" value="mongodb://localhost:27017" />
