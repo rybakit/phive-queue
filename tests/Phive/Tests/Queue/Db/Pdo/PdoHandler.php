@@ -18,11 +18,16 @@ class PdoHandler extends AbstractHandler
 
     public function __construct(array $options = array())
     {
-        if (!class_exists('\PDO')) {
-            throw new \RuntimeException(__CLASS__.' requires the php "pdo" extension.');
+        if (!extension_loaded('pdo')) {
+            throw new \RuntimeException('The "pdo" extension is not loaded.');
         }
 
         parent::__construct($options);
+
+        $driverName = strstr($this->getOption('dsn'), ':', true);
+        if (!extension_loaded('pdo_'.$driverName)) {
+            throw new \RuntimeException(sprintf('The "pdo_%s" extension is not loaded.', $driverName));
+        }
 
         $this->configure();
     }
@@ -41,6 +46,18 @@ class PdoHandler extends AbstractHandler
         $this->execSqlFile($sqlFile);
     }
 
+    public function execSqlFile($file)
+    {
+        $statements = file($file);
+
+        foreach ($statements as $statement) {
+            if (false === $result = $this->pdo->exec($statement)) {
+                $err = $this->pdo->errorInfo();
+                throw new \RuntimeException($err[2]);
+            }
+        }
+    }
+
     protected function configure()
     {
         $this->pdo = new \PDO(
@@ -57,17 +74,5 @@ class PdoHandler extends AbstractHandler
     protected function getQueueClassName()
     {
         return '\\Phive\\Queue\\Db\\Pdo\\'.ucfirst($this->driverName).'Queue';
-    }
-
-    protected function execSqlFile($file)
-    {
-        $statements = file($file);
-
-        foreach ($statements as $statement) {
-            if (false === $result = $this->pdo->exec($statement)) {
-                $err = $this->pdo->errorInfo();
-                throw new \RuntimeException($err[2]);
-            }
-        }
     }
 }

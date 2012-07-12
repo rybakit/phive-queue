@@ -14,8 +14,8 @@ class MongoDbHandler extends AbstractHandler
 
     public function __construct(array $options = array())
     {
-        if (!class_exists('\Mongo')) {
-            throw new \RuntimeException(__CLASS__.' requires the php "mongo" extension.');
+        if (!extension_loaded('mongo')) {
+            throw new \RuntimeException('The "mongo" extension is not loaded.');
         }
 
         parent::__construct($options);

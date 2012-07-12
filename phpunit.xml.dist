@@ -34,6 +34,12 @@
         <var name="redis_prefix" value="phive_tests:queue:" />
     </php>
 
+    <!--groups>
+        <exclude>
+            <group>concurency</group>
+        </exclude>
+    </groups-->
+
     <testsuites>
         <testsuite name="Phive Queue Test Suite">
             <directory>./tests/Phive/</directory>

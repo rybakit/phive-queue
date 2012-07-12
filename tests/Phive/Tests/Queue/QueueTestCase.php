@@ -2,7 +2,7 @@
 
 namespace Phive\Tests\Queue;
 
-abstract class AbstractQueueTestCase extends \PHPUnit_Framework_TestCase
+abstract class QueueTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Phive\Queue\QueueInterface
@@ -149,7 +149,9 @@ abstract class AbstractQueueTestCase extends \PHPUnit_Framework_TestCase
     }
     */
 
-    /*
+    /**
+     * @group concurency
+     */
     public function testConcurency()
     {
         if (!class_exists('GearmanClient', false)) {
@@ -175,6 +177,7 @@ abstract class AbstractQueueTestCase extends \PHPUnit_Framework_TestCase
         $this->client->runTasks();
     }
 
+    /*
     public function taskCompleted($task)
     {
         $this->concurencyQueueSize--;

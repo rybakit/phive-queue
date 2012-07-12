@@ -14,8 +14,8 @@ class RedisHandler extends AbstractHandler
 
     public function __construct(array $options = array())
     {
-        if (!class_exists('\Redis')) {
-            throw new \RuntimeException(__CLASS__.' requires the php "redis" extension.');
+        if (!extension_loaded('redis')) {
+            throw new \RuntimeException('The "redis" extension is not loaded.');
         }
 
         parent::__construct($options);
