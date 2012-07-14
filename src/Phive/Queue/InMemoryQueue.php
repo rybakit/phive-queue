@@ -14,16 +14,13 @@ class InMemoryQueue extends AbstractQueue
      */
     protected $queueOrder = PHP_INT_MAX;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->innerQueue = new \SplPriorityQueue();
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::push()
+     * {@inheritdoc}
      */
     public function push($item, $eta = null)
     {
@@ -32,7 +29,7 @@ class InMemoryQueue extends AbstractQueue
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::pop()
+     * {@inheritdoc}
      */
     public function pop()
     {
@@ -50,7 +47,7 @@ class InMemoryQueue extends AbstractQueue
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::peek()
+     * {@inheritdoc}
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -60,7 +57,7 @@ class InMemoryQueue extends AbstractQueue
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::count()
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -68,7 +65,7 @@ class InMemoryQueue extends AbstractQueue
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::clear()
+     * {@inheritdoc}
      */
     public function clear()
     {

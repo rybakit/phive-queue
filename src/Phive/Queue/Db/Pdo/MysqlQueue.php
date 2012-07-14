@@ -14,7 +14,7 @@ class MysqlQueue extends AbstractQueue
     }
 
     /**
-     * @see QueueInterface::pop()
+     * {@inheritdoc}
      */
     public function pop()
     {

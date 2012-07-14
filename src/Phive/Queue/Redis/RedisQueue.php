@@ -42,7 +42,7 @@ LUA;
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::push()
+     * {@inheritdoc}
      */
     public function push($item, $eta = null)
     {
@@ -58,7 +58,7 @@ LUA;
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::pop()
+     * {@inheritdoc}
      */
     public function pop()
     {
@@ -73,7 +73,7 @@ LUA;
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::peek()
+     * {@inheritdoc}
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -90,7 +90,7 @@ LUA;
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::count()
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -98,7 +98,7 @@ LUA;
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::clear()
+     * {@inheritdoc}
      */
     public function clear()
     {

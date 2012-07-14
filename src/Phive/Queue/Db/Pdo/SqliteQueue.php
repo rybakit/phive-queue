@@ -14,7 +14,7 @@ class SqliteQueue extends AbstractQueue
     }
 
     /**
-     * @see QueueInterface::pop()
+     * {@inheritdoc}
      */
     public function pop()
     {
@@ -48,7 +48,7 @@ class SqliteQueue extends AbstractQueue
     }
 
     /**
-     * @see QueueInterface::clear()
+     * {@inheritdoc}
      */
     public function clear()
     {

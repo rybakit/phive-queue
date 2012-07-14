@@ -14,7 +14,8 @@ class PgsqlQueue extends AbstractQueue
     }
 
     /**
-     * @see QueueInterface::pop()
+     * {@inheritdoc}
+     *
      * @link http://stackoverflow.com/questions/6507475/job-queue-as-sql-table-with-multiple-consumers-postgresql
      */
     public function pop()

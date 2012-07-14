@@ -41,7 +41,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::push()
+     * {@inheritdoc}
      */
     public function push($item, $eta = null)
     {
@@ -50,7 +50,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::pop()
+     * {@inheritdoc}
      */
     public function pop()
     {
@@ -62,7 +62,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::peek()
+     * {@inheritdoc}
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -72,7 +72,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::count()
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -80,7 +80,7 @@ class SerializerAwareQueue implements QueueInterface
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::clear()
+     * {@inheritdoc}
      */
     public function clear()
     {

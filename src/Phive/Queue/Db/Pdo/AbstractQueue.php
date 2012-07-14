@@ -39,7 +39,7 @@ abstract class AbstractQueue extends BaseAbstractQueue
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::push()
+     * {@inheritdoc}
      */
     public function push($item, $eta = null)
     {
@@ -54,7 +54,7 @@ abstract class AbstractQueue extends BaseAbstractQueue
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::peek()
+     * {@inheritdoc}
      */
     public function peek($limit = 1, $skip = 0)
     {
@@ -88,7 +88,7 @@ abstract class AbstractQueue extends BaseAbstractQueue
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::count()
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -102,7 +102,7 @@ abstract class AbstractQueue extends BaseAbstractQueue
     }
 
     /**
-     * @see \Phive\Queue\QueueInterface::clear()
+     * {@inheritdoc}
      */
     public function clear()
     {

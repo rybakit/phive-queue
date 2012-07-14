@@ -4,6 +4,13 @@ namespace Phive\Queue;
 
 abstract class AbstractQueue implements QueueInterface
 {
+    /**
+     * @param \DateTime|string|int|null $eta
+     *
+     * @return \DateTime
+     *
+     * @throws \InvalidArgumentException
+     */
     protected function normalizeEta($eta)
     {
         if (is_string($eta)) {
@@ -19,6 +26,12 @@ abstract class AbstractQueue implements QueueInterface
         throw new \InvalidArgumentException('Parameter eta must be a string, integer or \DateTime instance.');
     }
 
+    /**
+     * @param int $limit
+     * @param int $skip
+     *
+     * @throws \OutOfRangeException
+     */
     protected function assertLimit($limit, $skip)
     {
         if ($limit <= 0 && -1 != $limit) {
