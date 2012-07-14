@@ -2,6 +2,8 @@
 
 namespace Phive\Queue\Db\Pdo;
 
+use Phive\Exception\RuntimeException;
+
 class ConnectionWrapper
 {
     /**
@@ -32,13 +34,13 @@ class ConnectionWrapper
      *
      * @return int
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function execute($sql)
     {
         if (false === $result = $this->conn->exec($sql)) {
             $err = $this->conn->errorInfo();
-            throw new \RuntimeException($err[2]);
+            throw new RuntimeException($err[2]);
         }
 
         return $result;
@@ -49,13 +51,13 @@ class ConnectionWrapper
      *
      * @return \PDOStatement
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function query($sql)
     {
         if (false === $result = $this->conn->query($sql)) {
             $err = $this->conn->errorInfo();
-            throw new \RuntimeException($err[2]);
+            throw new RuntimeException($err[2]);
         }
 
         return $result;
@@ -67,7 +69,7 @@ class ConnectionWrapper
      *
      * @return StatementWrapper
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function prepare($sql, array $driverOptions = array())
     {
@@ -79,7 +81,7 @@ class ConnectionWrapper
             }
 
             if (false === $stmt) {
-                throw new \RuntimeException('The database cannot successfully prepare the statement.');
+                throw new RuntimeException('The database cannot successfully prepare the statement.');
             }
 
             $this->preparedStatements[$sql] = new StatementWrapper($stmt);

@@ -2,8 +2,9 @@
 
 namespace Phive\Queue\MongoDb;
 
-use Phive\Queue\AbstractQueue;
 use Phive\CallbackIterator;
+use Phive\Exception\RuntimeException;
+use Phive\Queue\AbstractQueue;
 
 class MongoDbQueue extends AbstractQueue
 {
@@ -46,7 +47,7 @@ class MongoDbQueue extends AbstractQueue
 
         $result = $this->collection->insert($data, array('safe' => true));
         if (!$result['ok']) {
-            throw new \RuntimeException($result['errmsg']);
+            throw new RuntimeException($result['errmsg']);
         }
     }
 
@@ -65,7 +66,7 @@ class MongoDbQueue extends AbstractQueue
 
         $result = $this->collection->db->command($command);
         if (!$result['ok']) {
-            throw new \RuntimeException($result['errmsg']);
+            throw new RuntimeException($result['errmsg']);
         }
 
         $data = $result['value'];

@@ -2,8 +2,9 @@
 
 namespace Phive\Queue\Redis;
 
-use Phive\Queue\AbstractQueue;
 use Phive\CallbackIterator;
+use Phive\Exception\RuntimeException;
+use Phive\Queue\AbstractQueue;
 
 class RedisQueue extends AbstractQueue
 {
@@ -52,7 +53,7 @@ LUA;
 
         $result = $this->redis->zAdd('items', $eta, $member);
         if (!$result) {
-            throw new \RuntimeException('Unable to push the item.');
+            throw new RuntimeException('Unable to push the item.');
         }
     }
 

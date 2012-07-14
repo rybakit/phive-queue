@@ -2,6 +2,8 @@
 
 namespace Phive\Queue\Db\Pdo;
 
+use Phive\Exception\RuntimeException;
+
 class StatementWrapper
 {
     /**
@@ -39,13 +41,13 @@ class StatementWrapper
      *
      * @return bool
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function execute(array $parameters = null)
     {
         if (!$this->statement->execute($parameters)) {
             $err = $this->statement->errorInfo();
-            throw new \RuntimeException($err[2]);
+            throw new RuntimeException($err[2]);
         }
 
         return true;
