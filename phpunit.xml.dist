@@ -32,11 +32,13 @@
         <var name="redis_host" value="127.0.0.1" />
         <var name="redis_port" value="6379" />
         <var name="redis_prefix" value="phive_tests:queue:" />
+
+        <var name="concurrency_queue_size" value="100" />
     </php>
 
     <!--groups>
         <exclude>
-            <group>concurency</group>
+            <group>concurrency</group>
         </exclude>
     </groups-->
 

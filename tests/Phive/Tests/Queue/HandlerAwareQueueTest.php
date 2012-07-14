@@ -39,9 +39,9 @@ abstract class HandlerAwareQueueTest extends AbstractQueueTest
     }
 
     /**
-     * @group concurency
+     * @group concurrency
      */
-    public function testConcurency()
+    public function testConcurrency()
     {
         if (!class_exists('GearmanClient', false)) {
             $this->markTestSkipped('pecl/gearman is required for this test to run.');
@@ -68,10 +68,10 @@ abstract class HandlerAwareQueueTest extends AbstractQueueTest
             }
         });
 
-        $numOfJobs = 100;
-        $workload = serialize(static::$handler);
+        $workload   = serialize(static::$handler);
+        $numOfTasks = (int) $GLOBALS['concurrency_queue_size'];
 
-        for ($i = $numOfJobs; $i; $i--) {
+        for ($i = 1; $i <= $numOfTasks; $i++) {
             $this->queue->push($i);
             $client->addTask('pop', $workload);
         }
@@ -81,18 +81,9 @@ abstract class HandlerAwareQueueTest extends AbstractQueueTest
             throw new \RuntimeException($client->error());
         }
 
-        $this->assertEquals($numOfJobs, count($poppedItems));
-        $this->assertGreaterThan(1, count($workerIds), 'Not enough workers to test concurency.');
-
-        //static::$handler->reset();
+        $this->assertEquals($numOfTasks, count($poppedItems));
+        $this->assertGreaterThan(1, count($workerIds), 'Not enough workers to test concurrency.');
     }
-
-    /*
-    public function taskCompleted($task)
-    {
-        $this->concurencyQueueSize--;
-    }
-    */
 
     abstract public static function createHandler();
 }
