@@ -7,10 +7,10 @@ echo "Starting\n";
 $worker = new \GearmanWorker();
 $worker->addServer();
 
-$queues = array();
 $workerId = uniqid(getmypid().'_', true);
-$worker->addFunction('pop', function(\GearmanJob $job) use (&$queues, $workerId) {
+$worker->addFunction('pop', function(\GearmanJob $job) use ($workerId) {
     static $i = 0;
+    static $queues = array();
 
     $workload = $job->workload();
     if (!isset($queues[$workload])) {
