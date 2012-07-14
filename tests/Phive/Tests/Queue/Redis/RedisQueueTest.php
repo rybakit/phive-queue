@@ -2,10 +2,10 @@
 
 namespace Phive\Tests\Queue\Redis;
 
-use Phive\Tests\Queue\HandlerAwareQueueTestCase;
+use Phive\Tests\Queue\HandlerAwareQueueTest;
 use Phive\Queue\Redis\RedisQueue;
 
-class RedisQueueTest extends HandlerAwareQueueTestCase
+class RedisQueueTest extends HandlerAwareQueueTest
 {
     public static function createHandler()
     {

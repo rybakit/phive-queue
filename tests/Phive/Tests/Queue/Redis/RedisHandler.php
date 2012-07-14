@@ -19,8 +19,6 @@ class RedisHandler extends AbstractHandler
         }
 
         parent::__construct($options);
-
-        $this->configure();
     }
 
     public function createQueue()
@@ -29,6 +27,11 @@ class RedisHandler extends AbstractHandler
     }
 
     public function reset()
+    {
+        $this->clear();
+    }
+
+    public function clear()
     {
         $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
         $offset = strlen($prefix);

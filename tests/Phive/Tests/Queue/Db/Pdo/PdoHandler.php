@@ -22,14 +22,14 @@ class PdoHandler extends AbstractHandler
             throw new \RuntimeException('The "pdo" extension is not loaded.');
         }
 
-        parent::__construct($options);
-
+        /*
         $driverName = strstr($this->getOption('dsn'), ':', true);
         if (!extension_loaded('pdo_'.$driverName)) {
             throw new \RuntimeException(sprintf('The "pdo_%s" extension is not loaded.', $driverName));
         }
+        */
 
-        $this->configure();
+        parent::__construct($options);
     }
 
     public function createQueue()
@@ -46,15 +46,30 @@ class PdoHandler extends AbstractHandler
         $this->execSqlFile($sqlFile);
     }
 
+    public function clear()
+    {
+        if (false === $result = $this->pdo->exec('DELETE FROM '.$this->getOption('table_name'))) {
+            $err = $this->pdo->errorInfo();
+            throw new \RuntimeException($err[2]);
+        }
+    }
+
     public function execSqlFile($file)
     {
         $statements = file($file);
 
-        foreach ($statements as $statement) {
-            if (false === $result = $this->pdo->exec($statement)) {
-                $err = $this->pdo->errorInfo();
-                throw new \RuntimeException($err[2]);
+        $this->pdo->beginTransaction();
+        try {
+            foreach ($statements as $statement) {
+                if (false === $result = $this->pdo->exec($statement)) {
+                    $err = $this->pdo->errorInfo();
+                    throw new \RuntimeException($err[2]);
+                }
             }
+            $this->pdo->commit();
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
         }
     }
 

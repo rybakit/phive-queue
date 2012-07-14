@@ -3,9 +3,9 @@
 namespace Phive\Tests\Queue\Db\Pdo;
 
 use Phive\Exception\RuntimeException;
-use Phive\Tests\Queue\HandlerAwareQueueTestCase;
+use Phive\Tests\Queue\HandlerAwareQueueTest;
 
-abstract class PdoQueueTestCase extends HandlerAwareQueueTestCase
+abstract class PdoQueueTest extends HandlerAwareQueueTest
 {
     public function testPdoThrowsExceptionOnError()
     {

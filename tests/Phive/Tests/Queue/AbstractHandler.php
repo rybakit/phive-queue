@@ -2,7 +2,7 @@
 
 namespace Phive\Tests\Queue;
 
-abstract class AbstractHandler
+abstract class AbstractHandler implements \Serializable
 {
     /**
      * @var array
@@ -12,6 +12,7 @@ abstract class AbstractHandler
     public function __construct(array $options = array())
     {
         $this->options = $options;
+        $this->configure();
     }
 
     /**
@@ -38,7 +39,26 @@ abstract class AbstractHandler
         throw new \InvalidArgumentException(sprintf('Option "%s" is not found.', $name));
     }
 
+    public function serialize()
+    {
+        return serialize($this->options);
+    }
+
+    public function unserialize($data)
+    {
+        $this->options = unserialize($data);
+        $this->configure();
+    }
+
     public function reset()
+    {
+    }
+
+    public function clear()
+    {
+    }
+
+    protected function configure()
     {
     }
 

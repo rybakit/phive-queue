@@ -2,7 +2,7 @@
 
 namespace Phive\Tests\Queue;
 
-abstract class QueueTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Phive\Queue\QueueInterface
@@ -55,6 +55,12 @@ abstract class QueueTestCase extends \PHPUnit_Framework_TestCase
         $i1 = $this->createUniqueItem();
         $i2 = $this->createUniqueItem();
         $i3 = $this->createUniqueItem();
+
+        /*
+        $i1 = '1';
+        $i2 = '2';
+        $i3 = '3';
+        */
 
         $this->queue->push($i1);
         $this->queue->push($i2);
@@ -129,64 +135,9 @@ abstract class QueueTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->queue->count());
     }
 
-    /*
-    public function testBinaryDataSupport()
-    {
-        $item = "\x04\x00\xa0\x00\x501";
-        //$item = file_get_contents('/bin/tailf');
-        //$item = base64_decode('wAD4Af8B/gHuA/4BzgP1A/8P/h//f/xv+z30D9IDSAE=');
-        //$item = 0x7f454c46020101;
-
-        //$item = array(1, new \stdClass());
-
-        //$item = new \Phive\Queue\InMemoryQueue();
-        //$queue = new \Phive\Queue\SerializerAwareQueue($this->queue, new \Phive\Serializer\IgbinarySerializer());
-
-        $this->queue->push($item);
-
-        //$this->assertEquals(0, strcmp($item, $this->queue->pop()));
-        $this->assertEquals($item, $this->queue->pop());
-    }
-    */
-
-    /**
-     * @group concurency
-     */
-    public function testConcurency()
-    {
-        if (!class_exists('GearmanClient', false)) {
-            $this->markTestSkipped('pecl/gearman is required for this test to run.');
-        }
-
-        //$count = 100;
-
-        for ($i = $this->concurencyQueueSize; $i; $i--) {
-            $this->queue->push($i);
-        }
-
-        $this->client = new \GearmanClient();
-        $this->client->addServer();
-
-        $config = $this->getQueueConfig();
-
-        for ($i = 10; $i; $i--) {
-            $this->client->addTask('pop', $config);
-        }
-
-        $this->client->setCompleteCallback(array($this, 'taskCompleted'));
-        $this->client->runTasks();
-    }
-
-    /*
-    public function taskCompleted($task)
-    {
-        $this->concurencyQueueSize--;
-    }
-    */
-
     protected function createUniqueItem()
     {
-        return uniqid('item_');
+        return uniqid('item_', true);
     }
 
     /**

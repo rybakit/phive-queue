@@ -12,6 +12,11 @@ class MongoDbHandler extends AbstractHandler
      */
     protected $mongo;
 
+    /**
+     * @var \MongoCollection
+     */
+    protected $collection;
+
     public function __construct(array $options = array())
     {
         if (!extension_loaded('mongo')) {
@@ -19,24 +24,33 @@ class MongoDbHandler extends AbstractHandler
         }
 
         parent::__construct($options);
-
-        $this->configure();
     }
 
     public function createQueue()
     {
-        $collection = $this->mongo->selectCollection(
-            $this->getOption('db_name'),
-            $this->getOption('coll_name')
-        );
-
-        return new MongoDbQueue($collection);
+        return new MongoDbQueue($this->getCollection());
     }
 
     public function reset()
     {
         $this->mongo->dropDB($this->getOption('db_name'));
-        //$collection->remove(array(), array('safe' => true));
+    }
+
+    public function clear()
+    {
+        $this->getCollection()->remove(array(), array('safe' => true));
+    }
+
+    protected function getCollection()
+    {
+        if (!$this->collection) {
+            $this->collection = $this->mongo->selectCollection(
+                $this->getOption('db_name'),
+                $this->getOption('coll_name')
+            );
+        }
+
+        return $this->collection;
     }
 
     protected function configure()

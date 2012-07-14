@@ -2,7 +2,7 @@
 
 namespace Phive\Tests\Queue\Db\Pdo;
 
-class SqliteQueueTest extends PdoQueueTestCase
+class SqliteQueueTest extends PdoQueueTest
 {
     public static function createHandler()
     {

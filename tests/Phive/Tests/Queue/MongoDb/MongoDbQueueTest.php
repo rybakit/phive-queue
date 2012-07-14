@@ -2,10 +2,10 @@
 
 namespace Phive\Tests\Queue\MongoDb;
 
-use Phive\Tests\Queue\HandlerAwareQueueTestCase;
+use Phive\Tests\Queue\HandlerAwareQueueTest;
 use Phive\Queue\MongoDb\MongoDbQueue;
 
-class MongoDbQueueTest extends HandlerAwareQueueTestCase
+class MongoDbQueueTest extends HandlerAwareQueueTest
 {
     public static function createHandler()
     {
