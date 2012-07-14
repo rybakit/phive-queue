@@ -2,7 +2,7 @@
 
 namespace Phive\Tests\Queue\Db\Pdo;
 
-use Phive\Exception\RuntimeException;
+use Phive\RuntimeException;
 use Phive\Tests\Queue\HandlerAwareQueueTest;
 
 abstract class PdoQueueTest extends HandlerAwareQueueTest

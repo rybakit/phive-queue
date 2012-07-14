@@ -3,7 +3,7 @@
 namespace Phive\Queue\Redis;
 
 use Phive\CallbackIterator;
-use Phive\Exception\RuntimeException;
+use Phive\RuntimeException;
 use Phive\Queue\AbstractQueue;
 
 class RedisQueue extends AbstractQueue

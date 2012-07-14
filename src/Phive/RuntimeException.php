@@ -1,6 +1,6 @@
 <?php
 
-namespace Phive\Exception;
+namespace Phive;
 
 class RuntimeException extends \RuntimeException
 {

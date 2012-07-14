@@ -3,7 +3,7 @@
 namespace Phive\Queue\MongoDb;
 
 use Phive\CallbackIterator;
-use Phive\Exception\RuntimeException;
+use Phive\RuntimeException;
 use Phive\Queue\AbstractQueue;
 
 class MongoDbQueue extends AbstractQueue

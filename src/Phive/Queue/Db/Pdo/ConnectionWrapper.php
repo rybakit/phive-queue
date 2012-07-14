@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Db\Pdo;
 
-use Phive\Exception\RuntimeException;
+use Phive\RuntimeException;
 
 class ConnectionWrapper
 {
