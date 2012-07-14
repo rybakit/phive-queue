@@ -49,12 +49,6 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $i2 = $this->createUniqueItem();
         $i3 = $this->createUniqueItem();
 
-        /*
-        $i1 = '1';
-        $i2 = '2';
-        $i3 = '3';
-        */
-
         $this->queue->push($i1);
         $this->queue->push($i2);
         $this->queue->push($i3);
