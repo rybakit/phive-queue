@@ -9,13 +9,6 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
      */
     protected $queue;
 
-    /**
-     * @var \GearmanClient
-     */
-    //protected $client;
-
-    //protected $concurencyQueueSize = 100;
-
     public function setUp()
     {
         $this->queue = $this->createQueue();
