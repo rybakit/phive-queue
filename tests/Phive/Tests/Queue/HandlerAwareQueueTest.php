@@ -68,9 +68,10 @@ abstract class HandlerAwareQueueTest extends AbstractQueueTest
             }
         });
 
-        $workload   = serialize(static::$handler);
         $numOfTasks = (int) $GLOBALS['concurrency_queue_size'];
+        $this->assertGreaterThan(1, $numOfTasks, 'Queue size is too small to test concurrency.');
 
+        $workload = serialize(static::$handler);
         for ($i = 1; $i <= $numOfTasks; $i++) {
             $this->queue->push($i);
             $client->addTask('pop', $workload);
