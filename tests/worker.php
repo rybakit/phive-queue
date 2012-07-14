@@ -8,7 +8,7 @@ $worker = new \GearmanWorker();
 $worker->addServer();
 
 $queues = array();
-$workerId = uniqid(getmypid().'_');
+$workerId = uniqid(getmypid().'_', true);
 $worker->addFunction('pop', function(\GearmanJob $job) use (&$queues, $workerId) {
     static $i = 0;
 
