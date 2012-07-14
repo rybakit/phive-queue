@@ -25,10 +25,10 @@ $worker->addFunction('pop', function(\GearmanJob $job) use (&$queues, $workerId)
     return json_encode(array($workerId, $item));
 });
 
-echo "Waiting for job...\n";
+echo "Waiting for a job...\n";
 while ($worker->work()) {
     if (GEARMAN_SUCCESS != $worker->returnCode()) {
-        echo 'return code: '.$worker->returnCode()."\n";
-        break;
+        echo $worker->error()."\n";
+        exit(1);
     }
 }
