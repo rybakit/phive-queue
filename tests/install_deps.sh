@@ -11,6 +11,7 @@ echo "extension=mongo.so" >> $PHP_INI_FILE
 
 # redis-server
 redis-server -v
+sudo service redis-server stop
 
 wget http://redis.googlecode.com/files/redis-2.6.0-rc5.tar.gz > /dev/null 2>&1
 tar -xzf redis-2.6.0-rc5.tar.gz > /dev/null 2>&1
