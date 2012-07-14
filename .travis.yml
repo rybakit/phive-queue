@@ -5,7 +5,7 @@ php:
     - 5.4
 
 before_script:
-    #- ./tests/install_deps.sh
+    - ./tests/install_deps.sh
     - mysql -e 'create database phive_tests;'
     - psql -c 'create database phive_tests;' -U postgres
 
