@@ -56,7 +56,11 @@ class PdoHandler extends AbstractHandler
 
     public function execSqlFile($file)
     {
-        $statements = file($file);
+        $content = file_get_contents($file);
+        $content = str_replace('{{table_name}}', $this->getOption('table_name'), $content);
+
+        $statements = explode(';', $content);
+        $statements = array_filter($statements, 'trim');
 
         $this->pdo->beginTransaction();
         try {
