@@ -22,9 +22,6 @@
         <var name="db_pdo_mysql_password" value="" />
         <var name="db_pdo_mysql_table_name" value="queue" />
 
-        <var name="db_pdo_sqlite_dsn" value="sqlite:{{temp_dir}}/phive_tests.sq3" />
-        <var name="db_pdo_sqlite_table_name" value="queue" />
-
         <var name="mongo_server" value="mongodb://localhost:27017" />
         <var name="mongo_db_name" value="phive_queue" />
         <var name="mongo_coll_name" value="queue" />
@@ -35,12 +32,6 @@
 
         <var name="concurrency_queue_size" value="100" />
     </php>
-
-    <!--groups>
-        <exclude>
-            <group>concurrency</group>
-        </exclude>
-    </groups-->
 
     <testsuites>
         <testsuite name="Phive Queue Test Suite">

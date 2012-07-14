@@ -6,11 +6,17 @@ class SqliteQueueTest extends PdoQueueTest
 {
     public static function createHandler()
     {
+        // Generate a new db file on every method call to prevent
+        // a "Database schema has changed" error which occurs if any
+        // other process (e.g. worker) is still using the old db file.
+        // We also can't use the shared cache mode due to
+        // @link http://stackoverflow.com/questions/9150319/enable-shared-pager-cache-in-sqlite-using-php-pdo
+
         return new PdoHandler(array(
-            'dsn'           => str_replace('{{temp_dir}}', sys_get_temp_dir(), $GLOBALS['db_pdo_sqlite_dsn']),
+            'dsn'           => 'sqlite:'.tempnam(sys_get_temp_dir(), 'q_').'.sq3',
             'username'      => null,
             'password'      => null,
-            'table_name'    => $GLOBALS['db_pdo_sqlite_table_name'],
+            'table_name'    => 'queue',
         ));
     }
 }
