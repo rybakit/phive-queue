@@ -15,7 +15,7 @@ sudo apt-get update
 sudo apt-get install redis-server
 
 # phpredis
-wget https://github.com/nicolasff/phpredis/tarball/2.2.1 > /dev/null 2>&1
-tar -xzf 2.2.1 > /dev/null 2>&1
-sh -c "cd nicolasff-phpredis-250e81b && phpize && ./configure && make && sudo make install" > /dev/null 2>&1
+wget https://github.com/nicolasff/phpredis/tarball/f3dff08cfaf5d6a7a78bd87e70ee19c92f0ad27d > /dev/null 2>&1
+tar -xzf f3dff08cfaf5d6a7a78bd87e70ee19c92f0ad27d > /dev/null 2>&1
+sh -c "cd nicolasff-phpredis-f3dff08 && phpize && ./configure && make && sudo make install" > /dev/null 2>&1
 echo "extension=redis.so" >> $PHP_INI_FILE
