@@ -13,6 +13,8 @@ abstract class HandlerAwareQueueTest extends AbstractQueueTest
     {
         try {
             static::$handler = static::createHandler();
+        } catch (\BadMethodCallException $e) {
+            throw $e;
         } catch (\Exception $e) {
             static::markTestSkipped($e->getMessage());
         }
@@ -86,5 +88,15 @@ abstract class HandlerAwareQueueTest extends AbstractQueueTest
         $this->assertGreaterThan(1, count($workerIds), 'Not enough workers to test concurrency.');
     }
 
-    abstract public static function createHandler();
+    /**
+     * Abstract static class functions are not possible since v5.2.
+     *
+     * @throws \BadMethodCallException
+     */
+    public static function createHandler()
+    {
+        throw new \BadMethodCallException(
+            sprintf('Method %s:%s is not implemented.', get_called_class(), __FUNCTION__)
+        );
+    }
 }
