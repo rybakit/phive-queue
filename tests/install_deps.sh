@@ -12,7 +12,7 @@ PHP_INI_FILE=$(php -r "echo php_ini_loaded_file();")
 # redis-server
 sudo add-apt-repository ppa:rwky/redis-unstable
 sudo apt-get update
-sudo apt-get install redis-server
+sudo apt-get install -y redis-server
 
 # phpredis
 wget https://github.com/nicolasff/phpredis/tarball/2.2.1 > /dev/null 2>&1
