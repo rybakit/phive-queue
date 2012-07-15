@@ -23,7 +23,7 @@
         <var name="db_pdo_mysql_table_name" value="queue" />
 
         <var name="mongo_server" value="mongodb://localhost:27017" />
-        <var name="mongo_db_name" value="phive_queue" />
+        <var name="mongo_db_name" value="phive_tests" />
         <var name="mongo_coll_name" value="queue" />
 
         <var name="redis_host" value="127.0.0.1" />
