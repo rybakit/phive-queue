@@ -13,7 +13,7 @@ class SqliteQueueTest extends PdoQueueTest
         // @link http://stackoverflow.com/questions/9150319/enable-shared-pager-cache-in-sqlite-using-php-pdo
 
         return new PdoHandler(array(
-            'dsn'           => 'sqlite:'.tempnam(sys_get_temp_dir(), 'q_').'.sq3',
+            'dsn'           => sprintf('sqlite:%s/%s.sq3', sys_get_temp_dir(), uniqid('phive_tests_')),
             'username'      => null,
             'password'      => null,
             'table_name'    => 'queue',
