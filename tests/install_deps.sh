@@ -15,8 +15,8 @@ sudo service redis-server stop
 
 wget http://redis.googlecode.com/files/redis-2.6.0-rc5.tar.gz > /dev/null 2>&1
 tar -xzf redis-2.6.0-rc5.tar.gz > /dev/null 2>&1
-#sh -c "cd redis-2.6.0-rc5 && make && ./src/redis-server" > /dev/null 2>&1
-cd redis-2.6.0-rc5 && make && ./src/redis-server
+#sh -c "cd redis-2.6.0-rc5 && make && ./src/redis-server &" > /dev/null 2>&1
+cd redis-2.6.0-rc5 && make && ./src/redis-server &
 
 # phpredis
 wget https://github.com/nicolasff/phpredis/tarball/2.2.1 > /dev/null 2>&1
