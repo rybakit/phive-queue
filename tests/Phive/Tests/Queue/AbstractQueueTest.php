@@ -68,16 +68,14 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     {
         $count = 5;
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = $count; $i; $i--) {
             $this->queue->push($i);
         }
 
-        $i = 0;
-        foreach ($this->queue->peek(-1, 0) as $item) {
-            $i++;
-        }
+        $items = $this->queue->peek(-1, 0);
 
-        $this->assertEquals($count, $i);
+        $this->assertInstanceOf('Iterator', $items);
+        $this->assertEquals($count, iterator_count($items));
     }
 
     public function testPeekThrowsExceptionOnInvalidLimitRange()
@@ -111,10 +109,8 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $count = 5;
 
         $this->assertEquals(0, $this->queue->count());
-
-        $item = $this->createUniqueItem();
-        for ($i = 0; $i < $count; $i++) {
-            $this->queue->push($item);
+        for ($i = $count; $i; $i--) {
+            $this->queue->push($i);
         }
         $this->assertEquals($count, $this->queue->count());
 
