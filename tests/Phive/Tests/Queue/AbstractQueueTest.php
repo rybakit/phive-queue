@@ -133,14 +133,14 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
             $this->queue->push($i);
         }
 
-        echo sprintf(" > pushing: %s seconds\n", microtime(true) - $start);
+        echo sprintf(" > push: %s seconds\n", microtime(true) - $start);
 
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
-            $this->queue->push($i);
+            $this->queue->pop($i);
         }
 
-        echo sprintf(" > popping: %s seconds\n", microtime(true) - $start);
+        echo sprintf(" > pop:  %s seconds\n", microtime(true) - $start);
     }
 
     protected function createUniqueItem()
