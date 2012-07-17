@@ -66,7 +66,7 @@ class PdoHandler extends AbstractHandler
             foreach ($statements as $statement) {
                 $statement = trim($statement);
 
-                // skip empty strings and comments
+                // skip empty lines and comments
                 if (!$statement || 0 === strpos($statement, '--')) {
                     continue;
                 }
