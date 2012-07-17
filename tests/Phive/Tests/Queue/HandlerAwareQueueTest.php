@@ -41,6 +41,7 @@ abstract class HandlerAwareQueueTest extends AbstractQueueTest
     }
 
     /**
+     * @group extra
      * @group concurrency
      */
     public function testConcurrency()
@@ -79,9 +80,15 @@ abstract class HandlerAwareQueueTest extends AbstractQueueTest
             $client->addTask('pop', $workload);
         }
 
-        // run the tasks in parallel (assuming multiple workers)
-        if (!$client->runTasks()) {
-            throw new \RuntimeException($client->error());
+        try {
+            // run the tasks in parallel (assuming multiple workers)
+            $result = $client->runTasks();
+        } catch (\GearmanException $e) {
+            $result = false;
+        }
+
+        if (!$result) {
+            $this->markTestSkipped('Unable to run gearman tasks. Check if gearman server is running.');
         }
 
         $this->assertEquals($queueSize, count($poppedItems));

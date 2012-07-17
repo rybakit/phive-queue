@@ -31,6 +31,8 @@
         <var name="redis_prefix" value="phive_tests:queue:" />
 
         <var name="concurrency_queue_size" value="100" />
+
+        <var name="benchmark_queue_size" value="1000" />
     </php>
 
     <testsuites>

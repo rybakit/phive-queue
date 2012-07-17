@@ -118,6 +118,31 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->queue->count());
     }
 
+    /**
+     * @group extra
+     * @group benchmark
+     */
+    public function testPushPopSpeed()
+    {
+        $queueSize = (int) $GLOBALS['benchmark_queue_size'];
+
+        echo sprintf("Benchmarking \"%s\" with %d item(s):\n", get_class($this->queue), $queueSize);
+
+        $start = microtime(true);
+        for ($i = $queueSize; $i; $i--) {
+            $this->queue->push($i);
+        }
+
+        echo sprintf(" > pushing: %s seconds\n", microtime(true) - $start);
+
+        $start = microtime(true);
+        for ($i = $queueSize; $i; $i--) {
+            $this->queue->push($i);
+        }
+
+        echo sprintf(" > popping: %s seconds\n", microtime(true) - $start);
+    }
+
     protected function createUniqueItem()
     {
         return uniqid('item_', true);
