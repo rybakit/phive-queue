@@ -60,14 +60,22 @@ class PdoHandler extends AbstractHandler
         $content = str_replace('{{table_name}}', $this->getOption('table_name'), $content);
 
         $statements = explode(';', $content);
-        $statements = array_filter($statements, 'trim');
 
         $this->pdo->beginTransaction();
         try {
             foreach ($statements as $statement) {
+                $statement = trim($statement);
+
+                // skip empty strings and comments
+                if (!$statement || 0 === strpos($statement, '--')) {
+                    continue;
+                }
+
                 if (false === $result = $this->pdo->exec($statement)) {
                     $err = $this->pdo->errorInfo();
-                    throw new \RuntimeException($err[2]);
+                    throw new \RuntimeException(
+                        $err[2] ?: sprintf('Unable to execute the statement "%s".', $statement)
+                    );
                 }
             }
             $this->pdo->commit();
