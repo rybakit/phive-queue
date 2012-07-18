@@ -7,7 +7,9 @@ class SqliteQueue extends AbstractQueue
     public function __construct(\PDO $conn, $tableName)
     {
         if ('sqlite' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
-            throw new \InvalidArgumentException('Invalid PDO driver specified.');
+            throw new \InvalidArgumentException(sprintf('%s expects "sqlite" PDO driver, "%s" given.',
+                __CLASS__, $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)
+            ));
         }
 
         parent::__construct($conn, $tableName);
