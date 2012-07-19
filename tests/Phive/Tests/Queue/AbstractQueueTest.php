@@ -23,8 +23,8 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     {
         $item = $this->createUniqueItem();
 
-        $this->assertFalse($this->queue->pop());
         $this->queue->push($item);
+
         $this->assertEquals($item, $this->queue->pop());
         $this->assertFalse($this->queue->pop());
     }
@@ -34,13 +34,22 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $i1 = $this->createUniqueItem();
         $i2 = $this->createUniqueItem();
 
-        $this->queue->push($i1, '+2 seconds');
-        $this->queue->push($i2);
+        $eta = time();
+        $this->queue->push($i1, $eta);
+        $this->queue->push($i2, $eta - 10);
 
         $this->assertEquals($i2, $this->queue->pop());
-        $this->assertFalse($this->queue->pop());
-        sleep(2);
         $this->assertEquals($i1, $this->queue->pop());
+    }
+
+    public function testPushPopDelay()
+    {
+        $item = $this->createUniqueItem();
+
+        $this->queue->push($item, '+1 second');
+        $this->assertFalse($this->queue->pop());
+        sleep(1);
+        $this->assertEquals($item, $this->queue->pop());
     }
 
     public function testPeek()
