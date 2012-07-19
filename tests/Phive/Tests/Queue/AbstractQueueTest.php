@@ -137,9 +137,10 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 
         echo sprintf("Benchmarking \"%s\" with %d item(s):\n", get_class($this->queue), $queueSize);
 
+        $item = str_repeat('x', 255);
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
-            $this->queue->push($i);
+            $this->queue->push($item);
         }
 
         echo sprintf(" > push: %s seconds\n", microtime(true) - $start);
