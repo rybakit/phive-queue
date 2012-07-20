@@ -36,9 +36,10 @@ class InMemoryQueue extends AbstractQueue
         if (!$this->innerQueue->isEmpty()) {
             $this->innerQueue->setExtractFlags(\SplPriorityQueue::EXTR_PRIORITY);
             list($eta,) = $this->innerQueue->top();
-            $this->innerQueue->setExtractFlags(\SplPriorityQueue::EXTR_DATA);
 
             if (time() + $eta >= 0) {
+                $this->innerQueue->setExtractFlags(\SplPriorityQueue::EXTR_DATA);
+
                 return $this->innerQueue->extract();
             }
         }
