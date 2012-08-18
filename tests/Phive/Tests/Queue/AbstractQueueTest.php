@@ -131,7 +131,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
      * @group extra
      * @group benchmark
      */
-    public function testPushPopSpeed()
+    public function testPushPopPerformance()
     {
         $queueSize = (int) $GLOBALS['benchmark_queue_size'];
 
