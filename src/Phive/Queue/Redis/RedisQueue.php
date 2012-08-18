@@ -6,6 +6,11 @@ use Phive\CallbackIterator;
 use Phive\RuntimeException;
 use Phive\Queue\AbstractQueue;
 
+/**
+ * RedisQueue requires Redis 2.6 (for a Lua scripting feature) and
+ * phpredis 2.2.2 which has a fix @link https://github.com/nicolasff/phpredis/pull/189
+ * for a PHP 5.4 bug @link https://bugs.php.net/bug.php?id=62112.
+ */
 class RedisQueue extends AbstractQueue
 {
     const SCRIPT_POP = <<<'LUA'
@@ -25,16 +30,9 @@ LUA;
      * Constructor.
      *
      * @param \Redis $redis
-     *
-     * @throws \RuntimeException If PHP version > 5.3 and < 5.4.5RC1 due to https://bugs.php.net/bug.php?id=62112
-     *                           fixed in https://github.com/php/php-src/commit/3e62aae1b456440328af4153524e22679b84f68a
      */
     public function __construct(\Redis $redis)
     {
-        if (version_compare(PHP_VERSION, '5.4', '>=') && version_compare(PHP_VERSION, '5.4.5RC1', '<')) {
-            throw new \RuntimeException(sprintf('%s doesn\'t support PHP 5.4 until 5.4.5RC1.', __CLASS__));
-        }
-
         $this->redis = $redis;
     }
 

@@ -14,9 +14,6 @@ class RedisHandler extends AbstractHandler
 
     public function __construct(array $options = array())
     {
-        if (version_compare(PHP_VERSION, '5.4', '>=') && version_compare(PHP_VERSION, '5.4.5RC1', '<')) {
-            throw new \RuntimeException('Phive\\Queue\\Redis\\RedisQueue doesn\'t support PHP 5.4 until 5.4.5RC1.');
-        }
         if (!extension_loaded('redis')) {
             throw new \RuntimeException('The "redis" extension is not loaded.');
         }
