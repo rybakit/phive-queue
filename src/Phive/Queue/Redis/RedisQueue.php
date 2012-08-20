@@ -7,8 +7,8 @@ use Phive\RuntimeException;
 use Phive\Queue\AbstractQueue;
 
 /**
- * RedisQueue requires Redis 2.6 (for a Lua scripting feature) and
- * phpredis 2.2.2 which has a fix @link https://github.com/nicolasff/phpredis/pull/189
+ * RedisQueue requires Redis >= 2.6 (for a Lua scripting feature) and
+ * phpredis >= 2.2.2 which has a fix @link https://github.com/nicolasff/phpredis/pull/189
  * for a PHP 5.4 bug @link https://bugs.php.net/bug.php?id=62112.
  */
 class RedisQueue extends AbstractQueue
