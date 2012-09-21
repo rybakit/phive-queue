@@ -14,7 +14,5 @@ sh -c "cd nicolasff-phpredis-22f4555 && phpize && ./configure && make && sudo ma
 echo "extension=redis.so" >> $PHP_INI_FILE
 
 # mongo
-wget http://pecl.php.net/get/mongo-1.2.10.tgz > /dev/null 2>&1
-tar -xzf mongo-1.2.10.tgz > /dev/null 2>&1
-sh -c "cd mongo-1.2.10 && phpize && ./configure && make && sudo make install" > /dev/null 2>&1
+pecl -q install mongo-${MONGO_VERSION}
 echo "extension=mongo.so" >> $PHP_INI_FILE
