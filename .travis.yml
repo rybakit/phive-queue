@@ -4,6 +4,10 @@ php:
     - 5.3
     - 5.4
 
+services:
+    - mongodb
+#    - redis-server
+
 before_script:
     - ./tests/install_deps.sh
     - mysql -e 'create database phive_tests;'
