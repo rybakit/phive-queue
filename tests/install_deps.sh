@@ -15,3 +15,5 @@ echo "extension=redis.so" >> $PHP_INI_FILE
 
 # mongo
 pecl install mongo
+
+php -m
