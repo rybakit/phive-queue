@@ -15,5 +15,8 @@ echo "extension=redis.so" >> $PHP_INI_FILE
 
 # mongo
 pecl install mongo
+if [ -z "$(php -m | grep mongo)" ]; then
+    echo "extension=mongo.so" >> $PHP_INI_FILE
+fi
 
 php -m
