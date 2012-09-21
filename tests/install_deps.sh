@@ -14,4 +14,4 @@ sh -c "cd nicolasff-phpredis-22f4555 && phpize && ./configure && make && sudo ma
 echo "extension=redis.so" >> $PHP_INI_FILE
 
 # mongo
-pecl install mongo && echo "extension=mongo.so" >> $PHP_INI_FILE
+pecl install mongo
