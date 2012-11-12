@@ -28,7 +28,10 @@ class MongoDbHandler extends AbstractHandler
 
     public function createQueue()
     {
-        return new MongoDbQueue($this->getCollection());
+        return new MongoDbQueue($this->mongo, array(
+            'database'      => $this->getOption('db_name'),
+            'collection'    => $this->getOption('coll_name'),
+        ));
     }
 
     public function reset()

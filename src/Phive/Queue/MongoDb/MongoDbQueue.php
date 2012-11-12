@@ -9,27 +9,58 @@ use Phive\Queue\AbstractQueue;
 class MongoDbQueue extends AbstractQueue
 {
     /**
+     * @var \Mongo
+     */
+    protected $conn;
+
+    /**
      * @var \MongoCollection
      */
     protected $collection;
 
     /**
+     * @var array
+     */
+    protected $options;
+
+    /**
      * Constructor.
      *
-     * @param \MongoCollection $collection
+     * @param \Mongo $conn
+     * @param array  $options
      */
-    public function __construct(\MongoCollection $collection)
+    public function __construct(\Mongo $conn, array $options)
     {
-        $this->collection = $collection;
+        if (!isset($options['database'], $options['collection'])) {
+            throw new \InvalidArgumentException(sprintf(
+                'The "database" and "collection" option are required for %s.', __CLASS__
+            ));
+        }
+
+        $this->conn = $conn;
+        $this->options = $options;
     }
 
     /**
-     * Retrieves \MongoCollection instance.
-     *
+     * @return \Mongo
+     */
+    public function getConnection()
+    {
+        return $this->conn;
+    }
+
+    /**
      * @return \MongoCollection
      */
     public function getCollection()
     {
+        if (!$this->collection) {
+            $this->collection = $this->conn->selectCollection(
+                $this->options['database'],
+                $this->options['collection']
+            );
+        }
+
         return $this->collection;
     }
 
@@ -45,7 +76,7 @@ class MongoDbQueue extends AbstractQueue
             'item' => $item,
         );
 
-        $result = $this->collection->insert($data, array('safe' => true));
+        $result = $this->getCollection()->insert($data, array('safe' => true));
         if (!$result['ok']) {
             throw new RuntimeException($result['errmsg']);
         }
@@ -57,7 +88,7 @@ class MongoDbQueue extends AbstractQueue
     public function pop()
     {
         $command = array(
-            'findandmodify' => $this->collection->getName(),
+            'findandmodify' => $this->getCollection()->getName(),
             'remove'        => 1,
             'fields'        => array('item' => 1),
             'query'         => array('eta' => array('$lte' => time())),
@@ -81,7 +112,7 @@ class MongoDbQueue extends AbstractQueue
     {
         $this->assertLimit($limit, $skip);
 
-        $cursor = $this->collection->find(array('eta' => array('$lte' => time())));
+        $cursor = $this->getCollection()->find(array('eta' => array('$lte' => time())));
         $cursor->sort(array('eta' => 1));
 
         if ($limit > 0) {
@@ -102,7 +133,7 @@ class MongoDbQueue extends AbstractQueue
      */
     public function count()
     {
-        return $this->collection->count();
+        return $this->getCollection()->count();
     }
 
     /**
@@ -110,6 +141,6 @@ class MongoDbQueue extends AbstractQueue
      */
     public function clear()
     {
-        $this->collection->remove(array(), array('safe' => true));
+        $this->getCollection()->remove(array(), array('safe' => true));
     }
 }
