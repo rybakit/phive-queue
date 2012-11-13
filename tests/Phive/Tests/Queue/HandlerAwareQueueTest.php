@@ -41,7 +41,6 @@ abstract class HandlerAwareQueueTest extends AbstractQueueTest
     }
 
     /**
-     * @group extra
      * @group concurrency
      */
     public function testConcurrency()

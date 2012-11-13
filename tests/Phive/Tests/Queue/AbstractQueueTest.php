@@ -128,7 +128,6 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group extra
      * @group benchmark
      */
     public function testPushPopPerformance()

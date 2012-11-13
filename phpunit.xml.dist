@@ -40,4 +40,11 @@
             <directory>./tests/Phive/</directory>
         </testsuite>
     </testsuites>
+
+    <groups>
+        <exclude>
+            <group>concurrency</group>
+            <group>benchmark</group>
+        </exclude>
+    </groups>
 </phpunit>
