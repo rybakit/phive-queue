@@ -24,7 +24,7 @@ class InMemoryQueue extends AbstractQueue
      */
     public function push($item, $eta = null)
     {
-        $eta = $eta ? $this->normalizeEta($eta) : time();
+        $eta = $this->normalizeEta($eta);
         $this->innerQueue->insert($item, array(-$eta, $this->queueOrder--));
     }
 

@@ -69,7 +69,7 @@ class MongoDbQueue extends AbstractQueue
      */
     public function push($item, $eta = null)
     {
-        $eta = $eta ? $this->normalizeEta($eta) : time();
+        $eta = $this->normalizeEta($eta);
 
         $data = array(
             'eta'  => $eta,

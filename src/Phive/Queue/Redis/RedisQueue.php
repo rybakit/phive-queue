@@ -51,7 +51,7 @@ LUA;
      */
     public function push($item, $eta = null)
     {
-        $eta = $eta ? $this->normalizeEta($eta) : time();
+        $eta = $this->normalizeEta($eta);
 
         $unique = $this->redis->incr('sequence');
         $member = $unique.'@'.$item;

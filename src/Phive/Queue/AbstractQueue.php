@@ -7,19 +7,22 @@ abstract class AbstractQueue implements QueueInterface
     /**
      * @param \DateTime|string|int|null $eta
      *
-     * @return \DateTime
+     * @return int The Unix timestamp.
      *
      * @throws \InvalidArgumentException
      */
     protected function normalizeEta($eta)
     {
+        if (null === $eta) {
+            return time();
+        }
         if (is_string($eta)) {
-            $eta = new \DateTime($eta);
+            $eta = date_create($eta);
         }
         if ($eta instanceof \DateTime) {
             return $eta->getTimestamp();
         }
-        if (is_numeric($eta)) {
+        if (is_int($eta)) {
             return $eta;
         }
 

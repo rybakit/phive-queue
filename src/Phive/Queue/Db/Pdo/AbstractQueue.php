@@ -43,7 +43,7 @@ abstract class AbstractQueue extends BaseAbstractQueue
      */
     public function push($item, $eta = null)
     {
-        $eta = $eta ? $this->normalizeEta($eta) : time();
+        $eta = $this->normalizeEta($eta);
 
         $sql = 'INSERT INTO '.$this->tableName.' (eta, item) VALUES (:eta, :item)';
         $stmt = $this->conn->prepare($sql);
