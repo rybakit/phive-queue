@@ -15,7 +15,7 @@ Create a create a composer.json file inside your project directory:
 }
 ```
 
-And run these two commands to install it:
+Then run these two commands to install it:
 
 ``` bash
 $ curl -s http://getcomposer.org/installer | php
@@ -34,12 +34,12 @@ require 'vendor/autoload.php';
 
 Currently, there are the following drivers:
 
-### MongoDbQueue
-### RedisQueue
-### PgsqlQueue
-### MysqlQueue
-### SqliteQueue
-### InMemoryQueue
+* `MongoDbQueue`
+* `RedisQueue`
+* `PgsqlQueue`
+* `MysqlQueue`
+* `SqliteQueue`
+* `InMemoryQueue`
 
 
 ## Usage
@@ -50,17 +50,23 @@ Currently, there are the following drivers:
 use Phive\Queue\InMemoryQueue;
 
 $queue = new InMemoryQueue();
+
 $queue->push('payload1');
 $queue->push('payload2', new \DateTime());
 $queue->push('payload3', time());
 $queue->push('payload4', '+5 seconds');
 
+foreach ($queue->peek(2, 1) as $payload) {
+    echo $payload, PHP_EOL;
+}
+
 while ($payload = $queue->pop()) {
     echo $payload, PHP_EOL;
 }
 
-sleep(5);
-echo $queue->pop(), PHP_EOL;
+$queue->clear();
+
+echo $queue->count(), PHP_EOL;
 
 ```
 
