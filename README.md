@@ -5,7 +5,7 @@ Phive Queue [![Build Status](https://secure.travis-ci.org/rybakit/phive-queue.pn
 
 The recommended way to install Phive Queue is through [composer](http://getcomposer.org).
 
-Create a create a composer.json file inside your project directory:
+Create a composer.json file inside your project directory:
 
 ``` json
 {
