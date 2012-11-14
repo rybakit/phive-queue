@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Db\Pdo;
 
-class SqliteQueue extends AbstractQueue
+class SqliteQueue extends AbstractPdoQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {

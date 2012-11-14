@@ -2,9 +2,9 @@
 
 namespace Phive\Queue\Db\Pdo;
 
-use Phive\Queue\AbstractQueue as BaseAbstractQueue;
+use Phive\Queue\AbstractQueue;
 
-abstract class AbstractQueue extends BaseAbstractQueue
+abstract class AbstractPdoQueue extends AbstractQueue
 {
     /**
      * @var ConnectionWrapper

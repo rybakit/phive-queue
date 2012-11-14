@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Db\Pdo;
 
-class MysqlQueue extends AbstractQueue
+class MysqlQueue extends AbstractPdoQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {
