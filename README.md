@@ -75,7 +75,9 @@ echo $queue->count(), PHP_EOL;
 
 To run the test suite, you'll have to install dependencies:
 
-    ./tests/install_deps.sh
+``` bash
+$ ./tests/install_deps.sh
+```
 
 Once done, run unit tests:
 
