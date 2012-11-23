@@ -3,11 +3,12 @@
 namespace Phive\Queue\Db\Pdo;
 
 use Phive\Queue\AbstractQueue;
+use Phive\RuntimeException;
 
 abstract class AbstractPdoQueue extends AbstractQueue
 {
     /**
-     * @var ConnectionWrapper
+     * @var \PDO
      */
     protected $conn;
 
@@ -24,13 +25,13 @@ abstract class AbstractPdoQueue extends AbstractQueue
      */
     public function __construct(\PDO $conn, $tableName)
     {
-        $this->conn = $this->createConnectionWrapper($conn);
+        $this->conn = $conn;
         $this->tableName = (string) $tableName;
     }
 
     public function getConnection()
     {
-        return $this->conn->getConnection();
+        return $this->conn;
     }
 
     public function getTableName()
@@ -43,14 +44,13 @@ abstract class AbstractPdoQueue extends AbstractQueue
      */
     public function push($item, $eta = null)
     {
-        $eta = $this->normalizeEta($eta);
+        $sql = sprintf('INSERT INTO %s (eta, item) VALUES (%d, %s)',
+            $this->tableName,
+            $this->normalizeEta($eta),
+            $this->conn->quote($item)
+        );
 
-        $sql = 'INSERT INTO '.$this->tableName.' (eta, item) VALUES (:eta, :item)';
-        $stmt = $this->conn->prepare($sql);
-
-        $stmt->bindValue(':eta', $eta, \PDO::PARAM_INT);
-        $stmt->bindValue(':item', $item);
-        $stmt->execute();
+        $this->exec($sql);
     }
 
     /**
@@ -60,8 +60,8 @@ abstract class AbstractPdoQueue extends AbstractQueue
     {
         $this->assertLimit($limit, $skip);
 
-        $eta = time();
-        $sql = "SELECT item FROM $this->tableName WHERE eta <= $eta ORDER BY eta, id";
+        $sql = 'SELECT item FROM '.$this->tableName
+            .' WHERE eta <= '.time().' ORDER BY eta, id';
 
         if ($limit > 0) {
             $sql .= ' LIMIT '.(int) $limit;
@@ -70,7 +70,7 @@ abstract class AbstractPdoQueue extends AbstractQueue
             $sql .= ' OFFSET '.(int) $skip;
         }
 
-        $stmt = $this->conn->query($sql);
+        $stmt = $this->query($sql);
         $stmt->setFetchMode(\PDO::FETCH_COLUMN, 0);
 
         /*
@@ -92,9 +92,7 @@ abstract class AbstractPdoQueue extends AbstractQueue
      */
     public function count()
     {
-        $sql = 'SELECT COUNT(*) FROM '.$this->tableName;
-        $stmt = $this->conn->query($sql);
-
+        $stmt = $this->query('SELECT COUNT(*) FROM '.$this->tableName);
         $result = $stmt->fetchColumn();
         $stmt->closeCursor();
 
@@ -106,18 +104,53 @@ abstract class AbstractPdoQueue extends AbstractQueue
      */
     public function clear()
     {
-        $sql = 'TRUNCATE TABLE '.$this->tableName;
-
-        return $this->conn->execute($sql);
+        return $this->exec('TRUNCATE TABLE '.$this->tableName);
     }
 
     /**
-     * @param \PDO $conn
+     * @param string $sql
      *
-     * @return ConnectionWrapper
+     * @return int
      */
-    protected function createConnectionWrapper(\PDO $conn)
+    protected function exec($sql)
     {
-        return new ConnectionWrapper($conn);
+        return $this->exceptional(function(\PDO $conn) use ($sql) {
+            return $conn->exec($sql);
+        });
+    }
+
+    /**
+     * @param string $sql
+     *
+     * @return \PDOStatement
+     */
+    protected function query($sql)
+    {
+        return $this->exceptional(function(\PDO $conn) use ($sql) {
+            return $conn->query($sql);
+        });
+    }
+
+    /**
+     * @param Closure $func The function to execute.
+     *
+     * @return mixed
+     *
+     * @throws RuntimeException
+     */
+    protected function exceptional(\Closure $func)
+    {
+        try {
+            $result = $func($this->conn);
+        } catch (\PDOException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        if (false === $result) {
+            $err = $this->conn->errorInfo();
+            throw new RuntimeException($err[2], $err[1]);
+        }
+
+        return $result;
     }
 }

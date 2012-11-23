@@ -20,29 +20,24 @@ class SqliteQueue extends AbstractPdoQueue
      */
     public function pop()
     {
-        $sql = 'SELECT id, item FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id LIMIT 1';
+        $sql = 'SELECT id, item FROM '.$this->tableName
+            .' WHERE eta <= '.time().' ORDER BY eta, id LIMIT 1';
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
-
-        $this->conn->execute('BEGIN IMMEDIATE');
+        $this->exec('BEGIN IMMEDIATE');
 
         try {
-            $stmt->execute();
+            $stmt = $this->query($sql);
             $row = $stmt->fetch();
             $stmt->closeCursor();
 
             if ($row) {
-                $sql = 'DELETE FROM '.$this->tableName.' WHERE id = :id';
-
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bindValue(':id', $row['id'], \PDO::PARAM_INT);
-                $stmt->execute();
+                $sql = 'DELETE FROM '.$this->tableName.' WHERE id = '.(int) $row['id'];
+                $this->exec($sql);
             }
 
-            $this->conn->execute('COMMIT');
+            $this->exec('COMMIT');
         } catch (\Exception $e) {
-            $this->conn->execute('ROLLBACK');
+            $this->exec('ROLLBACK');
             throw $e;
         }
 
@@ -54,8 +49,6 @@ class SqliteQueue extends AbstractPdoQueue
      */
     public function clear()
     {
-        $sql = 'DELETE FROM '.$this->tableName;
-
-        return $this->conn->execute($sql);
+        return $this->exec('DELETE FROM '.$this->tableName);
     }
 }

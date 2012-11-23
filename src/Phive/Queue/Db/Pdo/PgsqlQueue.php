@@ -22,17 +22,14 @@ class PgsqlQueue extends AbstractPdoQueue
      */
     public function pop()
     {
-        $sql = 'SELECT id FROM '.$this->tableName.' WHERE eta <= :eta ORDER BY eta, id LIMIT 1';
+        $sql = 'SELECT id FROM '.$this->tableName.' WHERE eta <= '.time().' ORDER BY eta, id LIMIT 1';
         $sql = 'DELETE FROM '.$this->tableName.' WHERE id = ('.$sql.') RETURNING item';
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
 
         $this->conn->beginTransaction();
 
         try {
-            $this->conn->execute('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
-            $stmt->execute();
+            $this->exec('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
+            $stmt = $this->query($sql);
             $this->conn->commit();
         } catch (\Exception $e) {
             $this->conn->rollBack();

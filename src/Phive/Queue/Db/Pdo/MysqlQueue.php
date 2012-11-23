@@ -21,24 +21,18 @@ class MysqlQueue extends AbstractPdoQueue
     public function pop()
     {
         $sql = 'SELECT id, item FROM '.$this->tableName
-            .' WHERE eta <= :eta ORDER BY eta, id LIMIT 1 FOR UPDATE';
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':eta', time(), \PDO::PARAM_INT);
+            .' WHERE eta <= '.time().' ORDER BY eta, id LIMIT 1 FOR UPDATE';
 
         $this->conn->beginTransaction();
 
         try {
-            $stmt->execute();
+            $stmt = $this->query($sql);
             $row = $stmt->fetch();
             $stmt->closeCursor();
 
             if ($row) {
-                $sql = 'DELETE FROM '.$this->tableName.' WHERE id = :id';
-
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bindValue(':id', $row['id'], \PDO::PARAM_INT);
-                $stmt->execute();
+                $sql = 'DELETE FROM '.$this->tableName.' WHERE id = '.(int) $row['id'];
+                $this->exec($sql);
             }
 
             $this->conn->commit();
