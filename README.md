@@ -32,7 +32,7 @@ require 'vendor/autoload.php';
 
 ## Drivers
 
-Currently, there are the following drivers:
+Currently, there are the following drivers available:
 
 * `MongoDbQueue`
 * `RedisQueue`
