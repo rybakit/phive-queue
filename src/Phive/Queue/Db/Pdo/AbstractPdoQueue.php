@@ -143,7 +143,11 @@ abstract class AbstractPdoQueue extends AbstractQueue
         try {
             $result = $func($this->conn);
         } catch (\PDOException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+            // We can't pass PDOException's code which is
+            // an alphanumeric string rather than an integer.
+            // @link http://www.php.net/manual/en/class.pdoexception.php#95812
+            $err = $this->conn->errorInfo();
+            throw new RuntimeException($e->getMessage(), $err[1], $e);
         }
 
         if (false === $result) {
