@@ -8,9 +8,9 @@ use Phive\Tests\Queue\AbstractHandler;
 class MongoDbHandler extends AbstractHandler
 {
     /**
-     * @var \Mongo
+     * @var \MongoClient
      */
-    protected $mongo;
+    protected $client;
 
     /**
      * @var \MongoCollection
@@ -28,7 +28,7 @@ class MongoDbHandler extends AbstractHandler
 
     public function createQueue()
     {
-        return new MongoDbQueue($this->mongo, array(
+        return new MongoDbQueue($this->client, array(
             'database'      => $this->getOption('db_name'),
             'collection'    => $this->getOption('coll_name'),
         ));
@@ -36,7 +36,7 @@ class MongoDbHandler extends AbstractHandler
 
     public function reset()
     {
-        $this->mongo->dropDB($this->getOption('db_name'));
+        $this->client->dropDB($this->getOption('db_name'));
     }
 
     public function clear()
@@ -47,7 +47,7 @@ class MongoDbHandler extends AbstractHandler
     protected function getCollection()
     {
         if (!$this->collection) {
-            $this->collection = $this->mongo->selectCollection(
+            $this->collection = $this->client->selectCollection(
                 $this->getOption('db_name'),
                 $this->getOption('coll_name')
             );
@@ -58,6 +58,6 @@ class MongoDbHandler extends AbstractHandler
 
     protected function configure()
     {
-        $this->mongo = new \Mongo($this->getOption('server'));
+        $this->client = new \MongoClient($this->getOption('server'));
     }
 }

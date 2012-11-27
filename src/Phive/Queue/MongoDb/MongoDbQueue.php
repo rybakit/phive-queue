@@ -9,9 +9,9 @@ use Phive\Queue\AbstractQueue;
 class MongoDbQueue extends AbstractQueue
 {
     /**
-     * @var \Mongo
+     * @var \MongoClient
      */
-    protected $conn;
+    protected $client;
 
     /**
      * @var \MongoCollection
@@ -26,10 +26,10 @@ class MongoDbQueue extends AbstractQueue
     /**
      * Constructor.
      *
-     * @param \Mongo $conn
-     * @param array  $options
+     * @param \MongoClient $client
+     * @param array        $options
      */
-    public function __construct(\Mongo $conn, array $options)
+    public function __construct(\MongoClient $client, array $options)
     {
         if (!isset($options['database'], $options['collection'])) {
             throw new \InvalidArgumentException(sprintf(
@@ -37,16 +37,16 @@ class MongoDbQueue extends AbstractQueue
             ));
         }
 
-        $this->conn = $conn;
+        $this->client = $client;
         $this->options = $options;
     }
 
     /**
-     * @return \Mongo
+     * @return \MongoClient
      */
-    public function getConnection()
+    public function getClient()
     {
-        return $this->conn;
+        return $this->client;
     }
 
     /**
@@ -55,7 +55,7 @@ class MongoDbQueue extends AbstractQueue
     public function getCollection()
     {
         if (!$this->collection) {
-            $this->collection = $this->conn->selectCollection(
+            $this->collection = $this->client->selectCollection(
                 $this->options['database'],
                 $this->options['collection']
             );
@@ -76,7 +76,8 @@ class MongoDbQueue extends AbstractQueue
             'item' => $item,
         );
 
-        $result = $this->getCollection()->insert($data, array('safe' => true));
+        // TODO replace with try/catch (MongoCursorException)
+        $result = $this->getCollection()->insert($data);
         if (!$result['ok']) {
             throw new RuntimeException($result['errmsg']);
         }
@@ -141,6 +142,6 @@ class MongoDbQueue extends AbstractQueue
      */
     public function clear()
     {
-        $this->getCollection()->remove(array(), array('safe' => true));
+        $this->getCollection()->remove();
     }
 }
