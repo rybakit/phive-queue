@@ -7,7 +7,7 @@ use Phive\Tests\Queue\HandlerAwareQueueTest;
 
 abstract class AbstractPdoQueueTest extends HandlerAwareQueueTest
 {
-    public function testPdoThrowsExceptionOnError()
+    public function testRuntimeExceptionThrowing()
     {
         $options = static::$handler->getOptions();
         $options['table_name'] = uniqid('non_existing_table_name_');
@@ -34,7 +34,7 @@ abstract class AbstractPdoQueueTest extends HandlerAwareQueueTest
                     continue;
                 }
 
-                $this->fail('PDO throws \Phive\RuntimeException on error.');
+                $this->fail(get_class($queue).":$method() throws \\Phive\\RuntimeException on error.");
             }
         }
 
