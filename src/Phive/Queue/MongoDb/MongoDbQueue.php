@@ -16,7 +16,7 @@ class MongoDbQueue extends AbstractQueue
     /**
      * @var \MongoCollection
      */
-    protected $collection;
+    protected $coll;
 
     /**
      * @var array
@@ -54,14 +54,14 @@ class MongoDbQueue extends AbstractQueue
      */
     public function getCollection()
     {
-        if (!$this->collection) {
-            $this->collection = $this->client->selectCollection(
+        if (!$this->coll) {
+            $this->coll = $this->client->selectCollection(
                 $this->options['database'],
                 $this->options['collection']
             );
         }
 
-        return $this->collection;
+        return $this->coll;
     }
 
     /**
@@ -71,16 +71,12 @@ class MongoDbQueue extends AbstractQueue
     {
         $eta = $this->normalizeEta($eta);
 
-        $data = array(
-            'eta'  => $eta,
-            'item' => $item,
-        );
-
-        // TODO replace with try/catch (MongoCursorException)
-        $result = $this->getCollection()->insert($data);
-        if (!$result['ok']) {
-            throw new RuntimeException($result['errmsg']);
-        }
+        $this->exceptional(function (\MongoCollection $coll) use ($eta, $item) {
+            $coll->insert(array(
+                'eta'  => $eta,
+                'item' => $item,
+            ));
+        });
     }
 
     /**
@@ -88,18 +84,21 @@ class MongoDbQueue extends AbstractQueue
      */
     public function pop()
     {
-        $command = array(
-            'findandmodify' => $this->getCollection()->getName(),
-            'remove'        => 1,
-            'fields'        => array('item' => 1),
-            'query'         => array('eta' => array('$lte' => time())),
-            'sort'          => array('eta' => 1),
-        );
+        $result = $this->exceptional(function (\MongoCollection $coll) {
+            return $coll->db->command(array(
+                'findandmodify' => $coll->getName(),
+                'remove'        => 1,
+                'fields'        => array('item' => 1),
+                'query'         => array('eta' => array('$lte' => time())),
+                'sort'          => array('eta' => 1),
+            ));
+        });
 
-        $result = $this->collection->db->command($command);
+        /*
         if (!$result['ok']) {
             throw new RuntimeException($result['errmsg']);
         }
+        */
 
         $data = $result['value'];
 
@@ -113,13 +112,15 @@ class MongoDbQueue extends AbstractQueue
     {
         $this->assertLimit($limit, $skip);
 
-        $cursor = $this->getCollection()->find(array('eta' => array('$lte' => time())));
+        $cursor = $this->exceptional(function (\MongoCollection $coll) {
+            return $coll->find(array('eta' => array('$lte' => time())));
+        });
+
         $cursor->sort(array('eta' => 1));
 
         if ($limit > 0) {
             $cursor->limit($limit);
         }
-
         if ($skip) {
             $cursor->skip($skip);
         }
@@ -134,7 +135,9 @@ class MongoDbQueue extends AbstractQueue
      */
     public function count()
     {
-        return $this->getCollection()->count();
+        return $this->exceptional(function (\MongoCollection $coll) {
+            return $coll->count();
+        });
     }
 
     /**
@@ -142,6 +145,26 @@ class MongoDbQueue extends AbstractQueue
      */
     public function clear()
     {
-        $this->getCollection()->remove();
+        $this->exceptional(function (\MongoCollection $coll) {
+            $coll->remove();
+        });
+    }
+
+    /**
+     * @param Closure $func The function to execute.
+     *
+     * @return mixed
+     *
+     * @throws RuntimeException
+     */
+    protected function exceptional(\Closure $func)
+    {
+        try {
+            $result = $func($this->getCollection());
+        } catch (\MongoException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return $result;
     }
 }
