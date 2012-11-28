@@ -1,6 +1,6 @@
 {
     "name": "rybakit/phive-queue",
-    "description": "Lightweight priority queue",
+    "description": "A time-based scheduling queue with multiple backends support",
     "keywords": ["queue scheduler priority delayed"],
     "homepage": "https://github.com/rybakit/phive-queue",
     "type": "library",
