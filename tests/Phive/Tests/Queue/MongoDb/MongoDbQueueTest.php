@@ -17,7 +17,7 @@ class MongoDbQueueTest extends HandlerAwareQueueTest
         ));
     }
 
-    public function testRuntimeExceptionThrowing()
+    public function testThrowRuntimeException()
     {
         $e = $this->getMock('\\MongoException');
         $client = $this->getMock('\\MongoClient');

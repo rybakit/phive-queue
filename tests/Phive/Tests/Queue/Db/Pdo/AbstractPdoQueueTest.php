@@ -7,7 +7,7 @@ use Phive\Tests\Queue\HandlerAwareQueueTest;
 
 abstract class AbstractPdoQueueTest extends HandlerAwareQueueTest
 {
-    public function testRuntimeExceptionThrowing()
+    public function testThrowRuntimeException()
     {
         $options = static::$handler->getOptions();
         $options['table_name'] = uniqid('non_existing_table_name_');
