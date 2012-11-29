@@ -31,9 +31,9 @@ class MongoDbQueue extends AbstractQueue
      */
     public function __construct(\MongoClient $client, array $options)
     {
-        if (!isset($options['database'], $options['collection'])) {
+        if (!isset($options['db'], $options['coll'])) {
             throw new \InvalidArgumentException(sprintf(
-                'The "database" and "collection" option are required for %s.', __CLASS__
+                'The "db" and "coll" option are required for %s.', __CLASS__
             ));
         }
 
@@ -56,8 +56,8 @@ class MongoDbQueue extends AbstractQueue
     {
         if (!$this->coll) {
             $this->coll = $this->client->selectCollection(
-                $this->options['database'],
-                $this->options['collection']
+                $this->options['db'],
+                $this->options['coll']
             );
         }
 

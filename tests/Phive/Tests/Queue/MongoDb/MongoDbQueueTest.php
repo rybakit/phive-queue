@@ -40,10 +40,7 @@ class MongoDbQueueTest extends HandlerAwareQueueTest
         $coll->expects($this->any())->method('remove')->will($this->throwException($e));
         $coll->expects($this->any())->method('__get')->with($this->equalTo('db'))->will($this->returnValue($db));
 
-        $queue = new MongoDbQueue($client, array(
-            'database'   => 'tmp_db',
-            'collection' => 'tmp_coll',
-        ));
+        $queue = new MongoDbQueue($client, array('db' => '', 'coll' => ''));
 
         foreach (array('push', 'pop', 'peek', 'clear', 'count') as $method) {
             try {
