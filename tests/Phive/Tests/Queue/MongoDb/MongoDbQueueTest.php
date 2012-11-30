@@ -3,8 +3,8 @@
 namespace Phive\Tests\Queue\MongoDb;
 
 use Phive\Tests\Queue\HandlerAwareQueueTest;
+use Phive\Queue\QueueInterface;
 use Phive\Queue\MongoDb\MongoDbQueue;
-use Phive\RuntimeException;
 
 class MongoDbQueueTest extends HandlerAwareQueueTest
 {
@@ -17,7 +17,16 @@ class MongoDbQueueTest extends HandlerAwareQueueTest
         ));
     }
 
-    public function testThrowRuntimeException()
+    /**
+     * @dataProvider        testThrowRuntimeExceptionProvider
+     * @expectedException   \Phive\RuntimeException
+     */
+    public function testThrowRuntimeException(QueueInterface $queue, $method)
+    {
+        ('push' === $method) ? $queue->$method('item') : $queue->$method();
+    }
+
+    public function testThrowRuntimeExceptionProvider()
     {
         $e = $this->getMock('\\MongoException');
         $client = $this->getMock('\\MongoClient');
@@ -42,18 +51,12 @@ class MongoDbQueueTest extends HandlerAwareQueueTest
 
         $queue = new MongoDbQueue($client, array('db' => '', 'coll' => ''));
 
-        foreach (array('push', 'pop', 'peek', 'clear', 'count') as $method) {
-            try {
-                if ('push' === $method) {
-                    $queue->$method('item');
-                } else {
-                    $queue->$method();
-                }
-            } catch (RuntimeException $e) {
-                continue;
-            }
-
-            $this->fail(get_class($queue).":$method() throws \\Phive\\RuntimeException on error.");
-        }
+        return array(
+            array($queue, 'push'),
+            array($queue, 'pop'),
+            array($queue, 'peek'),
+            array($queue, 'count'),
+            array($queue, 'clear'),
+        );
     }
 }

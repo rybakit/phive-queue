@@ -2,42 +2,39 @@
 
 namespace Phive\Tests\Queue\Db\Pdo;
 
+use Phive\Queue\Db\Pdo\AbstractPdoQueue;
 use Phive\RuntimeException;
 use Phive\Tests\Queue\HandlerAwareQueueTest;
 
 abstract class AbstractPdoQueueTest extends HandlerAwareQueueTest
 {
-    public function testThrowRuntimeException()
+    /**
+     * @dataProvider        testThrowRuntimeExceptionProvider
+     * @expectedException   \Phive\RuntimeException
+     */
+    public function testThrowRuntimeException(AbstractPdoQueue $queue, $method)
     {
-        $options = static::$handler->getOptions();
+        foreach (array(\PDO::ERRMODE_SILENT, \PDO::ERRMODE_EXCEPTION) as $mode) {
+            $queue->getConnection()->setAttribute(\PDO::ATTR_ERRMODE, $mode);
+            ('push' === $method) ? $queue->$method('item') : $queue->$method();
+        }
+    }
+
+    public function testThrowRuntimeExceptionProvider()
+    {
+        $handler = static::createHandler();
+        $options = $handler->getOptions();
         $options['table_name'] = uniqid('non_existing_table_name_');
 
         $handler = new PdoHandler($options);
         $queue = $handler->createQueue();
-        $conn = $queue->getConnection();
 
-        $errorModes = array(
-            \PDO::ERRMODE_SILENT,
-            \PDO::ERRMODE_EXCEPTION,
+        return array(
+            array($queue, 'push'),
+            array($queue, 'pop'),
+            array($queue, 'peek'),
+            array($queue, 'count'),
+            array($queue, 'clear'),
         );
-
-        foreach ($errorModes as $mode) {
-            $conn->setAttribute(\PDO::ATTR_ERRMODE, $mode);
-            foreach (array('push', 'pop', 'peek', 'clear', 'count') as $method) {
-                try {
-                    if ('push' === $method) {
-                        $queue->$method('item');
-                    } else {
-                        $queue->$method();
-                    }
-                } catch (RuntimeException $e) {
-                    continue;
-                }
-
-                $this->fail(get_class($queue).":$method() throws \\Phive\\RuntimeException on error.");
-            }
-        }
-
-        $conn = null;
     }
 }
