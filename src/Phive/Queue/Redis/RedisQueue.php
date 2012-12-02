@@ -13,6 +13,11 @@ use Phive\Queue\AbstractQueue;
  */
 class RedisQueue extends AbstractQueue
 {
+    const SCRIPT_PUSH = <<<'LUA'
+        local id = redis.call('INCR', ARGV[4])
+        return redis.call('ZADD', ARGV[1], ARGV[2], id..':'..ARGV[3])
+LUA;
+
     const SCRIPT_POP = <<<'LUA'
         local item = redis.call('ZRANGEBYSCORE', ARGV[1], '-inf', ARGV[2], 'LIMIT', 0, 1)
         if 0 ~= #item then
@@ -53,12 +58,12 @@ LUA;
     {
         $eta = $this->normalizeEta($eta);
 
-        $unique = $this->redis->incr('sequence');
-        $member = $unique.':'.$item;
+        $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
+        $result = $this->redis->eval(static::SCRIPT_PUSH, array($prefix.'items', $eta, $item, 'sequence'));
 
-        $result = $this->redis->zAdd('items', $eta, $member);
-        if (!$result) {
-            throw new RuntimeException('Unable to push the item.');
+        if (false === $result) {
+            $err = $this->redis->getLastError();
+            throw new \RuntimeException($err);
         }
     }
 
