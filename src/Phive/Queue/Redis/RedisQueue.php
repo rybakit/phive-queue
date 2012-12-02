@@ -54,7 +54,7 @@ LUA;
         $eta = $this->normalizeEta($eta);
 
         $unique = $this->redis->incr('sequence');
-        $member = $unique.'@'.$item;
+        $member = $unique.':'.$item;
 
         $result = $this->redis->zAdd('items', $eta, $member);
         if (!$result) {
@@ -71,7 +71,7 @@ LUA;
         $item = $this->redis->eval(static::SCRIPT_POP, array($prefix.'items', time()));
 
         if (false !== $item) {
-            return substr($item, strpos($item, '@') + 1);
+            return substr($item, strpos($item, ':') + 1);
         }
 
         return false;
@@ -90,7 +90,7 @@ LUA;
         }
 
         return new CallbackIterator(new \ArrayIterator($range), function ($data) {
-            return substr($data, strpos($data, '@') + 1);
+            return substr($data, strpos($data, ':') + 1);
         });
     }
 
