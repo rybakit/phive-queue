@@ -137,19 +137,29 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         echo sprintf("Benchmarking \"%s\" with %d item(s):\n", get_class($this->queue), $queueSize);
 
         $item = str_repeat('x', 255);
+
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
             $this->queue->push($item);
         }
+        $runtime = microtime(true) - $start;
 
-        echo sprintf(" > push: %s seconds\n", microtime(true) - $start);
+        echo " > push()\n";
+        echo sprintf("   Operations per second: %01.3f [#/sec]\n", $queueSize / $runtime);
+        echo sprintf("   Time per operation:    %01.3f [ms]\n", ($runtime / $queueSize) * 1000000);
+        echo sprintf("   Time taken for test:   %01.3f [sec]\n", $runtime);
 
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
             $this->queue->pop($i);
         }
+        $runtime = microtime(true) - $start;
 
-        echo sprintf(" > pop:  %s seconds\n", microtime(true) - $start);
+        echo "\n";
+        echo " > pop()\n";
+        echo sprintf("   Operations per second: %01.3f [#/sec]\n", $queueSize / $runtime);
+        echo sprintf("   Time per operation:    %01.3f [ms]\n", ($runtime / $queueSize) * 1000000);
+        echo sprintf("   Time taken for test:   %01.3f [sec]\n", $runtime);
     }
 
     protected function createUniqueItem()
