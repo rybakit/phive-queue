@@ -7,6 +7,8 @@ use Phive\RuntimeException;
 use Phive\Queue\AbstractQueue;
 
 /**
+ * TODO throw RuntimeException
+ *
  * RedisQueue requires Redis >= 2.6 (for a Lua scripting feature) and
  * phpredis >= 2.2.2 which has a fix @link https://github.com/nicolasff/phpredis/pull/189
  * for a PHP 5.4 bug @link https://bugs.php.net/bug.php?id=62112.
@@ -63,7 +65,7 @@ LUA;
 
         if (false === $result) {
             $err = $this->redis->getLastError();
-            throw new \RuntimeException($err);
+            throw new RuntimeException($err);
         }
     }
 
@@ -72,11 +74,21 @@ LUA;
      */
     public function pop()
     {
-        $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
-        $item = $this->redis->eval(static::SCRIPT_POP, array($prefix.'items', time()));
+        try {
+            $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
+            $lastError = $this->redis->getLastError();
 
-        if (false !== $item) {
-            return substr($item, strpos($item, ':') + 1);
+            $item = $this->redis->eval(static::SCRIPT_POP, array($prefix.'items', time()));
+
+            if ($error = $this->redis->getLastError() !== $lastError) {
+                throw new RuntimeException($error);
+            }
+
+            if (false !== $item) {
+                return substr($item, strpos($item, ':') + 1);
+            }
+        } catch (\RedisException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
 
         return false;
