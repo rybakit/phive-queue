@@ -41,7 +41,7 @@ class MongoDbHandler extends AbstractHandler
 
     public function clear()
     {
-        $this->getCollection()->remove(array(), array('safe' => true));
+        $this->getCollection()->remove();
     }
 
     protected function getCollection()
@@ -51,6 +51,7 @@ class MongoDbHandler extends AbstractHandler
                 $this->getOption('db_name'),
                 $this->getOption('coll_name')
             );
+            $this->collection->ensureIndex(array('eta' => 1));
         }
 
         return $this->collection;
