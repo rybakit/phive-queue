@@ -130,12 +130,11 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @group benchmark
      */
-    public function testPushPopPerformance()
+    public function testPushPerformance()
     {
+        echo sprintf("\n%s::push()\n", get_class($this->queue));
+
         $queueSize = (int) $GLOBALS['benchmark_queue_size'];
-
-        echo sprintf("Benchmarking \"%s\" with %d item(s):\n", get_class($this->queue), $queueSize);
-
         $item = str_repeat('x', 255);
 
         $start = microtime(true);
@@ -144,10 +143,18 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         }
         $runtime = microtime(true) - $start;
 
-        echo " > push()\n";
-        echo sprintf("   Operations per second: %01.3f [#/sec]\n", $queueSize / $runtime);
-        echo sprintf("   Time per operation:    %01.3f [ms]\n", ($runtime / $queueSize) * 1000000);
-        echo sprintf("   Time taken for test:   %01.3f [sec]\n", $runtime);
+        $this->printPerformanceResult($queueSize, $runtime);
+    }
+
+    /**
+     * @group   benchmark
+     * @depends testPushPerformance
+     */
+    public function testPopPerformance()
+    {
+        echo sprintf("\n%s::pop()\n", get_class($this->queue));
+
+        $queueSize = (int) $GLOBALS['benchmark_queue_size'];
 
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
@@ -155,16 +162,20 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         }
         $runtime = microtime(true) - $start;
 
-        echo "\n";
-        echo " > pop()\n";
-        echo sprintf("   Operations per second: %01.3f [#/sec]\n", $queueSize / $runtime);
-        echo sprintf("   Time per operation:    %01.3f [ms]\n", ($runtime / $queueSize) * 1000000);
-        echo sprintf("   Time taken for test:   %01.3f [sec]\n", $runtime);
+        $this->printPerformanceResult($queueSize, $runtime);
     }
 
     protected function createUniqueItem()
     {
         return uniqid('item_', true);
+    }
+
+    protected function printPerformanceResult($total, $runtime)
+    {
+        echo sprintf("   Total operations:      %d\n", $total);
+        echo sprintf("   Operations per second: %01.3f [#/sec]\n", $total / $runtime);
+        echo sprintf("   Time per operation:    %01.3f [ms]\n", ($runtime / $total) * 1000000);
+        echo sprintf("   Time taken for test:   %01.3f [sec]\n", $runtime);
     }
 
     /**
