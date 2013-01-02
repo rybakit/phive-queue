@@ -12,17 +12,17 @@
          bootstrap="tests/bootstrap.php"
 >
     <php>
-        <var name="db_pdo_pgsql_dsn" value="pgsql:host=localhost;port=5432;dbname=phive_tests" />
+        <var name="db_pdo_pgsql_dsn" value="pgsql:host=127.0.0.1;port=5432;dbname=phive_tests" />
         <var name="db_pdo_pgsql_username" value="postgres" />
         <var name="db_pdo_pgsql_password" value="" />
         <var name="db_pdo_pgsql_table_name" value="queue" />
 
-        <var name="db_pdo_mysql_dsn" value="mysql:host=localhost;port=3306;dbname=phive_tests" />
+        <var name="db_pdo_mysql_dsn" value="mysql:host=127.0.0.1;port=3306;dbname=phive_tests" />
         <var name="db_pdo_mysql_username" value="root" />
         <var name="db_pdo_mysql_password" value="" />
         <var name="db_pdo_mysql_table_name" value="queue" />
 
-        <var name="mongo_server" value="mongodb://localhost:27017" />
+        <var name="mongo_server" value="mongodb://127.0.0.1:27017" />
         <var name="mongo_db_name" value="phive_tests" />
         <var name="mongo_coll_name" value="queue" />
 
