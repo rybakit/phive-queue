@@ -7,8 +7,6 @@ use Phive\RuntimeException;
 use Phive\Queue\AbstractQueue;
 
 /**
- * TODO throw RuntimeException
- *
  * RedisQueue requires Redis >= 2.6 (for a Lua scripting feature) and
  * phpredis >= 2.2.2 which has a fix @link https://github.com/nicolasff/phpredis/pull/189
  * for a PHP 5.4 bug @link https://bugs.php.net/bug.php?id=62112.
@@ -34,8 +32,6 @@ LUA;
     protected $redis;
 
     /**
-     * Constructor.
-     *
      * @param \Redis $redis
      */
     public function __construct(\Redis $redis)
@@ -43,11 +39,6 @@ LUA;
         $this->redis = $redis;
     }
 
-    /**
-     * Retrieves \Redis instance.
-     *
-     * @return \Redis
-     */
     public function getRedis()
     {
         return $this->redis;
@@ -60,13 +51,11 @@ LUA;
     {
         $eta = $this->normalizeEta($eta);
 
-        $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
-        $result = $this->redis->eval(static::SCRIPT_PUSH, array($prefix.'items', $eta, $item, 'sequence'));
-
-        if (false === $result) {
-            $err = $this->redis->getLastError();
-            throw new RuntimeException($err);
-        }
+        $self = $this;
+        $this->exceptional(function(\Redis $redis) use ($self, $item, $eta) {
+            $prefix = $redis->getOption(\Redis::OPT_PREFIX);
+            $redis->eval($self::SCRIPT_PUSH, array($prefix.'items', $eta, $item, 'sequence'));
+        });
     }
 
     /**
@@ -74,24 +63,18 @@ LUA;
      */
     public function pop()
     {
-        try {
-            $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
-            $lastError = $this->redis->getLastError();
+        $self = $this;
+        $item = $this->exceptional(function(\Redis $redis) use ($self) {
+            $prefix = $redis->getOption(\Redis::OPT_PREFIX);
 
-            $item = $this->redis->eval(static::SCRIPT_POP, array($prefix.'items', time()));
+            return $redis->eval($self::SCRIPT_POP, array($prefix.'items', time()));
+        });
 
-            if ($error = $this->redis->getLastError() !== $lastError) {
-                throw new RuntimeException($error);
-            }
-
-            if (false !== $item) {
-                return substr($item, strpos($item, ':') + 1);
-            }
-        } catch (\RedisException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        if (false === $item) {
+            return false;
         }
 
-        return false;
+        return substr($item, strpos($item, ':') + 1);
     }
 
     /**
@@ -101,7 +84,12 @@ LUA;
     {
         $this->assertLimit($limit, $skip);
 
-        $range = $this->redis->zRangeByScore('items', '-inf', time(), array('limit' => array($skip, $limit)));
+        $range = $this->exceptional(function(\Redis $redis) use ($limit, $skip) {
+            return $redis->zRangeByScore('items', '-inf', time(),
+                array('limit' => array($skip, $limit))
+            );
+        });
+
         if (empty($range)) {
             return false;
         }
@@ -116,7 +104,9 @@ LUA;
      */
     public function count()
     {
-        return $this->redis->zCard('items');
+        return $this->exceptional(function(\Redis $redis) {
+            return $redis->zCard('items');
+        });
     }
 
     /**
@@ -124,6 +114,30 @@ LUA;
      */
     public function clear()
     {
-        $this->redis->del(array('items', 'sequence'));
+        return $this->exceptional(function(\Redis $redis) {
+            return $redis->del(array('items', 'sequence'));
+        });
+    }
+
+    /**
+     * @param Closure $func The function to execute.
+     *
+     * @return mixed
+     *
+     * @throws RuntimeException
+     */
+    protected function exceptional(\Closure $func)
+    {
+        try {
+            $lastError = $this->redis->getLastError();
+            $result = $func($this->redis);
+            if ($error = $this->redis->getLastError() !== $lastError) {
+                throw new RuntimeException($error);
+            }
+        } catch (\RedisException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return $result;
     }
 }
