@@ -24,8 +24,6 @@ class MongoDbQueue extends AbstractQueue
     protected $options;
 
     /**
-     * Constructor.
-     *
      * @param \MongoClient $client
      * @param array        $options
      */
@@ -41,17 +39,11 @@ class MongoDbQueue extends AbstractQueue
         $this->options = $options;
     }
 
-    /**
-     * @return \MongoClient
-     */
     public function getClient()
     {
         return $this->client;
     }
 
-    /**
-     * @return \MongoCollection
-     */
     public function getCollection()
     {
         if (!$this->coll) {
@@ -94,15 +86,9 @@ class MongoDbQueue extends AbstractQueue
             ));
         });
 
-        /*
-        if (!$result['ok']) {
-            throw new RuntimeException($result['errmsg']);
-        }
-        */
-
-        $data = $result['value'];
-
-        return $data ? $data['item'] : false;
+        return isset($result['value']['item'])
+            ? $result['value']['item']
+            : false;
     }
 
     /**

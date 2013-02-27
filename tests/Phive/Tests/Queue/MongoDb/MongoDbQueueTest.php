@@ -31,23 +31,9 @@ class MongoDbQueueTest extends HandlerAwareQueueTest
         $e = $this->getMock('\\MongoException');
         $client = $this->getMock('\\MongoClient');
 
-        $db = $this->getMockBuilder('\\MongoDB')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $coll = $this->getMockBuilder('\\MongoCollection')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $client->expects($this->any())->method('selectCollection')->will($this->returnValue($coll));
-
-        $db->expects($this->any())->method('command')->will($this->throwException($e));
-
-        $coll->expects($this->any())->method('find')->will($this->throwException($e));
-        $coll->expects($this->any())->method('insert')->will($this->throwException($e));
-        $coll->expects($this->any())->method('count')->will($this->throwException($e));
-        $coll->expects($this->any())->method('remove')->will($this->throwException($e));
-        $coll->expects($this->any())->method('__get')->with($this->equalTo('db'))->will($this->returnValue($db));
+        foreach (get_class_methods('\\MongoClient') as $method) {
+            $client->expects($this->any())->method($method)->will($this->throwException($e));
+        }
 
         $queue = new MongoDbQueue($client, array('db' => '', 'coll' => ''));
 
