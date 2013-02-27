@@ -120,7 +120,7 @@ LUA;
     }
 
     /**
-     * @param Closure $func The function to execute.
+     * @param \Closure $func The function to execute.
      *
      * @return mixed
      *
