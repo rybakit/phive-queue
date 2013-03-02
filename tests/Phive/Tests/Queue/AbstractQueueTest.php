@@ -5,6 +5,11 @@ namespace Phive\Tests\Queue;
 abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var int Timestamp that will be returned by time()
+     */
+    public static $now;
+
+    /**
      * @var \Phive\Queue\QueueInterface
      */
     protected $queue;
@@ -45,11 +50,15 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     public function testPushPopDelay()
     {
         $item = $this->createUniqueItem();
+        $eta = time() + 5;
 
-        $this->queue->push($item, '+1 second');
+        $this->queue->push($item, $eta);
         $this->assertFalse($this->queue->pop());
-        sleep(1);
-        $this->assertEquals($item, $this->queue->pop());
+
+        $queue = $this->queue;
+        $this->callInFuture(function(AbstractQueueTest $self) use ($item, $queue) {
+            $self->assertEquals($item, $queue->pop());
+        }, $eta);
     }
 
     public function testPeek()
@@ -168,6 +177,31 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     protected function createUniqueItem()
     {
         return uniqid('item_', true);
+    }
+
+    protected function callInFuture(\Closure $func, $futureTime, $sleep = false)
+    {
+        if ($sleep) {
+            sleep($futureTime - time());
+            return $func($this);
+        }
+
+        $class = get_class($this->queue);
+        $namespace = substr($class, 0, strrpos($class, '\\'));
+
+        if (!is_callable("$namespace\\time")) {
+            eval('namespace '.$namespace.' {
+                function time() {
+                    return \\'.__CLASS__.'::$now ?: \time();
+                }
+            }');
+        }
+
+        self::$now = $futureTime;
+        $result = $func($this);
+        self::$now = null;
+
+        return $result;
     }
 
     protected function printPerformanceResult($total, $runtime)

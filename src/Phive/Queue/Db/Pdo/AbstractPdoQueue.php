@@ -3,7 +3,7 @@
 namespace Phive\Queue\Db\Pdo;
 
 use Phive\Queue\AbstractQueue;
-use Phive\RuntimeException;
+use Phive\Queue\RuntimeException;
 
 abstract class AbstractPdoQueue extends AbstractQueue
 {

@@ -3,7 +3,6 @@
 namespace Phive\Tests\Queue\Redis;
 
 use Phive\Tests\Queue\HandlerAwareQueueTest;
-use Phive\Queue\QueueInterface;
 use Phive\Queue\Redis\RedisQueue;
 
 class RedisQueueTest extends HandlerAwareQueueTest
@@ -18,20 +17,21 @@ class RedisQueueTest extends HandlerAwareQueueTest
     }
 
     /**
-     * @dataProvider        testThrowRuntimeExceptionProvider
-     * @expectedException   \Phive\RuntimeException
+     * @dataProvider        throwRuntimeExceptionProvider
+     * @expectedException   \Phive\Queue\RuntimeException
      */
-    public function testThrowRuntimeException(QueueInterface $queue, $method)
+    public function testThrowRuntimeException(RedisQueue $queue, $method)
     {
         ('push' === $method) ? $queue->$method('item') : $queue->$method();
     }
 
-    public function testThrowRuntimeExceptionProvider()
+    public function throwRuntimeExceptionProvider()
     {
-        $e = $this->getMock('\\RedisException');
         $redis = $this->getMock('\\Redis');
+        $e = $this->getMock('\\RedisException');
 
-        foreach (get_class_methods('\\Redis') as $method) {
+        $methods = array_diff(get_class_methods('\\Redis'), array('__destruct'));
+        foreach ($methods as $method) {
             $redis->expects($this->any())->method($method)->will($this->throwException($e));
         }
 

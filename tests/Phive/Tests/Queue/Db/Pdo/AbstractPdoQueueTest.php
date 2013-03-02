@@ -3,14 +3,13 @@
 namespace Phive\Tests\Queue\Db\Pdo;
 
 use Phive\Queue\Db\Pdo\AbstractPdoQueue;
-use Phive\RuntimeException;
 use Phive\Tests\Queue\HandlerAwareQueueTest;
 
 abstract class AbstractPdoQueueTest extends HandlerAwareQueueTest
 {
     /**
-     * @dataProvider        testThrowRuntimeExceptionProvider
-     * @expectedException   \Phive\RuntimeException
+     * @dataProvider        throwRuntimeExceptionProvider
+     * @expectedException   \Phive\Queue\RuntimeException
      */
     public function testThrowRuntimeException(AbstractPdoQueue $queue, $method)
     {
@@ -20,7 +19,7 @@ abstract class AbstractPdoQueueTest extends HandlerAwareQueueTest
         }
     }
 
-    public function testThrowRuntimeExceptionProvider()
+    public function throwRuntimeExceptionProvider()
     {
         $handler = static::createHandler();
         $options = $handler->getOptions();

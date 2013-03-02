@@ -2,8 +2,8 @@
 
 namespace Phive\Queue\Redis;
 
-use Phive\CallbackIterator;
-use Phive\RuntimeException;
+use Phive\Queue\CallbackIterator;
+use Phive\Queue\RuntimeException;
 use Phive\Queue\AbstractQueue;
 
 /**

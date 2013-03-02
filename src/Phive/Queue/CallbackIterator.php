@@ -1,6 +1,6 @@
 <?php
 
-namespace Phive;
+namespace Phive\Queue;
 
 class CallbackIterator implements \OuterIterator
 {
