@@ -2,9 +2,9 @@
 
 namespace Phive\Queue\Redis;
 
+use Phive\Queue\AbstractQueue;
 use Phive\Queue\CallbackIterator;
 use Phive\Queue\RuntimeException;
-use Phive\Queue\AbstractQueue;
 
 /**
  * RedisQueue requires Redis >= 2.6 (for a Lua scripting feature) and
