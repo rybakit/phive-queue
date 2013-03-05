@@ -42,31 +42,35 @@ Currently, there are the following drivers available:
 * `InMemoryQueue`
 
 
-## Usage
+## Usage example
 
 ``` php
 <?php
 
-use Phive\Queue\InMemoryQueue;
+$queue = new \Phive\Queue\InMemoryQueue();
 
-$queue = new InMemoryQueue();
+$queue->push('item1');
+$queue->push('item2', new \DateTime());
+$queue->push('item3', time());
+$queue->push('item4', '+5 seconds');
+$queue->push('item5', 'next Monday');
 
-$queue->push('payload1');
-$queue->push('payload2', new \DateTime());
-$queue->push('payload3', time());
-$queue->push('payload4', '+5 seconds');
+// get the queue size
+$count = $queue->count(); // $count = 5;
 
-foreach ($queue->peek(2, 1) as $payload) {
-    echo $payload, PHP_EOL;
+// get two items starting from the second one
+$items = $queue->peek(2, 1); // $item is an iterator which holds 'item2' and 'item3' items
+
+// pop items off the queue
+while ($item = $queue->pop()) {
+    // $item = 'item1' ... 'item2' ... 'item3';
 }
 
-while ($payload = $queue->pop()) {
-    echo $payload, PHP_EOL;
-}
+sleep(5);
+$item = $queue->pop(); // $item = 'item4';
 
+// clear the queue (will remove 'item5')
 $queue->clear();
-
-echo $queue->count(), PHP_EOL;
 
 ```
 
