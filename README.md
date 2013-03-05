@@ -59,7 +59,7 @@ $queue->push('item5', 'next Monday');
 $count = $queue->count(); // $count = 5;
 
 // get two items starting from the second one
-$items = $queue->peek(2, 1); // $item is an iterator which holds 'item2' and 'item3' items
+$items = $queue->peek(2, 1); // $items is the iterator which holds 'item2' and 'item3' items
 
 // pop items off the queue
 while ($item = $queue->pop()) {
