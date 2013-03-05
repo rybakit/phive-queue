@@ -71,7 +71,6 @@ $item = $queue->pop(); // $item = 'item4';
 
 // clear the queue (will remove 'item5')
 $queue->clear();
-
 ```
 
 
