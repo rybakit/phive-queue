@@ -21,7 +21,7 @@ class SqliteQueue extends AbstractPdoQueue
     public function pop()
     {
         $sql = 'SELECT id, item FROM '.$this->tableName
-            .' WHERE eta <= '.time().' ORDER BY eta, id LIMIT 1';
+            .' WHERE eta <= '.time().' ORDER BY eta LIMIT 1';
 
         $this->exec('BEGIN IMMEDIATE');
 

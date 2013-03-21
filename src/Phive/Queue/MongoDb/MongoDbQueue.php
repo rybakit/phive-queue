@@ -2,11 +2,12 @@
 
 namespace Phive\Queue\MongoDb;
 
-use Phive\Queue\AbstractQueue;
 use Phive\Queue\CallbackIterator;
 use Phive\Queue\RuntimeException;
+use Phive\Queue\QueueInterface;
+use Phive\Queue\QueueUtils;
 
-class MongoDbQueue extends AbstractQueue
+class MongoDbQueue implements QueueInterface
 {
     /**
      * @var \MongoClient
@@ -61,7 +62,7 @@ class MongoDbQueue extends AbstractQueue
      */
     public function push($item, $eta = null)
     {
-        $eta = $this->normalizeEta($eta);
+        $eta = QueueUtils::normalizeEta($eta);
 
         $this->exceptional(function (\MongoCollection $coll) use ($eta, $item) {
             $coll->insert(array(
@@ -94,22 +95,17 @@ class MongoDbQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function peek($limit = 1, $skip = 0)
+    public function slice($offset, $limit)
     {
-        $this->assertLimit($limit, $skip);
-
         $cursor = $this->exceptional(function (\MongoCollection $coll) {
             return $coll->find(array('eta' => array('$lte' => time())));
         });
 
-        $cursor->sort(array('eta' => 1));
-
-        if ($limit > 0) {
-            $cursor->limit($limit);
-        }
-        if ($skip) {
-            $cursor->skip($skip);
-        }
+        $cursor
+            ->sort(array('eta' => 1))
+            ->skip(QueueUtils::normalizeOffset($offset))
+            ->limit(QueueUtils::normalizeLimit($limit))
+        ;
 
         return new CallbackIterator($cursor, function ($data) {
             return $data['item'];

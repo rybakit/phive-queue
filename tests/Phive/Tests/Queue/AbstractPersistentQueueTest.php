@@ -2,7 +2,7 @@
 
 namespace Phive\Tests\Queue;
 
-abstract class HandlerAwareQueueTest extends AbstractQueueTest
+abstract class AbstractPersistentQueueTest extends AbstractQueueTest
 {
     /**
      * @var AbstractHandler

@@ -26,110 +26,116 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testPushPop()
     {
-        $item = $this->createUniqueItem();
+        $this->queue->push('item');
 
-        $this->queue->push($item);
-
-        $this->assertEquals($item, $this->queue->pop());
+        $this->assertEquals('item', $this->queue->pop());
         $this->assertFalse($this->queue->pop());
     }
 
     public function testPushPopOrder()
     {
-        $i1 = $this->createUniqueItem();
-        $i2 = $this->createUniqueItem();
+        $this->queue->push('item1');
+        $this->queue->push('item2', '-1 second');
 
-        $eta = time();
-        $this->queue->push($i1, $eta);
-        $this->queue->push($i2, $eta - 10);
-
-        $this->assertEquals($i2, $this->queue->pop());
-        $this->assertEquals($i1, $this->queue->pop());
+        $this->assertEquals('item2', $this->queue->pop());
+        $this->assertEquals('item1', $this->queue->pop());
     }
 
     public function testPushPopDelay()
     {
-        $item = $this->createUniqueItem();
         $eta = time() + 5;
 
-        $this->queue->push($item, $eta);
+        $this->queue->push('item', $eta);
         $this->assertFalse($this->queue->pop());
 
         $queue = $this->queue;
-        $this->callInFuture(function(AbstractQueueTest $self) use ($item, $queue) {
-            $self->assertEquals($item, $queue->pop());
+        $this->callInFuture(function(AbstractQueueTest $self) use ($queue) {
+            $self->assertEquals('item', $queue->pop());
         }, $eta);
     }
 
-    public function testPeek()
+    public function testSlice()
     {
-        $i1 = $this->createUniqueItem();
-        $i2 = $this->createUniqueItem();
-        $i3 = $this->createUniqueItem();
+        for ($i = 0; $i < 5; $i++) {
+            $this->queue->push('item'.$i);
+        }
 
-        $this->queue->push($i1);
-        $this->queue->push($i2);
-        $this->queue->push($i3);
-
-        $items = $this->queue->peek(2, 1);
+        $items = $this->queue->slice(0, 100);
         $this->assertInstanceOf('Iterator', $items);
 
         $items->rewind();
-        $this->assertEquals($i2, $items->current());
-        $items->next();
-        $this->assertEquals($i3, $items->current());
+        for ($i = 0; $i < 5; $i++) {
+            $this->assertEquals('item'.$i, $items->current());
+            $items->next();
+        }
+
+        $this->assertEmpty($items->current());
+    }
+
+    public function testSliceOffset()
+    {
+        $this->queue->push('item1', '-1 second');
+        $this->queue->push('item2');
+
+        $items = $this->queue->slice(1, 100);
+
+        $items->rewind();
+        $this->assertEquals('item2', $items->current());
+    }
+
+    public function testSliceLimit()
+    {
+        $this->queue->push('item1', '-1 second');
+        $this->queue->push('item2');
+
+        $items = $this->queue->slice(0, 1);
+
+        $items->rewind();
+        $this->assertEquals('item1', $items->current());
         $items->next();
         $this->assertEmpty($items->current());
     }
 
-    public function testPeekAll()
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSliceThrowsExceptionOnInvalidOffsetArgumentType()
     {
-        $count = 5;
-
-        for ($i = $count; $i; $i--) {
-            $this->queue->push($i);
-        }
-
-        $items = $this->queue->peek(-1, 0);
-
-        $this->assertInstanceOf('Iterator', $items);
-        $this->assertEquals($count, iterator_count($items));
+        $this->queue->slice('invalid_argument', 100);
     }
 
-    public function testPeekThrowsExceptionOnInvalidLimitRange()
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSliceThrowsExceptionOnInvalidArgumentType()
     {
-        try {
-            $items = $this->queue->peek(0);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('OutOfRangeException', $e, 'peek() throws an \OutOfRangeException if limit <=0 and != -1');
-            $this->assertEquals('Parameter limit must either be -1 or a value greater than 0.', $e->getMessage());
-            return;
-        }
-
-        $this->fail('peek() throws an \OutOfRangeException if limit <= 0 and != -1');
+        $this->queue->slice(0, 'invalid_argument');
     }
 
-    public function testPeekThrowsExceptionOnInvalidSkipRange()
+    /**
+     * @expectedException \OutOfRangeException
+     */
+    public function testSliceThrowsExceptionOnInvalidOffsetRange()
     {
-        try {
-            $items = $this->queue->peek(1, -1);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('OutOfRangeException', $e, 'peek() throws an \OutOfRangeException if skip less then 0');
-            $this->assertEquals('Parameter skip must be greater than or equal 0.', $e->getMessage());
-            return;
-        }
+        $this->queue->slice(-1, 100);
+    }
 
-        $this->fail('peek() throws an \OutOfRangeException if skip less then 0');
+    /**
+     * @expectedException \OutOfRangeException
+     */
+    public function testSliceThrowsExceptionOnInvalidLimitRange()
+    {
+        $this->queue->slice(0, -1);
     }
 
     public function testCountAndClear()
     {
-        $count = 5;
-
         $this->assertEquals(0, $this->queue->count());
-        for ($i = $count; $i; $i--) {
-            $this->queue->push($i);
+
+        for ($i = $count = 5; $i; $i--) {
+            $this->queue->push('item'.$i);
         }
+
         $this->assertEquals($count, $this->queue->count());
 
         $this->queue->clear();
@@ -172,11 +178,6 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $runtime = microtime(true) - $start;
 
         $this->printPerformanceResult($queueSize, $runtime);
-    }
-
-    protected function createUniqueItem()
-    {
-        return uniqid('item_', true);
     }
 
     protected function callInFuture(\Closure $func, $futureTime, $sleep = false)

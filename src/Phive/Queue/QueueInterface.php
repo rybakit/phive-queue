@@ -16,14 +16,14 @@ interface QueueInterface extends \Countable
     public function pop();
 
     /**
+     * @param int $offset
      * @param int $limit
-     * @param int $skip
      *
      * @return \Iterator
      *
-     * @throws \OutOfRangeException
+     * @throws \InvalidArgumentException|\OutOfRangeException
      */
-    public function peek($limit = 1, $skip = 0);
+    public function slice($offset, $limit);
 
     /**
      * Removes all items from the queue.

@@ -2,7 +2,7 @@
 
 namespace Phive\Queue;
 
-class InMemoryQueue extends AbstractQueue
+class InMemoryQueue implements QueueInterface
 {
     /**
      * @var \SplPriorityQueue
@@ -24,7 +24,7 @@ class InMemoryQueue extends AbstractQueue
      */
     public function push($item, $eta = null)
     {
-        $eta = $this->normalizeEta($eta);
+        $eta = QueueUtils::normalizeEta($eta);
         $this->innerQueue->insert($item, array(-$eta, $this->queueOrder--));
     }
 
@@ -50,11 +50,12 @@ class InMemoryQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function peek($limit = 1, $skip = 0)
+    public function slice($offset, $limit)
     {
-        $this->assertLimit($limit, $skip);
+        $offset = QueueUtils::normalizeOffset($offset);
+        $limit = QueueUtils::normalizeLimit($limit);
 
-        return new \LimitIterator(clone $this->innerQueue, $skip, $limit);
+        return new \LimitIterator(clone $this->innerQueue, $offset, $limit);
     }
 
     /**

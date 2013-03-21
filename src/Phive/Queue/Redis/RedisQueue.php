@@ -2,16 +2,17 @@
 
 namespace Phive\Queue\Redis;
 
-use Phive\Queue\AbstractQueue;
 use Phive\Queue\CallbackIterator;
 use Phive\Queue\RuntimeException;
+use Phive\Queue\QueueInterface;
+use Phive\Queue\QueueUtils;
 
 /**
  * RedisQueue requires Redis >= 2.6 (for a Lua scripting feature) and
  * phpredis >= 2.2.2 which has a fix @link https://github.com/nicolasff/phpredis/pull/189
  * for a PHP 5.4 bug @link https://bugs.php.net/bug.php?id=62112.
  */
-class RedisQueue extends AbstractQueue
+class RedisQueue implements QueueInterface
 {
     const SCRIPT_PUSH = <<<'LUA'
         local id = redis.call('INCR', ARGV[4])
@@ -49,7 +50,7 @@ LUA;
      */
     public function push($item, $eta = null)
     {
-        $eta = $this->normalizeEta($eta);
+        $eta = QueueUtils::normalizeEta($eta);
 
         $self = $this;
         $this->exceptional(function(\Redis $redis) use ($self, $item, $eta) {
@@ -80,13 +81,16 @@ LUA;
     /**
      * {@inheritdoc}
      */
-    public function peek($limit = 1, $skip = 0)
+    public function slice($offset, $limit)
     {
-        $this->assertLimit($limit, $skip);
+        $limitOptions = array(
+            QueueUtils::normalizeOffset($offset),
+            QueueUtils::normalizeLimit($limit),
+        );
 
-        $range = $this->exceptional(function(\Redis $redis) use ($limit, $skip) {
+        $range = $this->exceptional(function(\Redis $redis) use ($limitOptions) {
             return $redis->zRangeByScore('items', '-inf', time(),
-                array('limit' => array($skip, $limit))
+                array('limit' => $limitOptions)
             );
         });
 

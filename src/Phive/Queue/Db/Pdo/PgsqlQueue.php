@@ -22,7 +22,7 @@ class PgsqlQueue extends AbstractPdoQueue
      */
     public function pop()
     {
-        $sql = 'SELECT id FROM '.$this->tableName.' WHERE eta <= '.time().' ORDER BY eta, id LIMIT 1';
+        $sql = 'SELECT id FROM '.$this->tableName.' WHERE eta <= '.time().' ORDER BY eta LIMIT 1';
         $sql = 'DELETE FROM '.$this->tableName.' WHERE id = ('.$sql.') RETURNING item';
 
         $this->conn->beginTransaction();

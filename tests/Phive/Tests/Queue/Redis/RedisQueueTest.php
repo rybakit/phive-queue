@@ -2,10 +2,10 @@
 
 namespace Phive\Tests\Queue\Redis;
 
-use Phive\Tests\Queue\HandlerAwareQueueTest;
+use Phive\Tests\Queue\AbstractPersistentQueueTest;
 use Phive\Queue\Redis\RedisQueue;
 
-class RedisQueueTest extends HandlerAwareQueueTest
+class RedisQueueTest extends AbstractPersistentQueueTest
 {
     public static function createHandler()
     {
@@ -20,9 +20,9 @@ class RedisQueueTest extends HandlerAwareQueueTest
      * @dataProvider        throwRuntimeExceptionProvider
      * @expectedException   \Phive\Queue\RuntimeException
      */
-    public function testThrowRuntimeException(RedisQueue $queue, $method)
+    public function testThrowRuntimeException(RedisQueue $queue, $method, array $args)
     {
-        ('push' === $method) ? $queue->$method('item') : $queue->$method();
+        call_user_func_array(array($queue, $method), $args);
     }
 
     public function throwRuntimeExceptionProvider()
@@ -38,11 +38,11 @@ class RedisQueueTest extends HandlerAwareQueueTest
         $queue = new RedisQueue($redis);
 
         return array(
-            array($queue, 'push'),
-            array($queue, 'pop'),
-            array($queue, 'peek'),
-            array($queue, 'count'),
-            array($queue, 'clear'),
+            array($queue, 'push',  array('item')),
+            array($queue, 'pop',   array()),
+            array($queue, 'slice', array(0, 1)),
+            array($queue, 'count', array()),
+            array($queue, 'clear', array()),
         );
     }
 }

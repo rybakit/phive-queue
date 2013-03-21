@@ -2,10 +2,11 @@
 
 namespace Phive\Queue\Db\Pdo;
 
-use Phive\Queue\AbstractQueue;
 use Phive\Queue\RuntimeException;
+use Phive\Queue\QueueInterface;
+use Phive\Queue\QueueUtils;
 
-abstract class AbstractPdoQueue extends AbstractQueue
+abstract class AbstractPdoQueue implements QueueInterface
 {
     /**
      * @var \PDO
@@ -46,7 +47,7 @@ abstract class AbstractPdoQueue extends AbstractQueue
     {
         $sql = sprintf('INSERT INTO %s (eta, item) VALUES (%d, %s)',
             $this->tableName,
-            $this->normalizeEta($eta),
+            QueueUtils::normalizeEta($eta),
             $this->conn->quote($item)
         );
 
@@ -56,19 +57,14 @@ abstract class AbstractPdoQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function peek($limit = 1, $skip = 0)
+    public function slice($offset, $limit)
     {
-        $this->assertLimit($limit, $skip);
-
-        $sql = 'SELECT item FROM '.$this->tableName
-            .' WHERE eta <= '.time().' ORDER BY eta, id';
-
-        if ($limit > 0) {
-            $sql .= ' LIMIT '.(int) $limit;
-        }
-        if ($skip > 0) {
-            $sql .= ' OFFSET '.(int) $skip;
-        }
+        $sql = sprintf('SELECT item FROM %s WHERE eta <= %d ORDER BY eta LIMIT %d OFFSET %d',
+            $this->tableName,
+            time(),
+            QueueUtils::normalizeLimit($limit),
+            QueueUtils::normalizeOffset($offset)
+        );
 
         $stmt = $this->query($sql);
         $stmt->setFetchMode(\PDO::FETCH_COLUMN, 0);

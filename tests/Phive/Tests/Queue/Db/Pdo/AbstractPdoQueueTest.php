@@ -3,19 +3,19 @@
 namespace Phive\Tests\Queue\Db\Pdo;
 
 use Phive\Queue\Db\Pdo\AbstractPdoQueue;
-use Phive\Tests\Queue\HandlerAwareQueueTest;
+use Phive\Tests\Queue\AbstractPersistentQueueTest;
 
-abstract class AbstractPdoQueueTest extends HandlerAwareQueueTest
+abstract class AbstractPdoQueueTest extends AbstractPersistentQueueTest
 {
     /**
      * @dataProvider        throwRuntimeExceptionProvider
      * @expectedException   \Phive\Queue\RuntimeException
      */
-    public function testThrowRuntimeException(AbstractPdoQueue $queue, $method)
+    public function testThrowRuntimeException(AbstractPdoQueue $queue, $method, array $args)
     {
         foreach (array(\PDO::ERRMODE_SILENT, \PDO::ERRMODE_EXCEPTION) as $mode) {
             $queue->getConnection()->setAttribute(\PDO::ATTR_ERRMODE, $mode);
-            ('push' === $method) ? $queue->$method('item') : $queue->$method();
+            call_user_func_array(array($queue, $method), $args);
         }
     }
 
@@ -29,11 +29,11 @@ abstract class AbstractPdoQueueTest extends HandlerAwareQueueTest
         $queue = $handler->createQueue();
 
         return array(
-            array($queue, 'push'),
-            array($queue, 'pop'),
-            array($queue, 'peek'),
-            array($queue, 'count'),
-            array($queue, 'clear'),
+            array($queue, 'push',  array('item')),
+            array($queue, 'pop',   array()),
+            array($queue, 'slice', array(0, 1)),
+            array($queue, 'count', array()),
+            array($queue, 'clear', array()),
         );
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Phive\Queue\Db\Pdo;
 
+use Phive\Queue\QueueUtils;
+
 class MysqlQueue extends AbstractPdoQueue
 {
     public function __construct(\PDO $conn, $tableName)
@@ -21,7 +23,7 @@ class MysqlQueue extends AbstractPdoQueue
     public function pop()
     {
         $sql = 'SELECT id, item FROM '.$this->tableName
-            .' WHERE eta <= '.time().' ORDER BY eta, id LIMIT 1 FOR UPDATE';
+            .' WHERE eta <= '.time().' ORDER BY eta LIMIT 1 FOR UPDATE';
 
         $this->conn->beginTransaction();
 
