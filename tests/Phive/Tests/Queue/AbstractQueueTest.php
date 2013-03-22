@@ -99,17 +99,17 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSliceThrowsExceptionOnInvalidOffsetArgumentType()
+    public function testSliceThrowsExceptionOnInvalidOffsetType()
     {
-        $this->queue->slice('invalid_argument', 100);
+        $this->queue->slice('invalid', 100);
     }
 
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSliceThrowsExceptionOnInvalidArgumentType()
+    public function testSliceThrowsExceptionOnInvalidLimitType()
     {
-        $this->queue->slice(0, 'invalid_argument');
+        $this->queue->slice(0, 'invalid');
     }
 
     /**
