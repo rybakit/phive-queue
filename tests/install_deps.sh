@@ -8,9 +8,9 @@ sudo apt-get update > /dev/null 2>&1
 sudo apt-get install redis-server > /dev/null 2>&1
 
 # phpredis
-wget https://github.com/nicolasff/phpredis/tarball/22f455593a9027cf935d37d70e198de225283d2e > /dev/null 2>&1
-tar -xzf 22f455593a9027cf935d37d70e198de225283d2e > /dev/null 2>&1
-sh -c "cd nicolasff-phpredis-22f4555 && phpize && ./configure && make && sudo make install" > /dev/null 2>&1
+wget -O phpredis-master.zip https://github.com/nicolasff/phpredis/archive/master.zip > /dev/null 2>&1
+unzip phpredis-master.zip > /dev/null 2>&1
+sh -c "cd phpredis-master && phpize && ./configure && make && sudo make install" > /dev/null 2>&1
 echo "extension=redis.so" >> $PHP_INI_FILE
 
 # mongo

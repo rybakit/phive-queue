@@ -8,9 +8,7 @@ use Phive\Queue\QueueInterface;
 use Phive\Queue\QueueUtils;
 
 /**
- * RedisQueue requires Redis >= 2.6 (for a Lua scripting feature) and
- * phpredis >= 2.2.2 which has a fix @link https://github.com/nicolasff/phpredis/pull/189
- * for a PHP 5.4 bug @link https://bugs.php.net/bug.php?id=62112.
+ * RedisQueue requires Redis >= 2.6 and phpredis >= d287163de2
  */
 class RedisQueue implements QueueInterface
 {
@@ -55,7 +53,7 @@ LUA;
         $self = $this;
         $this->exceptional(function(\Redis $redis) use ($self, $item, $eta) {
             $prefix = $redis->getOption(\Redis::OPT_PREFIX);
-            $redis->eval($self::SCRIPT_PUSH, array($prefix.'items', $eta, $item, 'sequence'));
+            $redis->evaluate($self::SCRIPT_PUSH, array($prefix.'items', $eta, $item, 'sequence'));
         });
     }
 
@@ -68,7 +66,7 @@ LUA;
         $item = $this->exceptional(function(\Redis $redis) use ($self) {
             $prefix = $redis->getOption(\Redis::OPT_PREFIX);
 
-            return $redis->eval($self::SCRIPT_POP, array($prefix.'items', time()));
+            return $redis->evaluate($self::SCRIPT_POP, array($prefix.'items', time()));
         });
 
         if (false === $item) {
