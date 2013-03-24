@@ -19,8 +19,6 @@ abstract class AbstractPdoQueue implements QueueInterface
     protected $tableName;
 
     /**
-     * Constructor.
-     *
      * @param \PDO   $conn
      * @param string $tableName
      */

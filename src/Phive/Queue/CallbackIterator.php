@@ -17,8 +17,6 @@ class CallbackIterator implements \OuterIterator
     protected $callback;
 
     /**
-     * Constructor.
-     *
      * @param \Iterator             $iterator
      * @param \Closure|string|array $callback
      *
