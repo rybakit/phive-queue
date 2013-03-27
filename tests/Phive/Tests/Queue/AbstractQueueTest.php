@@ -17,6 +17,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->queue = $this->createQueue();
+        $this->stubTimeFunction();
     }
 
     public function testQueueImplementsQueueInterface()
@@ -187,17 +188,6 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
             return $func($this);
         }
 
-        $class = get_class($this->queue);
-        $namespace = substr($class, 0, strrpos($class, '\\'));
-
-        if (!is_callable("$namespace\\time")) {
-            eval('namespace '.$namespace.' {
-                function time() {
-                    return \\'.__CLASS__.'::$now ?: \time();
-                }
-            }');
-        }
-
         self::$now = $futureTime;
         $result = $func($this);
         self::$now = null;
@@ -211,6 +201,16 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         echo sprintf("   Operations per second: %01.3f [#/sec]\n", $total / $runtime);
         echo sprintf("   Time per operation:    %01.3f [ms]\n", ($runtime / $total) * 1000000);
         echo sprintf("   Time taken for test:   %01.3f [sec]\n", $runtime);
+    }
+
+    private function stubTimeFunction()
+    {
+        $class = get_class($this->queue);
+        $namespace = substr($class, 0, strrpos($class, '\\'));
+
+        if (!is_callable("$namespace\\time")) {
+            eval('namespace '.$namespace.' { function time() { return \\'.__CLASS__.'::$now ?: \time(); }}');
+        }
     }
 
     /**
