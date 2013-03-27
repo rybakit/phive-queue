@@ -97,6 +97,8 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
     /**
      * Abstract static class functions are not possible since v5.2.
      *
+     * @return AbstractHandler
+     *
      * @throws \BadMethodCallException
      */
     public static function createHandler()
