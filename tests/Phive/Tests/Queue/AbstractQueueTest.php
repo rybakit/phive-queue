@@ -14,12 +14,6 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
      */
     protected $queue;
 
-    public function setUp()
-    {
-        $this->queue = $this->createQueue();
-        $this->stubTimeFunction();
-    }
-
     public function testQueueImplementsQueueInterface()
     {
         $this->assertInstanceOf('Phive\Queue\QueueInterface', $this->queue);
@@ -57,20 +51,17 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testSlice()
     {
-        for ($i = 0; $i < 5; $i++) {
-            $this->queue->push('item'.$i);
-        }
+        $this->queue->push('item1');
+        $this->queue->push('item2');
+        $this->queue->push('itemx', '+1 hour');
 
         $items = $this->queue->slice(0, 100);
         $this->assertInstanceOf('Iterator', $items);
 
-        $items->rewind();
-        for ($i = 0; $i < 5; $i++) {
-            $this->assertEquals('item'.$i, $items->current());
-            $items->next();
+        $i = 0;
+        foreach ($items as $item) {
+            $this->assertEquals('item'.++$i, $item);
         }
-
-        $this->assertEmpty($items->current());
     }
 
     public function testSliceOffset()
@@ -179,6 +170,12 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $runtime = microtime(true) - $start;
 
         $this->printPerformanceResult($queueSize, $runtime);
+    }
+
+    protected function setUp()
+    {
+        $this->queue = $this->createQueue();
+        $this->stubTimeFunction();
     }
 
     protected function callInFuture(\Closure $func, $futureTime, $sleep = false)
