@@ -23,13 +23,6 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
         parent::setUpBeforeClass();
     }
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        static::$handler->clear();
-    }
-
     /**
      * @return \Phive\Queue\QueueInterface
      *
@@ -106,5 +99,12 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
         throw new \BadMethodCallException(
             sprintf('Method %s:%s is not implemented.', get_called_class(), __FUNCTION__)
         );
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        static::$handler->clear();
     }
 }
