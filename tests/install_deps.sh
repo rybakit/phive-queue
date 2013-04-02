@@ -14,7 +14,6 @@ sh -c "cd phpredis-master && phpize && ./configure && make && sudo make install"
 echo "extension=redis.so" >> $PHP_INI_FILE
 
 # mongo
-pecl -q install mongo
 if [ -z "$(php -m | grep mongo)" ]; then
     echo "extension=mongo.so" >> $PHP_INI_FILE
 fi
