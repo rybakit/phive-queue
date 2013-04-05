@@ -7,16 +7,17 @@ class InMemoryQueue implements QueueInterface
     /**
      * @var \SplPriorityQueue
      */
-    protected $innerQueue;
+    protected $queue;
 
     /**
      * @var int
      */
-    protected $queueOrder = PHP_INT_MAX;
+    protected $queueOrder;
 
     public function __construct()
     {
-        $this->innerQueue = new \SplPriorityQueue();
+        $this->queue = new \SplPriorityQueue();
+        $this->queueOrder = PHP_INT_MAX;
     }
 
     /**
@@ -25,7 +26,7 @@ class InMemoryQueue implements QueueInterface
     public function push($item, $eta = null)
     {
         $eta = QueueUtils::normalizeEta($eta);
-        $this->innerQueue->insert($item, array(-$eta, $this->queueOrder--));
+        $this->queue->insert($item, array(-$eta, $this->queueOrder--));
     }
 
     /**
@@ -33,14 +34,14 @@ class InMemoryQueue implements QueueInterface
      */
     public function pop()
     {
-        if (!$this->innerQueue->isEmpty()) {
-            $this->innerQueue->setExtractFlags(\SplPriorityQueue::EXTR_PRIORITY);
-            list($eta,) = $this->innerQueue->top();
+        if (!$this->queue->isEmpty()) {
+            $this->queue->setExtractFlags(\SplPriorityQueue::EXTR_PRIORITY);
+            $priority = $this->queue->top();
 
-            if (time() + $eta >= 0) {
-                $this->innerQueue->setExtractFlags(\SplPriorityQueue::EXTR_DATA);
+            if (time() + $priority[0] >= 0) {
+                $this->queue->setExtractFlags(\SplPriorityQueue::EXTR_DATA);
 
-                return $this->innerQueue->extract();
+                return $this->queue->extract();
             }
         }
 
@@ -55,7 +56,18 @@ class InMemoryQueue implements QueueInterface
         $offset = QueueUtils::normalizeOffset($offset);
         $limit = QueueUtils::normalizeLimit($limit);
 
-        return new \LimitIterator(clone $this->innerQueue, $offset, $limit);
+        $now = time();
+        $iterator = new CustomLimitIterator(clone $this->queue,
+            function (\SplPriorityQueue $queue) use ($now) {
+                $queue->setExtractFlags(\SplPriorityQueue::EXTR_PRIORITY);
+                $priority = $queue->current();
+                $queue->setExtractFlags(\SplPriorityQueue::EXTR_DATA);
+
+                return $now + $priority[0] >=0;
+            }
+        );
+
+        return $iterator = new \LimitIterator($iterator, $offset, $limit);
     }
 
     /**
@@ -63,7 +75,7 @@ class InMemoryQueue implements QueueInterface
      */
     public function count()
     {
-        return $this->innerQueue->count();
+        return $this->queue->count();
     }
 
     /**
@@ -71,7 +83,7 @@ class InMemoryQueue implements QueueInterface
      */
     public function clear()
     {
-        $this->innerQueue = new \SplPriorityQueue();
+        $this->queue = new \SplPriorityQueue();
         $this->queueOrder = PHP_INT_MAX;
     }
 }
