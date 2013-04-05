@@ -67,7 +67,7 @@ class InMemoryQueue implements QueueInterface
             }
         );
 
-        return $iterator = new \LimitIterator($iterator, $offset, $limit);
+        return new \LimitIterator($iterator, $offset, $limit);
     }
 
     /**
