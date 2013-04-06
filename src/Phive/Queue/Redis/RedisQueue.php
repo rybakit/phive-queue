@@ -53,7 +53,7 @@ LUA;
         $self = $this;
         $this->exceptional(function(\Redis $redis) use ($self, $item, $eta) {
             $prefix = $redis->getOption(\Redis::OPT_PREFIX);
-            $redis->evaluate($self::SCRIPT_PUSH, array($prefix.'items', $eta, $item, 'sequence'));
+            $redis->evaluate($self::SCRIPT_PUSH, array($prefix.'items', $eta, $item, $prefix.'sequence'));
         });
     }
 
@@ -69,11 +69,7 @@ LUA;
             return $redis->evaluate($self::SCRIPT_POP, array($prefix.'items', time()));
         });
 
-        if (false === $item) {
-            return false;
-        }
-
-        return substr($item, strpos($item, ':') + 1);
+        return (false === $item) ? false : substr($item, strpos($item, ':') + 1);
     }
 
     /**
