@@ -63,7 +63,7 @@ class InMemoryQueue implements QueueInterface
                 $priority = $queue->current();
                 $queue->setExtractFlags(\SplPriorityQueue::EXTR_DATA);
 
-                return $now + $priority[0] >=0;
+                return $now + $priority[0] >= 0;
             }
         );
 
