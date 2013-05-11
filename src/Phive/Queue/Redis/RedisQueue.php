@@ -8,7 +8,7 @@ use Phive\Queue\QueueInterface;
 use Phive\Queue\QueueUtils;
 
 /**
- * RedisQueue requires Redis >= 2.6 and phpredis >= d287163de2
+ * RedisQueue requires redis server >= 2.6.
  */
 class RedisQueue implements QueueInterface
 {
