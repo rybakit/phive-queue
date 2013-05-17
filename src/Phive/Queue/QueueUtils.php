@@ -40,7 +40,7 @@ class QueueUtils
      */
     public static function normalizeLimit($value)
     {
-        return self::normalizeNumber($value, 'limit', 1);
+        return self::normalizeNumber($value, 1, 'limit');
     }
 
     /**
@@ -50,17 +50,17 @@ class QueueUtils
      */
     public static function normalizeOffset($value)
     {
-        return self::normalizeNumber($value, 'offset', 0);
+        return self::normalizeNumber($value, 0, 'offset');
     }
 
     /**
      * @param mixed  $number
-     * @param string $name
      * @param int    $min
+     * @param string $name
      *
      * @throws \InvalidArgumentException|\OutOfRangeException
      */
-    private static function normalizeNumber($number, $name, $min)
+    private static function normalizeNumber($number, $min, $name)
     {
         if (!is_numeric($number)) {
             throw new \InvalidArgumentException("Parameter \"$name\" must be a valid number.");
