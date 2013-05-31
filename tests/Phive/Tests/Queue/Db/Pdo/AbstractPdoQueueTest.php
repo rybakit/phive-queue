@@ -8,15 +8,23 @@ use Phive\Tests\Queue\AbstractPersistentQueueTest;
 abstract class AbstractPdoQueueTest extends AbstractPersistentQueueTest
 {
     /**
-     * @dataProvider        throwRuntimeExceptionProvider
-     * @expectedException   \Phive\Queue\RuntimeException
+     * @dataProvider      throwRuntimeExceptionProvider
+     * @expectedException \Phive\Queue\RuntimeException
      */
-    public function testThrowRuntimeException(AbstractPdoQueue $queue, $method, array $args)
+    public function testThrowRuntimeExceptionInSilentErrorMode(AbstractPdoQueue $queue, $method, array $args)
     {
-        foreach (array(\PDO::ERRMODE_SILENT, \PDO::ERRMODE_EXCEPTION) as $mode) {
-            $queue->getConnection()->setAttribute(\PDO::ATTR_ERRMODE, $mode);
-            call_user_func_array(array($queue, $method), $args);
-        }
+        $queue->getConnection()->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
+        call_user_func_array(array($queue, $method), $args);
+    }
+
+    /**
+     * @dataProvider      throwRuntimeExceptionProvider
+     * @expectedException \Phive\Queue\RuntimeException
+     */
+    public function testThrowRuntimeExceptionInExceptionErrorMode(AbstractPdoQueue $queue, $method, array $args)
+    {
+        $queue->getConnection()->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        call_user_func_array(array($queue, $method), $args);
     }
 
     public function throwRuntimeExceptionProvider()
