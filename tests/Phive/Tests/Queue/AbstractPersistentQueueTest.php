@@ -48,8 +48,8 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
 
         $workerIds = array();
         $poppedItems = array();
-        $client->setCompleteCallback(function($task) use (&$workerIds, &$poppedItems) {
-            $data = json_decode($task->data(), true);
+        $client->setCompleteCallback(function(\GearmanTask $task) use (&$workerIds, &$poppedItems) {
+            $data = explode(':', $task->data(), 2);
             if (!is_array($data) || 2 != count($data)) {
                 return;
             }

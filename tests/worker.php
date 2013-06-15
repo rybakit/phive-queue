@@ -22,7 +22,7 @@ $worker->addFunction('pop', function(\GearmanJob $job) use ($workerId) {
 
     echo ++$i.': popped ('.$item.') from '.get_class($queues[$workload])."\n";
 
-    return json_encode(array($workerId, $item));
+    return $workerId.':'.$item;
 });
 
 echo "Waiting for a job...\n";
