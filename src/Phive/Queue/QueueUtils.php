@@ -57,6 +57,8 @@ class QueueUtils
      * @param mixed  $number
      * @param int    $min
      * @param string $name
+     * 
+     * @return int
      *
      * @throws \InvalidArgumentException|\OutOfRangeException
      */
