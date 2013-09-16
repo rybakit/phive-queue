@@ -18,7 +18,7 @@ Create a composer.json file inside your project directory:
 Then run these two commands to install it:
 
 ``` bash
-$ curl -s http://getcomposer.org/installer | php
+$ curl -sS https://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
