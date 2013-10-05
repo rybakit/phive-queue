@@ -30,7 +30,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     public function testPushPopOrder()
     {
         $this->queue->push('item1');
-        $this->queue->push('item2', '-1 second');
+        $this->queue->push('item2', '-1 minute');
 
         $this->assertEquals('item2', $this->queue->pop());
         $this->assertEquals('item1', $this->queue->pop());
@@ -66,7 +66,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testSliceOffset()
     {
-        $this->queue->push('item1', '-1 second');
+        $this->queue->push('item1', '-1 minute');
         $this->queue->push('item2');
 
         $items = $this->queue->slice(1, 100);
@@ -77,7 +77,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testSliceLimit()
     {
-        $this->queue->push('item1', '-1 second');
+        $this->queue->push('item1', '-1 minute');
         $this->queue->push('item2');
 
         $items = $this->queue->slice(0, 1);
