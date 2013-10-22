@@ -48,7 +48,7 @@ class PdoHandler extends AbstractHandler
 
     public function clear()
     {
-        if (false === $result = $this->pdo->exec('DELETE FROM '.$this->getOption('table_name'))) {
+        if (false === $this->pdo->exec('DELETE FROM '.$this->getOption('table_name'))) {
             $err = $this->pdo->errorInfo();
             throw new \RuntimeException($err[2]);
         }
@@ -71,7 +71,7 @@ class PdoHandler extends AbstractHandler
                     continue;
                 }
 
-                if (false === $result = $this->pdo->exec($statement)) {
+                if (false === $this->pdo->exec($statement)) {
                     $err = $this->pdo->errorInfo();
                     throw new \RuntimeException(
                         $err[2] ?: sprintf('Unable to execute the statement "%s".', $statement)
