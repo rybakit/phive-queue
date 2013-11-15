@@ -58,8 +58,10 @@ $queue->push('item5', 'next Monday');
 // get the queue size
 $count = $queue->count(); // $count = 5;
 
-// get two items starting from the second one
-$items = $queue->slice(1, 2); // $items is the iterator which holds 'item2' and 'item3' items
+// iterate over a slice of items
+foreach ($queue->slice(1, 2) as $item) {
+    // $item = 'item2' ... 'item3';
+}
 
 // pop items off the queue
 while ($item = $queue->pop()) {
