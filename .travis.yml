@@ -7,7 +7,7 @@ php:
 
 services:
     - mongodb
-#    - redis-server
+    - redis-server
 
 before_script:
     - ./tests/install_deps.sh

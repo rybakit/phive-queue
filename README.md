@@ -78,19 +78,13 @@ $queue->clear();
 
 ## Tests
 
-To run the test suite, you'll have to install dependencies:
-
-``` bash
-$ ./tests/install_deps.sh
-```
-
-Once done, run unit tests:
+Run the test suite using PHPUnit:
 
 ``` bash
 $ phpunit
 ```
 
-To check performance run
+To check performance run:
 
 ``` bash
 $ phpunit --group=benchmark
