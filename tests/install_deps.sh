@@ -2,9 +2,11 @@
 
 PHP_INI_FILE=$(php -r "echo php_ini_loaded_file();")
 
-# phpredis
+# redis
 pecl -q install redis
-echo "extension=redis.so" >> $PHP_INI_FILE
+if [ -z "$(php -m | grep redis)" ]; then
+    echo "extension=redis.so" >> $PHP_INI_FILE
+fi
 
 # mongo
 if [ -z "$(php -m | grep mongo)" ]; then
