@@ -12,7 +12,7 @@ services:
 
 before_script:
     - sh -c 'php_ini="~/.phpenv/versions/$(phpenv version-name)/etc/php.ini"; if [ -w $php_ini ]; then echo "extension = mongo.so" >> $php_ini; fi;'
-    - pecl install redis
+    - sh -c 'if type -p pecl > /dev/null 2>&1; then pecl install redis; fi'
     - mysql -e 'create database phive_tests;'
     - psql -c 'create database phive_tests;' -U postgres
 
