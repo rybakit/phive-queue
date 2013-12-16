@@ -11,7 +11,7 @@ services:
     - redis-server
 
 before_script:
-    - '[ -w ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ] && echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini'
+    - sh -c 'php_ini="~/.phpenv/versions/$(phpenv version-name)/etc/php.ini"; if [ -w $php_ini ]; then echo "extension = mongo.so" >> $php_ini; fi;'
     - pecl install redis
     - mysql -e 'create database phive_tests;'
     - psql -c 'create database phive_tests;' -U postgres
