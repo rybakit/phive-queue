@@ -87,7 +87,7 @@ $ phpunit
 To check performance run:
 
 ``` bash
-$ phpunit --group=benchmark
+$ phpunit --group benchmark
 ```
 
 To check concurrency you'll have to install [Gearman Server](http://gearman.org) and [pecl/german extension](http://pecl.php.net/package/gearman).
@@ -100,7 +100,7 @@ $ php tests/worker.php
 Then run the concurrency tests:
 
 ``` bash
-$ phpunit --group=concurrency
+$ phpunit --group concurrency
 ```
 
 
