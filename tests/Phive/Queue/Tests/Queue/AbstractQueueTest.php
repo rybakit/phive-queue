@@ -48,7 +48,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $this->assertNoItemException($this->queue);
 
         $queue = $this->queue;
-        $this->callInFuture(function(self $self) use ($queue) {
+        $this->callInFuture(function(AbstractQueueTest $self) use ($queue) {
             $self->assertEquals('item', $queue->pop());
         }, $eta);
     }
