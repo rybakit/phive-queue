@@ -30,16 +30,17 @@ To use library, just add the following line to your code's bootstrap process:
 require 'vendor/autoload.php';
 ```
 
-## Drivers
+## Queues
 
-Currently, there are the following drivers available:
+Currently, there are the following queues available:
 
-* `MongoDbQueue`
+* `MongoQueue`
 * `RedisQueue`
 * `PgsqlQueue`
 * `MysqlQueue`
 * `SqliteQueue`
 * `InMemoryQueue`
+* `SysVQueue`
 
 
 ## Usage example
@@ -47,7 +48,7 @@ Currently, there are the following drivers available:
 ``` php
 <?php
 
-$queue = new \Phive\Queue\InMemoryQueue();
+$queue = new \Phive\Queue\Queue\InMemoryQueue();
 
 $queue->push('item1');
 $queue->push('item2', new \DateTime());
@@ -57,11 +58,6 @@ $queue->push('item5', 'next Monday');
 
 // get the queue size
 $count = $queue->count(); // $count = 5;
-
-// iterate over a slice of items
-foreach ($queue->slice(1, 2) as $item) {
-    // $item = 'item2' ... 'item3';
-}
 
 // pop items off the queue
 while ($item = $queue->pop()) {
@@ -87,7 +83,7 @@ $ phpunit
 To check performance run:
 
 ``` bash
-$ phpunit --group benchmark
+$ phpunit --group performance
 ```
 
 To check concurrency you'll have to install [Gearman Server](http://gearman.org) and [pecl/german extension](http://pecl.php.net/package/gearman).
