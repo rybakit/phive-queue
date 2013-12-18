@@ -32,7 +32,7 @@ class SysVQueue implements QueueInterface
      */
     public function pop()
     {
-        if ($res = msg_receive($this->getQueue(), -time(), $eta, static::MSG_MAX_SIZE, $item, false, \MSG_IPC_NOWAIT)) {
+        if (msg_receive($this->getQueue(), -time(), $eta, static::MSG_MAX_SIZE, $item, false, \MSG_IPC_NOWAIT)) {
             return $item;
         }
 
