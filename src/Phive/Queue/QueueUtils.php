@@ -11,7 +11,7 @@ class QueueUtils
     }
 
     /**
-     * @param \DateTime|string|int|null $eta
+     * @param mixed $eta
      *
      * @return int The Unix timestamp.
      *
@@ -32,6 +32,6 @@ class QueueUtils
             return $eta;
         }
 
-        throw new InvalidArgumentException('Parameter "eta" must be a string, integer or \DateTime instance.');
+        throw new InvalidArgumentException('The eta parameter is not valid.');
     }
 }

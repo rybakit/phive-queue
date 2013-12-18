@@ -5,8 +5,8 @@ namespace Phive\Queue\Queue;
 interface QueueInterface extends \Countable
 {
     /**
-     * @param string                    $item
-     * @param \DateTime|string|int|null $eta
+     * @param string $item
+     * @param mixed  $eta
      */
     public function push($item, $eta = null);
 
