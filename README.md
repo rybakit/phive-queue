@@ -48,7 +48,10 @@ Currently, there are the following queues available:
 ``` php
 <?php
 
-$queue = new \Phive\Queue\Queue\InMemoryQueue();
+use Phive\Queue\Exception\NoItemException;
+use Phive\Queue\Queue\InMemoryQueue;
+
+$queue = new InMemoryQueue();
 
 $queue->push('item1');
 $queue->push('item2', new \DateTime());
@@ -60,8 +63,13 @@ $queue->push('item5', 'next Monday');
 $count = $queue->count(); // $count = 5;
 
 // pop items off the queue
-while ($item = $queue->pop()) {
-    // $item = 'item1' ... 'item2' ... 'item3';
+try {
+    while ($item = $queue->pop()) {
+        // $item = 'item1' ... 'item2' ... 'item3';
+    }
+} catch (NoItemException $e) {
+    // no items are available
+    ...
 }
 
 sleep(5);
