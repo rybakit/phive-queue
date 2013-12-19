@@ -70,39 +70,27 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @group performance
      */
-    public function testPushPerformance()
+    public function testPushPopPerformance()
     {
-        echo sprintf("\n%s::push()\n", get_class($this->queue));
-
         $queueSize = (int) $GLOBALS['performance_queue_size'];
         $item = str_repeat('x', 255);
+
+        echo sprintf("\n%s::push()\n", get_class($this->queue));
 
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
             $this->queue->push($item);
         }
-        $runtime = microtime(true) - $start;
+        $this->printPerformanceResult($queueSize, microtime(true) - $start);
 
-        $this->printPerformanceResult($queueSize, $runtime);
-    }
-
-    /**
-     * @group   performance
-     * @depends testPushPerformance
-     */
-    public function testPopPerformance()
-    {
         echo sprintf("\n%s::pop()\n", get_class($this->queue));
-
-        $queueSize = (int) $GLOBALS['performance_queue_size'];
 
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
-            $this->queue->pop($i);
+            $this->queue->pop();
         }
-        $runtime = microtime(true) - $start;
 
-        $this->printPerformanceResult($queueSize, $runtime);
+        $this->printPerformanceResult($queueSize, microtime(true) - $start);
     }
 
     protected function setUp()
