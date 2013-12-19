@@ -2,16 +2,12 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-use Phive\Queue\Queue\SysVQueue;
+use Phive\Queue\Tests\Handler\SysVHandler;
 
-class SysVQueueTest extends AbstractQueueTest
+class SysVQueueTest extends AbstractPersistentQueueTest
 {
-    public function createQueue()
+    public static function createHandler()
     {
-        if (!extension_loaded('sysvmsg')) {
-            $this->markTestSkipped('The "sysvmsg" extension is not loaded.');
-        }
-
-        return new SysVQueue(0xDEADBEEF);
+        return new SysVHandler(array('key' => 0xDEADBEEF));
     }
 }
