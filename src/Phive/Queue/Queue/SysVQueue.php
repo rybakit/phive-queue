@@ -91,7 +91,7 @@ class SysVQueue implements QueueInterface
 
     protected function exceptional(\Closure $func)
     {
-        set_error_handler(function ($error, $message = '') { throw new RuntimeException($message, $error); }, E_WARNING | E_NOTICE);
+        set_error_handler(function ($error, $message = '') { throw new RuntimeException($message, $error); }, E_WARNING);
         $result = $func();
         restore_error_handler();
 
