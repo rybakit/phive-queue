@@ -13,9 +13,20 @@ class SysVQueue implements QueueInterface
 
     private $queue;
 
-    public function __construct($key)
+    private $serialize;
+
+    private $perms;
+
+    /**
+     * @param int       $key
+     * @param bool|null $serialize
+     * @param int|null  $perms
+     */
+    public function __construct($key, $serialize = null, $perms = null)
     {
         $this->key = $key;
+        $this->serialize = (bool) $serialize;
+        $this->perms = $perms ?: 0666;
     }
 
     /**
@@ -24,7 +35,7 @@ class SysVQueue implements QueueInterface
     public function push($item, $eta = null)
     {
         $eta = QueueUtils::normalizeEta($eta);
-        msg_send($this->getQueue(), $eta, $item, false);
+        msg_send($this->getQueue(), $eta, $item, $this->serialize, false);
     }
 
     /**
@@ -32,11 +43,15 @@ class SysVQueue implements QueueInterface
      */
     public function pop()
     {
-        if (msg_receive($this->getQueue(), -time(), $eta, static::MSG_MAX_SIZE, $item, false, \MSG_IPC_NOWAIT)) {
+        if (msg_receive($this->getQueue(), -time(), $eta, static::MSG_MAX_SIZE, $item, $this->serialize, \MSG_IPC_NOWAIT, $errorCode)) {
             return $item;
         }
 
-        throw new NoItemException();
+        if (MSG_ENOMSG === $errorCode) {
+            throw new NoItemException();
+        }
+
+        throw new RuntimeException('Pop failed.', $errorCode);
     }
 
     /**
@@ -60,7 +75,7 @@ class SysVQueue implements QueueInterface
     private function getQueue()
     {
         if (!is_resource($this->queue)) {
-            $this->queue = msg_get_queue($this->key);
+            $this->queue = msg_get_queue($this->key, $this->perms);
         }
 
         return $this->queue;
