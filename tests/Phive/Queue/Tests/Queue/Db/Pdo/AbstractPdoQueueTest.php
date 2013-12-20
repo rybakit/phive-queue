@@ -15,7 +15,7 @@ abstract class AbstractPdoQueueTest extends AbstractPersistentQueueTest
     public function testThrowRuntimeExceptionInSilentErrorMode(AbstractPdoQueue $queue, $method, array $args)
     {
         $queue->getConnection()->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
-        call_user_func_array(array($queue, $method), $args);
+        call_user_func_array([$queue, $method], $args);
     }
 
     /**
@@ -25,7 +25,7 @@ abstract class AbstractPdoQueueTest extends AbstractPersistentQueueTest
     public function testThrowRuntimeExceptionInExceptionErrorMode(AbstractPdoQueue $queue, $method, array $args)
     {
         $queue->getConnection()->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        call_user_func_array(array($queue, $method), $args);
+        call_user_func_array([$queue, $method], $args);
     }
 
     public function throwRuntimeExceptionProvider()
@@ -37,11 +37,11 @@ abstract class AbstractPdoQueueTest extends AbstractPersistentQueueTest
         $handler = new PdoHandler($options);
         $queue = $handler->createQueue();
 
-        return array(
-            array($queue, 'push',  array('item')),
-            array($queue, 'pop',   array()),
-            array($queue, 'count', array()),
-            array($queue, 'clear', array()),
-        );
+        return [
+            [$queue, 'push',  ['item']],
+            [$queue, 'pop',   []],
+            [$queue, 'count', []],
+            [$queue, 'clear', []],
+        ];
     }
 }

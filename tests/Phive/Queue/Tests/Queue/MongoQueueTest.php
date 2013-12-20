@@ -9,11 +9,11 @@ class MongoQueueTest extends AbstractPersistentQueueTest
 {
     public static function createHandler()
     {
-        return new MongoHandler(array(
+        return new MongoHandler([
             'server'    => $GLOBALS['mongo_server'],
             'db_name'   => $GLOBALS['mongo_db_name'],
             'coll_name' => $GLOBALS['mongo_coll_name'],
-        ));
+        ]);
     }
 
     /**
@@ -22,7 +22,7 @@ class MongoQueueTest extends AbstractPersistentQueueTest
      */
     public function testThrowRuntimeException(MongoQueue $queue, $method, array $args)
     {
-        call_user_func_array(array($queue, $method), $args);
+        call_user_func_array([$queue, $method], $args);
     }
 
     public function throwRuntimeExceptionProvider()
@@ -30,18 +30,18 @@ class MongoQueueTest extends AbstractPersistentQueueTest
         $client = $this->getMock('\\MongoClient');
         $e = $this->getMock('\\MongoException');
 
-        $methods = array_diff(get_class_methods('\\MongoClient'), array('__destruct'));
+        $methods = array_diff(get_class_methods('\\MongoClient'), ['__destruct']);
         foreach ($methods as $method) {
             $client->expects($this->any())->method($method)->will($this->throwException($e));
         }
 
-        $queue = new MongoQueue($client, array('db' => '', 'coll' => ''));
+        $queue = new MongoQueue($client, ['db' => '', 'coll' => '']);
 
-        return array(
-            array($queue, 'push',  array('item')),
-            array($queue, 'pop',   array()),
-            array($queue, 'count', array()),
-            array($queue, 'clear', array()),
-        );
+        return [
+            [$queue, 'push',  ['item']],
+            [$queue, 'pop',   []],
+            [$queue, 'count', []],
+            [$queue, 'clear', []],
+        ];
     }
 }

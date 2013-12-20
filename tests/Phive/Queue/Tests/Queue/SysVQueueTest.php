@@ -8,6 +8,6 @@ class SysVQueueTest extends AbstractPersistentQueueTest
 {
     public static function createHandler()
     {
-        return new SysVHandler(array('key' => 0xDEADBEEF));
+        return new SysVHandler(['key' => 0xDEADBEEF]);
     }
 }
