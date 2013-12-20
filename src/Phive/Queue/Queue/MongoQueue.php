@@ -64,10 +64,10 @@ class MongoQueue implements QueueInterface
         $eta = QueueUtils::normalizeEta($eta);
 
         $this->exceptional(function (\MongoCollection $coll) use ($eta, $item) {
-            $coll->insert([
+            $coll->insert(array(
                 'eta'  => $eta,
                 'item' => $item,
-            ]);
+            ));
         });
     }
 
@@ -77,13 +77,13 @@ class MongoQueue implements QueueInterface
     public function pop()
     {
         $result = $this->exceptional(function (\MongoCollection $coll) {
-            return $coll->db->command([
+            return $coll->db->command(array(
                 'findandmodify' => $coll->getName(),
                 'remove'        => 1,
-                'fields'        => ['item' => 1],
-                'query'         => ['eta' => ['$lte' => time()]],
-                'sort'          => ['eta' => 1],
-            ]);
+                'fields'        => array('item' => 1),
+                'query'         => array('eta' => array('$lte' => time())),
+                'sort'          => array('eta' => 1),
+            ));
         });
 
         if (isset($result['value']['item'])) {

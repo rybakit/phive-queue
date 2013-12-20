@@ -9,11 +9,11 @@ class RedisQueueTest extends AbstractPersistentQueueTest
 {
     public static function createHandler()
     {
-        return new RedisHandler([
+        return new RedisHandler(array(
             'host'   => $GLOBALS['redis_host'],
             'port'   => $GLOBALS['redis_port'],
             'prefix' => $GLOBALS['redis_prefix'],
-        ]);
+        ));
     }
 
     /**
@@ -22,7 +22,7 @@ class RedisQueueTest extends AbstractPersistentQueueTest
      */
     public function testThrowRuntimeException(RedisQueue $queue, $method, array $args)
     {
-        call_user_func_array([$queue, $method], $args);
+        call_user_func_array(array($queue, $method), $args);
     }
 
     public function throwRuntimeExceptionProvider()
@@ -30,18 +30,18 @@ class RedisQueueTest extends AbstractPersistentQueueTest
         $redis = $this->getMock('\\Redis');
         $e = $this->getMock('\\RedisException');
 
-        $methods = array_diff(get_class_methods('\\Redis'), ['__destruct']);
+        $methods = array_diff(get_class_methods('\\Redis'), array('__destruct'));
         foreach ($methods as $method) {
             $redis->expects($this->any())->method($method)->will($this->throwException($e));
         }
 
         $queue = new RedisQueue($redis);
 
-        return [
-            [$queue, 'push',  ['item']],
-            [$queue, 'pop',   []],
-            [$queue, 'count', []],
-            [$queue, 'clear', []],
-        ];
+        return array(
+            array($queue, 'push',  array('item')),
+            array($queue, 'pop',   array()),
+            array($queue, 'count', array()),
+            array($queue, 'clear', array()),
+        );
     }
 }

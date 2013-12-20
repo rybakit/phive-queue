@@ -29,7 +29,7 @@ class InMemoryQueue implements QueueInterface
     public function push($item, $eta = null)
     {
         $eta = QueueUtils::normalizeEta($eta);
-        $this->queue->insert($item, [-$eta, $this->queueOrder--]);
+        $this->queue->insert($item, array(-$eta, $this->queueOrder--));
     }
 
     /**

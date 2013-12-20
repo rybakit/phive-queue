@@ -16,7 +16,7 @@ class MongoHandler extends AbstractHandler
      */
     protected $collection;
 
-    public function __construct(array $options = [])
+    public function __construct(array $options = array())
     {
         if (!extension_loaded('mongo')) {
             throw new \RuntimeException('The "mongo" extension is not loaded.');
@@ -27,10 +27,10 @@ class MongoHandler extends AbstractHandler
 
     public function createQueue()
     {
-        return new MongoQueue($this->client, [
+        return new MongoQueue($this->client, array(
             'db'   => $this->getOption('db_name'),
             'coll' => $this->getOption('coll_name'),
-        ]);
+        ));
     }
 
     public function reset()
@@ -50,7 +50,7 @@ class MongoHandler extends AbstractHandler
                 $this->getOption('db_name'),
                 $this->getOption('coll_name')
             );
-            $this->collection->ensureIndex(['eta' => 1]);
+            $this->collection->ensureIndex(array('eta' => 1));
         }
 
         return $this->collection;

@@ -46,8 +46,8 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
         $client->addServer();
         //$client->setTimeout(30);
 
-        $workerIds = [];
-        $poppedItems = [];
+        $workerIds = array();
+        $poppedItems = array();
         $client->setCompleteCallback(function(\GearmanTask $task) use (&$workerIds, &$poppedItems) {
             $data = explode(':', $task->data(), 2);
             if (!is_array($data) || 2 != count($data)) {

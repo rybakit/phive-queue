@@ -3,7 +3,6 @@
 namespace Phive\Queue\Queue;
 
 use Phive\Queue\Exception\NoItemException;
-use Phive\Queue\Exception\RuntimeException;
 use Phive\Queue\QueueUtils;
 
 class SysVQueue implements QueueInterface
@@ -14,20 +13,9 @@ class SysVQueue implements QueueInterface
 
     private $queue;
 
-    private $serialize;
-
-    private $perms;
-
-    /**
-     * @param int       $key
-     * @param bool|null $serialize
-     * @param int|null  $perms
-     */
-    public function __construct($key, $serialize = null, $perms = null)
+    public function __construct($key)
     {
         $this->key = $key;
-        $this->serialize = (bool) $serialize;
-        $this->perms = $perms ?: 0666;
     }
 
     /**
@@ -36,10 +24,7 @@ class SysVQueue implements QueueInterface
     public function push($item, $eta = null)
     {
         $eta = QueueUtils::normalizeEta($eta);
-
-        $this->exceptional(function () use ($eta, $item) {
-            msg_send($this->getQueue(), $eta, $item, $this->serialize, false);
-        });
+        msg_send($this->getQueue(), $eta, $item, false);
     }
 
     /**
@@ -47,15 +32,11 @@ class SysVQueue implements QueueInterface
      */
     public function pop()
     {
-        return $this->exceptional(function () {
-            if (msg_receive($this->getQueue(), -time(), $eta, static::MSG_MAX_SIZE, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode)) {
-                return $item;
-            }
+        if (msg_receive($this->getQueue(), -time(), $eta, static::MSG_MAX_SIZE, $item, false, \MSG_IPC_NOWAIT)) {
+            return $item;
+        }
 
-            if (MSG_ENOMSG === $errorCode) {
-                throw new NoItemException();
-            }
-        });
+        throw new NoItemException();
     }
 
     /**
@@ -63,9 +44,7 @@ class SysVQueue implements QueueInterface
      */
     public function count()
     {
-        $stat = $this->exceptional(function () {
-            return msg_stat_queue($this->getQueue());
-        });
+        $stat = msg_stat_queue($this->getQueue());
 
         return $stat['msg_qnum'];
     }
@@ -75,26 +54,15 @@ class SysVQueue implements QueueInterface
      */
     public function clear()
     {
-        $this->exceptional(function () {
-            msg_remove_queue($this->getQueue());
-        });
+        msg_remove_queue($this->getQueue());
     }
 
-    protected function getQueue()
+    private function getQueue()
     {
         if (!is_resource($this->queue)) {
-            $this->queue = msg_get_queue($this->key, $this->perms);
+            $this->queue = msg_get_queue($this->key);
         }
 
         return $this->queue;
-    }
-
-    protected function exceptional(\Closure $func)
-    {
-        set_error_handler(function ($error, $message = '') { throw new RuntimeException($message, $error); }, E_WARNING);
-        $result = $func();
-        restore_error_handler();
-
-        return $result;
     }
 }

@@ -14,7 +14,7 @@ class PdoHandler extends AbstractHandler
      */
     protected $driverName;
 
-    public function __construct(array $options = [])
+    public function __construct(array $options = array())
     {
         if (!extension_loaded('pdo')) {
             throw new \RuntimeException('The "pdo" extension is not loaded.');
