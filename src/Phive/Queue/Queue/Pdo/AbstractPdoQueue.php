@@ -1,6 +1,6 @@
 <?php
 
-namespace Phive\Queue\Queue\Db\Pdo;
+namespace Phive\Queue\Queue\Pdo;
 
 use Phive\Queue\Exception\RuntimeException;
 use Phive\Queue\Queue\QueueInterface;

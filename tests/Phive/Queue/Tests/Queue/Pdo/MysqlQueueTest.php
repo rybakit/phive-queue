@@ -1,6 +1,6 @@
 <?php
 
-namespace Phive\Queue\Tests\Queue\Db\Pdo;
+namespace Phive\Queue\Tests\Queue\Pdo;
 
 use Phive\Queue\Tests\Handler\PdoHandler;
 

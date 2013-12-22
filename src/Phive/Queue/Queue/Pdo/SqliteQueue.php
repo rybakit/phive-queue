@@ -1,16 +1,16 @@
 <?php
 
-namespace Phive\Queue\Queue\Db\Pdo;
+namespace Phive\Queue\Queue\Pdo;
 
 use Phive\Queue\Exception\NoItemException;
 use Phive\Queue\Exception\InvalidArgumentException;
 
-class MysqlQueue extends AbstractPdoQueue
+class SqliteQueue extends AbstractPdoQueue
 {
     public function __construct(\PDO $conn, $tableName)
     {
-        if ('mysql' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
-            throw new InvalidArgumentException(sprintf('%s expects "mysql" PDO driver, "%s" given.',
+        if ('sqlite' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
+            throw new InvalidArgumentException(sprintf('%s expects "sqlite" PDO driver, "%s" given.',
                 __CLASS__, $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)
             ));
         }
@@ -24,9 +24,9 @@ class MysqlQueue extends AbstractPdoQueue
     public function pop()
     {
         $sql = 'SELECT id, item FROM '.$this->tableName
-            .' WHERE eta <= '.time().' ORDER BY eta LIMIT 1 FOR UPDATE';
+            .' WHERE eta <= '.time().' ORDER BY eta LIMIT 1';
 
-        $this->conn->beginTransaction();
+        $this->exec('BEGIN IMMEDIATE');
 
         try {
             $stmt = $this->query($sql);
@@ -38,9 +38,9 @@ class MysqlQueue extends AbstractPdoQueue
                 $this->exec($sql);
             }
 
-            $this->conn->commit();
+            $this->exec('COMMIT');
         } catch (\Exception $e) {
-            $this->conn->rollBack();
+            $this->exec('ROLLBACK');
             throw $e;
         }
 
@@ -49,5 +49,13 @@ class MysqlQueue extends AbstractPdoQueue
         }
 
         throw new NoItemException();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clear()
+    {
+        return $this->exec('DELETE FROM '.$this->tableName);
     }
 }

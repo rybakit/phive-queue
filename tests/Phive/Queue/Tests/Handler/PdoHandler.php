@@ -98,6 +98,6 @@ class PdoHandler extends AbstractHandler
 
     protected function getQueueClassName()
     {
-        return '\\Phive\\Queue\\Queue\\Db\\Pdo\\'.ucfirst($this->driverName).'Queue';
+        return '\\Phive\\Queue\\Queue\\Pdo\\'.ucfirst($this->driverName).'Queue';
     }
 }
