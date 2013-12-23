@@ -17,6 +17,13 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
      */
     protected $queue;
 
+    /**
+     * Whether the queue supports an expired ETA or not.
+     *
+     * @var bool
+     */
+    protected $supportsExpiredEta = true;
+
     public function testQueueImplementsQueueInterface()
     {
         $this->assertInstanceOf('Phive\Queue\Queue\QueueInterface', $this->queue);
@@ -32,16 +39,24 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testPopOrder()
     {
-        $this->queue->push('item1');
-        $this->queue->push('item2', '-1 hour');
+        if ($this->supportsExpiredEta) {
+            $this->queue->push('item1');
+            $this->queue->push('item2', '-1 hour');
+        } else {
+            $this->queue->push('item1', '+3 seconds');
+            $this->queue->push('item2');
+        }
 
         $this->assertEquals('item2', $this->queue->pop());
+        if (!$this->supportsExpiredEta) {
+            sleep(3);
+        }
         $this->assertEquals('item1', $this->queue->pop());
     }
 
     public function testPopDelay()
     {
-        $eta = time() + 5;
+        $eta = time() + 3;
 
         $this->queue->push('item', $eta);
 
@@ -50,7 +65,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $queue = $this->queue;
         $this->callInFuture(function(AbstractQueueTest $self) use ($queue) {
             $self->assertEquals('item', $queue->pop());
-        }, $eta);
+        }, $eta, !$this->supportsExpiredEta);
     }
 
     public function testCountAndClear()
@@ -143,7 +158,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Phive\Queue\QueueInterface
+     * @return \Phive\Queue\Queue\QueueInterface
      */
     abstract public function createQueue();
 }
