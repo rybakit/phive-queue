@@ -3,21 +3,9 @@
 namespace Phive\Queue\Queue\Pdo;
 
 use Phive\Queue\Exception\NoItemException;
-use Phive\Queue\Exception\InvalidArgumentException;
 
 class PgsqlQueue extends AbstractPdoQueue
 {
-    public function __construct(\PDO $conn, $tableName)
-    {
-        if ('pgsql' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
-            throw new InvalidArgumentException(sprintf('%s expects "pgsql" PDO driver, "%s" given.',
-                __CLASS__, $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)
-            ));
-        }
-
-        parent::__construct($conn, $tableName);
-    }
-
     /**
      * {@inheritdoc}
      *
@@ -47,5 +35,10 @@ class PgsqlQueue extends AbstractPdoQueue
         }
 
         throw new NoItemException();
+    }
+
+    public function getSupportedDrivers()
+    {
+        return array('pgsql');
     }
 }

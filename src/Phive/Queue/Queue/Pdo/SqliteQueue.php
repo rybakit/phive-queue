@@ -3,21 +3,9 @@
 namespace Phive\Queue\Queue\Pdo;
 
 use Phive\Queue\Exception\NoItemException;
-use Phive\Queue\Exception\InvalidArgumentException;
 
 class SqliteQueue extends AbstractPdoQueue
 {
-    public function __construct(\PDO $conn, $tableName)
-    {
-        if ('sqlite' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
-            throw new InvalidArgumentException(sprintf('%s expects "sqlite" PDO driver, "%s" given.',
-                __CLASS__, $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)
-            ));
-        }
-
-        parent::__construct($conn, $tableName);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -57,5 +45,10 @@ class SqliteQueue extends AbstractPdoQueue
     public function clear()
     {
         return $this->exec('DELETE FROM '.$this->tableName);
+    }
+
+    public function getSupportedDrivers()
+    {
+        return array('sqlite');
     }
 }

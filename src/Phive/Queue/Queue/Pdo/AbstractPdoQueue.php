@@ -2,6 +2,7 @@
 
 namespace Phive\Queue\Queue\Pdo;
 
+use Phive\Queue\Exception\InvalidArgumentException;
 use Phive\Queue\Exception\RuntimeException;
 use Phive\Queue\Queue\QueueInterface;
 use Phive\Queue\QueueUtils;
@@ -21,9 +22,18 @@ abstract class AbstractPdoQueue implements QueueInterface
     /**
      * @param \PDO   $conn
      * @param string $tableName
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(\PDO $conn, $tableName)
     {
+        $supportedDrivers = (array) $this->getSupportedDrivers();
+        $driver = $conn->getAttribute(\PDO::ATTR_DRIVER_NAME);
+
+        if (!in_array($driver, $supportedDrivers)) {
+            throw new InvalidArgumentException(sprintf('PDO driver "%s" is unsupported by "%s".', $driver, get_class($this)));
+        }
+
         $this->conn = $conn;
         $this->tableName = (string) $tableName;
     }
@@ -122,4 +132,9 @@ abstract class AbstractPdoQueue implements QueueInterface
 
         return $result;
     }
+
+    /**
+     * @return array
+     */
+    abstract public function getSupportedDrivers();
 }

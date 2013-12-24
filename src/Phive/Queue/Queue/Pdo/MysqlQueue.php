@@ -3,21 +3,9 @@
 namespace Phive\Queue\Queue\Pdo;
 
 use Phive\Queue\Exception\NoItemException;
-use Phive\Queue\Exception\InvalidArgumentException;
 
 class MysqlQueue extends AbstractPdoQueue
 {
-    public function __construct(\PDO $conn, $tableName)
-    {
-        if ('mysql' != $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)) {
-            throw new InvalidArgumentException(sprintf('%s expects "mysql" PDO driver, "%s" given.',
-                __CLASS__, $conn->getAttribute(\PDO::ATTR_DRIVER_NAME)
-            ));
-        }
-
-        parent::__construct($conn, $tableName);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -49,5 +37,10 @@ class MysqlQueue extends AbstractPdoQueue
         }
 
         throw new NoItemException();
+    }
+
+    public function getSupportedDrivers()
+    {
+        return array('mysql');
     }
 }
