@@ -2,6 +2,7 @@
 
 namespace Phive\Queue\Queue;
 
+use Phive\Queue\Exception\InvalidArgumentException;
 use Phive\Queue\Exception\NoItemException;
 use Phive\Queue\Exception\RuntimeException;
 use Phive\Queue\QueueUtils;
@@ -26,11 +27,13 @@ class MongoQueue implements QueueInterface
     /**
      * @param \MongoClient $client
      * @param array        $options
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(\MongoClient $client, array $options)
     {
         if (!isset($options['db'], $options['coll'])) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'The "db" and "coll" option are required for %s.', __CLASS__
             ));
         }
