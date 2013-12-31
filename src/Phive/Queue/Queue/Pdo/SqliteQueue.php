@@ -18,7 +18,7 @@ class SqliteQueue extends AbstractPdoQueue
 
         try {
             $stmt = $this->query($sql);
-            $row = $stmt->fetch();
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
             if ($row) {
