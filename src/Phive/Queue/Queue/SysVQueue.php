@@ -3,6 +3,7 @@
 namespace Phive\Queue\Queue;
 
 use Phive\Queue\Exception\NoItemException;
+use Phive\Queue\Exception\RuntimeException;
 use Phive\Queue\QueueUtils;
 
 class SysVQueue implements QueueInterface
