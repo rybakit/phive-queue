@@ -4,9 +4,12 @@ namespace Phive\Queue\Tests\Queue\Pdo;
 
 use Phive\Queue\Tests\Handler\PdoHandler;
 
+/**
+ * @requires extension pdo_sqlite
+ */
 class SqliteQueueTest extends AbstractPdoQueueTest
 {
-    public static function createHandler()
+    public static function createHandler(array $config)
     {
         // Generate a new db file on every method call to prevent
         // a "Database schema has changed" error which occurs if any

@@ -30,8 +30,7 @@ abstract class AbstractPdoQueueTest extends AbstractPersistentQueueTest
 
     public function throwRuntimeExceptionProvider()
     {
-        $handler = static::createHandler();
-        $options = $handler->getOptions();
+        $options = self::getHandler()->getOptions();
         $options['table_name'] = uniqid('non_existing_table_name_');
 
         $handler = new PdoHandler($options);

@@ -7,30 +7,14 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
     /**
      * @var \Phive\Queue\Tests\Handler\AbstractHandler
      */
-    protected static $handler;
-
-    public static function setUpBeforeClass()
-    {
-        try {
-            static::$handler = static::createHandler();
-        } catch (\BadMethodCallException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            static::markTestSkipped($e->getMessage());
-        }
-
-        static::$handler->reset();
-        parent::setUpBeforeClass();
-    }
+    private static $handler;
 
     /**
      * @return \Phive\Queue\Queue\QueueInterface
-     *
-     * @throws \LogicException
      */
     public function createQueue()
     {
-        return static::$handler->createQueue();
+        return self::getHandler()->createQueue();
     }
 
     /**
@@ -66,7 +50,7 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
         $queueSize = (int) $GLOBALS['concurrency_queue_size'];
         $this->assertGreaterThan(1, $queueSize, 'Queue size is too small to test concurrency.');
 
-        $workload = serialize(static::$handler);
+        $workload = serialize(self::getHandler());
         for ($i = 1; $i <= $queueSize; $i++) {
             $this->queue->push($i);
             $client->addTask('pop', $workload);
@@ -88,23 +72,35 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
     }
 
     /**
-     * Abstract static class functions are not possible since v5.2.
+     * Abstract static class functions are not supported since v5.2.
+     *
+     * @param array $config
      *
      * @return \Phive\Queue\Tests\Handler\AbstractHandler
      *
      * @throws \BadMethodCallException
      */
-    public static function createHandler()
+    public static function createHandler(array $config)
     {
         throw new \BadMethodCallException(
             sprintf('Method %s:%s is not implemented.', get_called_class(), __FUNCTION__)
         );
     }
 
+    public static function getHandler()
+    {
+        if (!self::$handler) {
+            self::$handler = static::createHandler($GLOBALS);
+            self::$handler->reset();
+        }
+
+        return self::$handler;
+    }
+
     protected function setUp()
     {
         parent::setUp();
 
-        static::$handler->clear();
+        self::getHandler()->clear();
     }
 }

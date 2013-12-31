@@ -8,7 +8,7 @@ use Phive\Queue\Queue\QueueInterface;
 abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var int Timestamp that will be returned by time()
+     * @var int Timestamp that will be returned by time().
      */
     public static $now;
 
@@ -59,7 +59,6 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $eta = time() + 3;
 
         $this->queue->push('item', $eta);
-
         $this->assertNoItemException($this->queue);
 
         $queue = $this->queue;
@@ -111,6 +110,8 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->queue = $this->createQueue();
+
+        self::$now = null;
         $this->stubTimeFunction();
     }
 
@@ -152,6 +153,8 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $class = get_class($this->queue);
         $namespace = substr($class, 0, strrpos($class, '\\'));
 
+        // this code should be evaluated directly after the queue class is loaded
+        // and before any queue method is called
         if (!is_callable("$namespace\\time")) {
             eval('namespace '.$namespace.' { function time() { return \\'.__CLASS__.'::$now ?: \time(); }}');
         }

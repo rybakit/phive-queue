@@ -11,15 +11,6 @@ class RedisHandler extends AbstractHandler
      */
     protected $redis;
 
-    public function __construct(array $options = array())
-    {
-        if (!extension_loaded('redis')) {
-            throw new \RuntimeException('The "redis" extension is not loaded.');
-        }
-
-        parent::__construct($options);
-    }
-
     public function createQueue()
     {
         return new RedisQueue($this->redis);

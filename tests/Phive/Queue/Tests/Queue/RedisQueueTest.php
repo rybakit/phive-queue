@@ -5,17 +5,11 @@ namespace Phive\Queue\Tests\Queue;
 use Phive\Queue\Queue\RedisQueue;
 use Phive\Queue\Tests\Handler\RedisHandler;
 
+/**
+ * @requires extension redis
+ */
 class RedisQueueTest extends AbstractPersistentQueueTest
 {
-    public static function createHandler()
-    {
-        return new RedisHandler(array(
-            'host'   => $GLOBALS['redis_host'],
-            'port'   => $GLOBALS['redis_port'],
-            'prefix' => $GLOBALS['redis_prefix'],
-        ));
-    }
-
     /**
      * @dataProvider        throwRuntimeExceptionProvider
      * @expectedException   \Phive\Queue\Exception\RuntimeException
@@ -43,5 +37,14 @@ class RedisQueueTest extends AbstractPersistentQueueTest
             array($queue, 'count', array()),
             array($queue, 'clear', array()),
         );
+    }
+
+    public static function createHandler(array $config)
+    {
+        return new RedisHandler(array(
+            'host'   => $config['redis_host'],
+            'port'   => $config['redis_port'],
+            'prefix' => $config['redis_prefix'],
+        ));
     }
 }

@@ -14,22 +14,6 @@ class PdoHandler extends AbstractHandler
      */
     protected $driverName;
 
-    public function __construct(array $options = array())
-    {
-        if (!extension_loaded('pdo')) {
-            throw new \RuntimeException('The "pdo" extension is not loaded.');
-        }
-
-        /*
-        $driverName = strstr($this->getOption('dsn'), ':', true);
-        if (!extension_loaded('pdo_'.$driverName)) {
-            throw new \RuntimeException(sprintf('The "pdo_%s" extension is not loaded.', $driverName));
-        }
-        */
-
-        parent::__construct($options);
-    }
-
     public function createQueue()
     {
         $queueClassName = $this->getQueueClassName();

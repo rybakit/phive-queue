@@ -16,15 +16,6 @@ class MongoHandler extends AbstractHandler
      */
     protected $collection;
 
-    public function __construct(array $options = array())
-    {
-        if (!extension_loaded('mongo')) {
-            throw new \RuntimeException('The "mongo" extension is not loaded.');
-        }
-
-        parent::__construct($options);
-    }
-
     public function createQueue()
     {
         return new MongoQueue($this->client, array(
