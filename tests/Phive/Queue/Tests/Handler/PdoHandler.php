@@ -7,7 +7,7 @@ class PdoHandler extends AbstractHandler
     /**
      * @var \PDO
      */
-    protected $pdo;
+    protected $conn;
 
     /**
      * @var string
@@ -16,72 +16,44 @@ class PdoHandler extends AbstractHandler
 
     public function createQueue()
     {
-        $queueClassName = $this->getQueueClassName();
+        $class = '\\Phive\\Queue\\Queue\\Pdo\\'.ucfirst($this->driverName).'Queue';
 
-        return new $queueClassName($this->pdo, $this->getOption('table_name'));
+        return new $class($this->conn, $this->getOption('table_name'));
     }
 
     public function reset()
     {
-        $sqlFile = __DIR__.'/../Fixtures/sql/'.$this->driverName.'.sql';
+        $file = __DIR__.'/../Fixtures/sql/'.$this->driverName.'.sql';
+        $sql = file_get_contents($file);
+        $sql = str_replace('{{table_name}}', $this->getOption('table_name'), $sql);
 
-        $this->execSqlFile($sqlFile);
+        $this->conn->exec($sql);
     }
 
     public function clear()
     {
-        if (false === $this->pdo->exec('DELETE FROM '.$this->getOption('table_name'))) {
-            $err = $this->pdo->errorInfo();
-            throw new \RuntimeException($err[2]);
-        }
-    }
-
-    public function execSqlFile($file)
-    {
-        $content = file_get_contents($file);
-        $content = str_replace('{{table_name}}', $this->getOption('table_name'), $content);
-
-        $statements = explode(';', $content);
-
-        $this->pdo->beginTransaction();
-        try {
-            foreach ($statements as $statement) {
-                $statement = trim($statement);
-
-                // skip empty lines and comments
-                if (!$statement || 0 === strpos($statement, '--')) {
-                    continue;
-                }
-
-                if (false === $this->pdo->exec($statement)) {
-                    $err = $this->pdo->errorInfo();
-                    throw new \RuntimeException(
-                        $err[2] ?: sprintf('Unable to execute the statement "%s".', $statement)
-                    );
-                }
-            }
-            $this->pdo->commit();
-        } catch (\Exception $e) {
-            $this->pdo->rollBack();
-            throw $e;
-        }
+        $this->conn->exec('DELETE FROM '.$this->getOption('table_name'));
     }
 
     protected function configure()
     {
-        $this->pdo = new \PDO(
+        $this->conn = new \PDO(
             $this->getOption('dsn'),
             $this->getOption('username'),
             $this->getOption('password')
         );
-        //$this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-        //$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->driverName = $this->conn->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
-        $this->driverName = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $this->configureDriver();
     }
 
-    protected function getQueueClassName()
+    protected function configureDriver()
     {
-        return '\\Phive\\Queue\\Queue\\Pdo\\'.ucfirst($this->driverName).'Queue';
+        switch ($this->driverName) {
+            case 'sqlite':
+                $this->conn->exec('PRAGMA journal_mode=WAL');
+                break;
+        }
     }
 }
