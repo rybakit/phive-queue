@@ -91,10 +91,16 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
     {
         if (!self::$handler) {
             self::$handler = static::createHandler($GLOBALS);
-            self::$handler->reset();
         }
 
         return self::$handler;
+    }
+
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+
+        self::getHandler()->reset();
     }
 
     protected function setUp()
