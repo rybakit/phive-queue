@@ -24,8 +24,8 @@
         "ext-sysvmsg":    ""
     },
     "autoload": {
-        "psr-0": {
-            "Phive\\": "src/"
+        "psr-4": {
+            "Phive\\Queue\\": "src/"
         }
     }
 }

@@ -37,7 +37,7 @@
 
     <testsuites>
         <testsuite name="Phive Queue Test Suite">
-            <directory>tests/Phive</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
