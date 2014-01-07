@@ -16,11 +16,6 @@ class RedisHandler extends AbstractHandler
         return new RedisQueue($this->redis);
     }
 
-    public function reset()
-    {
-        $this->clear();
-    }
-
     public function clear()
     {
         $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
