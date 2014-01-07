@@ -11,11 +11,6 @@ class SysVHandler extends AbstractHandler
         return new SysVQueue($this->getOption('key'));
     }
 
-    public function reset()
-    {
-        $this->clear();
-    }
-
     public function clear()
     {
         msg_remove_queue(msg_get_queue($this->getOption('key')));
