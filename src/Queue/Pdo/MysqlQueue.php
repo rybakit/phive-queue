@@ -17,13 +17,13 @@ class MysqlQueue extends AbstractPdoQueue
         $this->conn->beginTransaction();
 
         try {
-            $stmt = $this->query($sql);
+            $stmt = $this->conn->query($sql);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
             if ($row) {
                 $sql = 'DELETE FROM '.$this->tableName.' WHERE id = '.(int) $row['id'];
-                $this->exec($sql);
+                $this->conn->exec($sql);
             }
 
             $this->conn->commit();
