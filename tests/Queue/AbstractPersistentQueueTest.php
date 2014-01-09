@@ -103,6 +103,13 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
         self::getHandler()->reset();
     }
 
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+
+        self::$handler = null;
+    }
+
     protected function setUp()
     {
         parent::setUp();
