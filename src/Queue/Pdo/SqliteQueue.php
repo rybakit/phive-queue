@@ -14,21 +14,21 @@ class SqliteQueue extends AbstractPdoQueue
         $sql = 'SELECT id, item FROM '.$this->tableName
             .' WHERE eta <= '.time().' ORDER BY eta LIMIT 1';
 
-        $this->exec('BEGIN IMMEDIATE');
+        $this->conn->exec('BEGIN IMMEDIATE');
 
         try {
-            $stmt = $this->query($sql);
+            $stmt = $this->conn->query($sql);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
             if ($row) {
                 $sql = 'DELETE FROM '.$this->tableName.' WHERE id = '.(int) $row['id'];
-                $this->exec($sql);
+                $this->conn->exec($sql);
             }
 
-            $this->exec('COMMIT');
+            $this->conn->exec('COMMIT');
         } catch (\Exception $e) {
-            $this->exec('ROLLBACK');
+            $this->conn->exec('ROLLBACK');
             throw $e;
         }
 
@@ -44,7 +44,7 @@ class SqliteQueue extends AbstractPdoQueue
      */
     public function clear()
     {
-        return $this->exec('DELETE FROM '.$this->tableName);
+        return $this->conn->exec('DELETE FROM '.$this->tableName);
     }
 
     public function getSupportedDrivers()

@@ -19,8 +19,8 @@ class PgsqlQueue extends AbstractPdoQueue
         $this->conn->beginTransaction();
 
         try {
-            $this->exec('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
-            $stmt = $this->query($sql);
+            $this->conn->exec('LOCK TABLE '.$this->tableName.' IN EXCLUSIVE MODE');
+            $stmt = $this->conn->query($sql);
             $this->conn->commit();
         } catch (\Exception $e) {
             $this->conn->rollBack();
