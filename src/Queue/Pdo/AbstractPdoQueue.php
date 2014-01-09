@@ -46,11 +46,6 @@ abstract class AbstractPdoQueue implements QueueInterface
         return $this->conn;
     }
 
-    public function getTableName()
-    {
-        return $this->tableName;
-    }
-
     /**
      * {@inheritdoc}
      */
