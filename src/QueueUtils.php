@@ -25,7 +25,7 @@ class QueueUtils
         if (is_string($eta)) {
             $eta = date_create($eta);
         }
-        if ($eta instanceof \DateTime) {
+        if ($eta instanceof \DateTime || $eta instanceof \DateTimeInterface) {
             return $eta->getTimestamp();
         }
         if (is_int($eta)) {
