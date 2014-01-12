@@ -15,7 +15,7 @@ services:
     - redis-server
 
 before_script:
-    - sh -c 'php_version=$(phpenv version-name); if [ "hhvm" != "$php_version" ]; then printf "extension = mongo.so\nextension = redis.so" >> ~/.phpenv/versions/$php_version/etc/php.ini; fi;'
+    - sh -c 'if [ "hhvm" != $TRAVIS_PHP_VERSION ]; then printf "extension = mongo.so\nextension = redis.so" >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini; fi;'
     - mysql -e 'create database phive_tests;'
     - psql -c 'create database phive_tests;' -U postgres
 
