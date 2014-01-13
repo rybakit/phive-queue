@@ -39,8 +39,8 @@ Currently, there are the following queues available:
 * `PgsqlQueue`
 * `MysqlQueue`
 * `SqliteQueue`
-* `InMemoryQueue`
 * `SysVQueue`
+* `InMemoryQueue`
 
 
 ## Usage example
@@ -64,8 +64,8 @@ $count = $queue->count(); // $count = 5;
 
 // pop items off the queue
 try {
-    while ($item = $queue->pop()) {
-        // $item = 'item1' ... 'item2' ... 'item3';
+    while (1) {
+        $item = $queue->pop(); // $item = 'item1', 'item2', 'item3';
     }
 } catch (NoItemException $e) {
     // no items are available
