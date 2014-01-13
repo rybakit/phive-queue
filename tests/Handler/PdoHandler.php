@@ -7,16 +7,21 @@ class PdoHandler extends AbstractHandler
     /**
      * @var \PDO
      */
-    protected $conn;
+    private $conn;
 
     /**
      * @var string
      */
-    protected $driverName;
+    private $driverName;
+
+    public function getQueueClass()
+    {
+        return '\\Phive\\Queue\\Queue\\Pdo\\'.ucfirst($this->driverName).'Queue';
+    }
 
     public function createQueue()
     {
-        $class = '\\Phive\\Queue\\Queue\\Pdo\\'.ucfirst($this->driverName).'Queue';
+        $class = $this->getQueueClass();
 
         return new $class($this->conn, $this->getOption('table_name'));
     }

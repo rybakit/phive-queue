@@ -9,7 +9,7 @@ class RedisHandler extends AbstractHandler
     /**
      * @var \Redis
      */
-    protected $redis;
+    private $redis;
 
     public function createQueue()
     {
