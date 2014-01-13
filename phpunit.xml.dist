@@ -30,6 +30,8 @@
         <var name="redis_port" value="6379" />
         <var name="redis_prefix" value="phive_tests:queue:" />
 
+        <var name="sysv_key" value="3735928559" />
+
         <var name="concurrency_queue_size" value="100" />
 
         <var name="performance_queue_size" value="1000" />

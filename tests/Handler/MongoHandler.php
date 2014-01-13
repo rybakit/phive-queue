@@ -9,12 +9,12 @@ class MongoHandler extends AbstractHandler
     /**
      * @var \MongoClient
      */
-    protected $client;
+    private $client;
 
     /**
      * @var \MongoCollection
      */
-    protected $collection;
+    private $coll;
 
     public function createQueue()
     {
@@ -31,24 +31,13 @@ class MongoHandler extends AbstractHandler
 
     public function clear()
     {
-        $this->getCollection()->remove();
-    }
-
-    protected function getCollection()
-    {
-        if (!$this->collection) {
-            $this->collection = $this->client->selectCollection(
-                $this->getOption('db_name'),
-                $this->getOption('coll_name')
-            );
-            $this->collection->ensureIndex(array('eta' => 1));
-        }
-
-        return $this->collection;
+        $this->coll->remove();
     }
 
     protected function configure()
     {
         $this->client = new \MongoClient($this->getOption('server'));
+        $this->coll = $this->client->selectCollection($this->getOption('db_name'), $this->getOption('coll_name'));
+        $this->coll->ensureIndex(array('eta' => 1));
     }
 }
