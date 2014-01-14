@@ -46,18 +46,6 @@ class MongoQueue implements QueueInterface
         return $this->client;
     }
 
-    public function getCollection()
-    {
-        if (!$this->coll) {
-            $this->coll = $this->client->selectCollection(
-                $this->options['db'],
-                $this->options['coll']
-            );
-        }
-
-        return $this->coll;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -107,5 +95,17 @@ class MongoQueue implements QueueInterface
     public function clear()
     {
         $this->getCollection()->remove();
+    }
+    
+    private function getCollection()
+    {
+        if (!$this->coll) {
+            $this->coll = $this->client->selectCollection(
+                $this->options['db'],
+                $this->options['coll']
+            );
+        }
+
+        return $this->coll;
     }
 }
