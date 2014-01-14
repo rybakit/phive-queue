@@ -96,8 +96,8 @@ class MongoQueue implements QueueInterface
     {
         $this->getCollection()->remove();
     }
-    
-    private function getCollection()
+
+    protected function getCollection()
     {
         if (!$this->coll) {
             $this->coll = $this->client->selectCollection(
