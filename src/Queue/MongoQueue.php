@@ -4,7 +4,6 @@ namespace Phive\Queue\Queue;
 
 use Phive\Queue\Exception\InvalidArgumentException;
 use Phive\Queue\Exception\NoItemException;
-use Phive\Queue\Exception\RuntimeException;
 use Phive\Queue\QueueUtils;
 
 class MongoQueue implements QueueInterface
@@ -47,18 +46,6 @@ class MongoQueue implements QueueInterface
         return $this->client;
     }
 
-    public function getCollection()
-    {
-        if (!$this->coll) {
-            $this->coll = $this->client->selectCollection(
-                $this->options['db'],
-                $this->options['coll']
-            );
-        }
-
-        return $this->coll;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -66,12 +53,10 @@ class MongoQueue implements QueueInterface
     {
         $eta = QueueUtils::normalizeEta($eta);
 
-        $this->exceptional(function (\MongoCollection $coll) use ($eta, $item) {
-            $coll->insert(array(
-                'eta'  => $eta,
-                'item' => $item,
-            ));
-        });
+        $this->getCollection()->insert(array(
+            'eta'  => $eta,
+            'item' => $item,
+        ));
     }
 
     /**
@@ -79,15 +64,15 @@ class MongoQueue implements QueueInterface
      */
     public function pop()
     {
-        $result = $this->exceptional(function (\MongoCollection $coll) {
-            return $coll->db->command(array(
-                'findandmodify' => $coll->getName(),
-                'remove'        => 1,
-                'fields'        => array('item' => 1),
-                'query'         => array('eta' => array('$lte' => time())),
-                'sort'          => array('eta' => 1),
-            ));
-        });
+        $coll = $this->getCollection();
+
+        $result = $coll->db->command(array(
+            'findandmodify' => $coll->getName(),
+            'remove'        => 1,
+            'fields'        => array('item' => 1),
+            'query'         => array('eta' => array('$lte' => time())),
+            'sort'          => array('eta' => 1),
+        ));
 
         if (isset($result['value']['item'])) {
             return $result['value']['item'];
@@ -101,9 +86,7 @@ class MongoQueue implements QueueInterface
      */
     public function count()
     {
-        return $this->exceptional(function (\MongoCollection $coll) {
-            return $coll->count();
-        });
+        return $this->getCollection()->count();
     }
 
     /**
@@ -111,26 +94,18 @@ class MongoQueue implements QueueInterface
      */
     public function clear()
     {
-        $this->exceptional(function (\MongoCollection $coll) {
-            $coll->remove();
-        });
+        $this->getCollection()->remove();
     }
 
-    /**
-     * @param \Closure $func The function to execute.
-     *
-     * @return mixed
-     *
-     * @throws RuntimeException
-     */
-    protected function exceptional(\Closure $func)
+    protected function getCollection()
     {
-        try {
-            $result = $func($this->getCollection());
-        } catch (\MongoException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        if (!$this->coll) {
+            $this->coll = $this->client->selectCollection(
+                $this->options['db'],
+                $this->options['coll']
+            );
         }
 
-        return $result;
+        return $this->coll;
     }
 }

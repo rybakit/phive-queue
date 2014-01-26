@@ -7,7 +7,7 @@ abstract class AbstractHandler implements \Serializable
     /**
      * @var array
      */
-    protected $options;
+    private $options;
 
     public function __construct(array $options = array())
     {
