@@ -41,6 +41,6 @@ class MysqlQueue extends AbstractPdoQueue
 
     public function getSupportedDrivers()
     {
-        return array('mysql');
+        return ['mysql'];
     }
 }

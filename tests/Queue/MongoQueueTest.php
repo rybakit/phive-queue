@@ -11,11 +11,11 @@ class MongoQueueTest extends AbstractPersistentQueueTest
 {
     public static function createHandler(array $config)
     {
-        return new MongoHandler(array(
+        return new MongoHandler([
             'server'    => $config['mongo_server'],
             'db_name'   => $config['mongo_db_name'],
             'coll_name' => $config['mongo_coll_name'],
-        ));
+        ]);
     }
 
 }

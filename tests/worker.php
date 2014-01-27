@@ -10,7 +10,7 @@ $worker->addServer();
 $workerId = uniqid(getmypid().'_', true);
 $worker->addFunction('pop', function(\GearmanJob $job) use ($workerId) {
     static $i = 0;
-    static $queues = array();
+    static $queues = [];
 
     $workload = $job->workload();
     if (!isset($queues[$workload])) {

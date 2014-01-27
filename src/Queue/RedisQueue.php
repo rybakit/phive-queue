@@ -49,10 +49,9 @@ LUA;
     {
         $eta = QueueUtils::normalizeEta($eta);
 
-        $self = $this;
-        $this->exceptional(function(\Redis $redis) use ($self, $item, $eta) {
-            $prefix = $redis->getOption(\Redis::OPT_PREFIX);
-            $redis->evaluate($self::SCRIPT_PUSH, array($prefix.'items', $eta, $item, $prefix.'sequence'));
+        $this->exceptional(function () use ($item, $eta) {
+            $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
+            $this->redis->evaluate(self::SCRIPT_PUSH, [$prefix.'items', $eta, $item, $prefix.'sequence']);
         });
     }
 
@@ -61,11 +60,10 @@ LUA;
      */
     public function pop()
     {
-        $self = $this;
-        $item = $this->exceptional(function(\Redis $redis) use ($self) {
-            $prefix = $redis->getOption(\Redis::OPT_PREFIX);
+        $item = $this->exceptional(function () {
+            $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
 
-            return $redis->evaluate($self::SCRIPT_POP, array($prefix.'items', time()));
+            return $this->redis->evaluate(self::SCRIPT_POP, [$prefix.'items', time()]);
         });
 
         if ($item) {
@@ -80,8 +78,8 @@ LUA;
      */
     public function count()
     {
-        return $this->exceptional(function(\Redis $redis) {
-            return $redis->zCard('items');
+        return $this->exceptional(function () {
+            return $this->redis->zCard('items');
         });
     }
 
@@ -90,8 +88,8 @@ LUA;
      */
     public function clear()
     {
-        return $this->exceptional(function(\Redis $redis) {
-            return $redis->del(array('items', 'sequence'));
+        return $this->exceptional(function () {
+            return $this->redis->del(['items', 'sequence']);
         });
     }
 
@@ -106,7 +104,7 @@ LUA;
     {
         try {
             $lastError = $this->redis->getLastError();
-            $result = $func($this->redis);
+            $result = $func();
             if ($error = $this->redis->getLastError() !== $lastError) {
                 throw new RuntimeException($error);
             }

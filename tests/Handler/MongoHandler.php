@@ -18,10 +18,10 @@ class MongoHandler extends AbstractHandler
 
     public function createQueue()
     {
-        return new MongoQueue($this->client, array(
+        return new MongoQueue($this->client, [
             'db'   => $this->getOption('db_name'),
             'coll' => $this->getOption('coll_name'),
-        ));
+        ]);
     }
 
     public function reset()
@@ -38,6 +38,6 @@ class MongoHandler extends AbstractHandler
     {
         $this->client = new \MongoClient($this->getOption('server'));
         $this->coll = $this->client->selectCollection($this->getOption('db_name'), $this->getOption('coll_name'));
-        $this->coll->ensureIndex(array('eta' => 1));
+        $this->coll->ensureIndex(['eta' => 1]);
     }
 }

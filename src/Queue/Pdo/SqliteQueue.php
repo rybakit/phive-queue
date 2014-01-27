@@ -49,6 +49,6 @@ class SqliteQueue extends AbstractPdoQueue
 
     public function getSupportedDrivers()
     {
-        return array('sqlite');
+        return ['sqlite'];
     }
 }

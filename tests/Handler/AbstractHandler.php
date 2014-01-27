@@ -9,9 +9,9 @@ abstract class AbstractHandler implements \Serializable
      */
     private $options;
 
-    public function __construct(array $options = array())
+    public function __construct($options = null)
     {
-        $this->options = $options;
+        $this->options = (array) $options;
         $this->configure();
     }
 

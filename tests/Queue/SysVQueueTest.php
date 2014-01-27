@@ -11,6 +11,6 @@ class SysVQueueTest extends AbstractPersistentQueueTest
 {
     public static function createHandler(array $config)
     {
-        return new SysVHandler(array('key' => $config['sysv_key']));
+        return new SysVHandler(['key' => $config['sysv_key']]);
     }
 }

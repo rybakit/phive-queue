@@ -61,9 +61,8 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $this->queue->push('item', $eta);
         $this->assertNoItemException($this->queue);
 
-        $queue = $this->queue;
-        $this->callInFuture(function(AbstractQueueTest $self) use ($queue) {
-            $self->assertEquals('item', $queue->pop());
+        $this->callInFuture(function () {
+            $this->assertEquals('item', $this->queue->pop());
         }, $eta, !$this->supportsExpiredEta);
     }
 
@@ -134,7 +133,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         }
 
         self::$now = $futureTime;
-        $result = $func($this);
+        $result = $func();
         self::$now = null;
 
         return $result;
