@@ -99,7 +99,7 @@ LUA;
     protected function ensureResult($result)
     {
         if (false === $result) {
-            throw new RuntimeException($this->redis->getLastEror());
+            throw new RuntimeException($this->redis->getLastError());
         }
     }
 }
