@@ -49,7 +49,7 @@ LUA;
     {
         $eta = QueueUtils::normalizeEta($eta);
         $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
-        
+
         $result = $this->redis->evaluate(self::SCRIPT_PUSH, [$prefix.'items', $eta, $item, $prefix.'sequence']);
         $this->ensureResult($result);
     }
