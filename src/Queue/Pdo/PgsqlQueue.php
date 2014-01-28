@@ -39,6 +39,6 @@ class PgsqlQueue extends AbstractPdoQueue
 
     public function getSupportedDrivers()
     {
-        return array('pgsql');
+        return ['pgsql'];
     }
 }

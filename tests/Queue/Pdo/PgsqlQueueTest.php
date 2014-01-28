@@ -11,11 +11,11 @@ class PgsqlQueueTest extends AbstractPdoQueueTest
 {
     public static function createHandler(array $config)
     {
-        return new PdoHandler(array(
+        return new PdoHandler([
             'dsn'        => $config['db_pdo_pgsql_dsn'],
             'username'   => $config['db_pdo_pgsql_username'],
             'password'   => $config['db_pdo_pgsql_password'],
             'table_name' => $config['db_pdo_pgsql_table_name'],
-        ));
+        ]);
     }
 }

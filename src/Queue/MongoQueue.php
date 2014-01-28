@@ -53,10 +53,10 @@ class MongoQueue implements QueueInterface
     {
         $eta = QueueUtils::normalizeEta($eta);
 
-        $this->getCollection()->insert(array(
+        $this->getCollection()->insert([
             'eta'  => $eta,
             'item' => $item,
-        ));
+        ]);
     }
 
     /**
@@ -66,13 +66,13 @@ class MongoQueue implements QueueInterface
     {
         $coll = $this->getCollection();
 
-        $result = $coll->db->command(array(
+        $result = $coll->db->command([
             'findandmodify' => $coll->getName(),
             'remove'        => 1,
-            'fields'        => array('item' => 1),
-            'query'         => array('eta' => array('$lte' => time())),
-            'sort'          => array('eta' => 1),
-        ));
+            'fields'        => ['item' => 1],
+            'query'         => ['eta' => ['$lte' => time()]],
+            'sort'          => ['eta' => 1],
+        ]);
 
         if (isset($result['value']['item'])) {
             return $result['value']['item'];

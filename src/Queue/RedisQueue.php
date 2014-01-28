@@ -48,12 +48,10 @@ LUA;
     public function push($item, $eta = null)
     {
         $eta = QueueUtils::normalizeEta($eta);
-
-        $self = $this;
-        $this->exceptional(function(\Redis $redis) use ($self, $item, $eta) {
-            $prefix = $redis->getOption(\Redis::OPT_PREFIX);
-            $redis->evaluate($self::SCRIPT_PUSH, array($prefix.'items', $eta, $item, $prefix.'sequence'));
-        });
+        $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
+        
+        $result = $this->redis->evaluate(self::SCRIPT_PUSH, [$prefix.'items', $eta, $item, $prefix.'sequence']);
+        $this->ensureResult($result);
     }
 
     /**
@@ -61,15 +59,13 @@ LUA;
      */
     public function pop()
     {
-        $self = $this;
-        $item = $this->exceptional(function(\Redis $redis) use ($self) {
-            $prefix = $redis->getOption(\Redis::OPT_PREFIX);
+        $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
 
-            return $redis->evaluate($self::SCRIPT_POP, array($prefix.'items', time()));
-        });
+        $result = $this->redis->evaluate(self::SCRIPT_POP, [$prefix.'items', time()]);
+        $this->ensureResult($result);
 
-        if ($item) {
-            return substr($item, strpos($item, ':') + 1);
+        if ($result) {
+            return substr($result, strpos($result, ':') + 1);
         }
 
         throw new NoItemException();
@@ -80,9 +76,10 @@ LUA;
      */
     public function count()
     {
-        return $this->exceptional(function(\Redis $redis) {
-            return $redis->zCard('items');
-        });
+        $result = $this->redis->zCard('items');
+        $this->ensureResult($result);
+
+        return $result;
     }
 
     /**
@@ -90,30 +87,19 @@ LUA;
      */
     public function clear()
     {
-        return $this->exceptional(function(\Redis $redis) {
-            return $redis->del(array('items', 'sequence'));
-        });
+        $result = $this->redis->del(['items', 'sequence']);
+        $this->ensureResult($result);
     }
 
     /**
-     * @param \Closure $func The function to execute.
-     *
-     * @return mixed
+     * @param mixed $result
      *
      * @throws RuntimeException
      */
-    protected function exceptional(\Closure $func)
+    protected function ensureResult($result)
     {
-        try {
-            $lastError = $this->redis->getLastError();
-            $result = $func($this->redis);
-            if ($error = $this->redis->getLastError() !== $lastError) {
-                throw new RuntimeException($error);
-            }
-        } catch (\RedisException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        if (false === $result) {
+            throw new RuntimeException($this->redis->getLastError());
         }
-
-        return $result;
     }
 }
