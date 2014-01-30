@@ -18,9 +18,10 @@ LUA;
 
     const SCRIPT_POP = <<<'LUA'
         local item = redis.call('ZRANGEBYSCORE', ARGV[1], '-inf', ARGV[2], 'LIMIT', 0, 1)
-        if 0 ~= #item then
-            redis.call('ZREM', ARGV[1], unpack(item))
+        if 0 == #item then
+            return -1
         end
+        redis.call('ZREM', ARGV[1], unpack(item))
         return unpack(item)
 LUA;
 
@@ -64,11 +65,11 @@ LUA;
         $result = $this->redis->evaluate(self::SCRIPT_POP, [$prefix.'items', time()]);
         $this->ensureResult($result);
 
-        if ($result) {
-            return substr($result, strpos($result, ':') + 1);
+        if (-1 === $result) {
+            throw new NoItemException();
         }
 
-        throw new NoItemException();
+        return substr($result, strpos($result, ':') + 1);
     }
 
     /**
