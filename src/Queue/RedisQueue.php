@@ -12,17 +12,18 @@ use Phive\Queue\QueueUtils;
 class RedisQueue implements QueueInterface
 {
     const SCRIPT_PUSH = <<<'LUA'
-        local id = redis.call('INCR', ARGV[4])
-        return redis.call('ZADD', ARGV[1], ARGV[2], id..':'..ARGV[3])
+        local id = redis.call('INCR', KEYS[2])
+        return redis.call('ZADD', KEYS[1], ARGV[2], id..':'..ARGV[1])
 LUA;
 
     const SCRIPT_POP = <<<'LUA'
-        local item = redis.call('ZRANGEBYSCORE', ARGV[1], '-inf', ARGV[2], 'LIMIT', 0, 1)
+        local item = redis.call('ZRANGEBYSCORE', KEYS[1], '-inf', ARGV[1], 'LIMIT', 0, 1)
         if 0 == #item then
             return -1
         end
-        redis.call('ZREM', ARGV[1], unpack(item))
-        return unpack(item)
+        item = unpack(item)
+        redis.call('ZREM', KEYS[1], item)
+        return item
 LUA;
 
     /**
@@ -49,9 +50,8 @@ LUA;
     public function push($item, $eta = null)
     {
         $eta = QueueUtils::normalizeEta($eta);
-        $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
 
-        $result = $this->redis->evaluate(self::SCRIPT_PUSH, [$prefix.'items', $eta, $item, $prefix.'sequence']);
+        $result = $this->redis->evaluate(self::SCRIPT_PUSH, ['items', 'sequence', $item, $eta], 2);
         $this->ensureResult($result);
     }
 
@@ -60,9 +60,7 @@ LUA;
      */
     public function pop()
     {
-        $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
-
-        $result = $this->redis->evaluate(self::SCRIPT_POP, [$prefix.'items', time()]);
+        $result = $this->redis->evaluate(self::SCRIPT_POP, ['items', time()], 1);
         $this->ensureResult($result);
 
         if (-1 === $result) {
