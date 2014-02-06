@@ -17,13 +17,10 @@ class RedisQueue implements QueueInterface
 LUA;
 
     const SCRIPT_POP = <<<'LUA'
-        local item = redis.call('ZRANGEBYSCORE', KEYS[1], '-inf', ARGV[1], 'LIMIT', 0, 1)
-        if 0 == #item then
-            return -1
-        end
-        item = unpack(item)
-        redis.call('ZREM', KEYS[1], item)
-        return item
+        local items = redis.call('ZRANGEBYSCORE', KEYS[1], '-inf', ARGV[1], 'LIMIT', 0, 1)
+        if 0 == #items then return -1 end
+        redis.call('ZREM', KEYS[1], items[1])
+        return string.sub(items[1], string.find(items[1], ':') + 1)
 LUA;
 
     /**
@@ -31,9 +28,6 @@ LUA;
      */
     private $redis;
 
-    /**
-     * @param \Redis $redis
-     */
     public function __construct(\Redis $redis)
     {
         $this->redis = $redis;
@@ -51,8 +45,12 @@ LUA;
     {
         $eta = QueueUtils::normalizeEta($eta);
 
-        $result = $this->redis->evaluate(self::SCRIPT_PUSH, ['items', 'sequence', $item, $eta], 2);
-        $this->ensureResult($result);
+        if (\Redis::SERIALIZER_NONE !== $this->redis->getOption(\Redis::OPT_SERIALIZER)) {
+            $item = $this->redis->_serialize($item);
+        }
+
+        $result = $this->redis->evaluate(self::SCRIPT_PUSH, ['items', 'seq', $item, $eta], 2);
+        $this->assertResult($result);
     }
 
     /**
@@ -61,13 +59,17 @@ LUA;
     public function pop()
     {
         $result = $this->redis->evaluate(self::SCRIPT_POP, ['items', time()], 1);
-        $this->ensureResult($result);
+        $this->assertResult($result);
 
         if (-1 === $result) {
             throw new NoItemException();
         }
 
-        return substr($result, strpos($result, ':') + 1);
+        if (\Redis::SERIALIZER_NONE !== $this->redis->getOption(\Redis::OPT_SERIALIZER)) {
+            return $this->redis->_unserialize($result);
+        }
+
+        return $result;
     }
 
     /**
@@ -76,7 +78,7 @@ LUA;
     public function count()
     {
         $result = $this->redis->zCard('items');
-        $this->ensureResult($result);
+        $this->assertResult($result);
 
         return $result;
     }
@@ -86,8 +88,8 @@ LUA;
      */
     public function clear()
     {
-        $result = $this->redis->del(['items', 'sequence']);
-        $this->ensureResult($result);
+        $result = $this->redis->del(['items', 'seq']);
+        $this->assertResult($result);
     }
 
     /**
@@ -95,7 +97,7 @@ LUA;
      *
      * @throws RuntimeException
      */
-    protected function ensureResult($result)
+    protected function assertResult($result)
     {
         if (false === $result) {
             throw new RuntimeException($this->redis->getLastError());

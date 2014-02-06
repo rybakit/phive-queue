@@ -18,6 +18,7 @@ class RedisHandler extends AbstractHandler
 
     public function clear()
     {
+        $this->redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_NONE);
         $prefix = $this->redis->getOption(\Redis::OPT_PREFIX);
         $offset = strlen($prefix);
 
