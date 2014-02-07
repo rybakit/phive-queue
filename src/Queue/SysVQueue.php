@@ -10,12 +10,24 @@ class SysVQueue implements QueueInterface
 {
     const MSG_MAX_SIZE = 512;
 
+    /**
+     * @var int
+     */
     private $key;
 
+    /**
+     * @var resource
+     */
     private $queue;
 
+    /**
+     * @var bool
+     */
     private $serialize;
 
+    /**
+     * @var int
+     */
     private $perms;
 
     /**
@@ -27,7 +39,7 @@ class SysVQueue implements QueueInterface
     {
         $this->key = $key;
         $this->serialize = (bool) $serialize;
-        $this->perms = $perms ?: 0666;
+        $this->perms = (null === $perms) ? 0666 : $perms;
     }
 
     /**
@@ -44,7 +56,7 @@ class SysVQueue implements QueueInterface
      */
     public function pop()
     {
-        if (msg_receive($this->getQueue(), -time(), $eta, static::MSG_MAX_SIZE, $item, $this->serialize, \MSG_IPC_NOWAIT, $errorCode)) {
+        if (msg_receive($this->getQueue(), -time(), $eta, static::MSG_MAX_SIZE, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode)) {
             return $item;
         }
 
@@ -73,7 +85,7 @@ class SysVQueue implements QueueInterface
         msg_remove_queue($this->getQueue());
     }
 
-    private function getQueue()
+    protected function getQueue()
     {
         if (!is_resource($this->queue)) {
             $this->queue = msg_get_queue($this->key, $this->perms);
