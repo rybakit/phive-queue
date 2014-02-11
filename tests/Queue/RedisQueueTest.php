@@ -34,8 +34,9 @@ class RedisQueueTest extends AbstractPersistentQueueTest
         $items = [null, true, -1, 1.5, 'string', ['a','r','r','a','y'], new \stdClass()];
 
         foreach ($serializers as $serializer) {
+            $redis->setOption(\Redis::OPT_SERIALIZER, $serializer);
+
             foreach ($items as $item) {
-                $redis->setOption(\Redis::OPT_SERIALIZER, $serializer);
                 $this->queue->push($item);
                 $this->assertEquals($item, $this->queue->pop());
             }
