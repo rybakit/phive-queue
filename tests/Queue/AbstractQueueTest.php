@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-use Phive\Queue\Exception\NoItemException;
+use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\Queue\QueueInterface;
 
 abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
@@ -34,7 +34,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $this->queue->push('item');
 
         $this->assertEquals('item', $this->queue->pop());
-        $this->assertNoItemException($this->queue);
+        $this->assertNoItemAvailableException($this->queue);
     }
 
     public function testPopOrder()
@@ -59,7 +59,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $eta = time() + 3;
 
         $this->queue->push('item', $eta);
-        $this->assertNoItemException($this->queue);
+        $this->assertNoItemAvailableException($this->queue);
 
         $this->callInFuture(function () {
             $this->assertEquals('item', $this->queue->pop());
@@ -114,15 +114,15 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $this->stubTimeFunction();
     }
 
-    protected function assertNoItemException(QueueInterface $queue)
+    protected function assertNoItemAvailableException(QueueInterface $queue)
     {
         try {
             $queue->pop();
-        } catch (NoItemException $e) {
+        } catch (NoItemAvailableException $e) {
             return;
         }
 
-        $this->fail('An expected NoItemException has not been raised.');
+        $this->fail('An expected NoItemAvailableException has not been raised.');
     }
 
     protected function callInFuture(\Closure $func, $futureTime, $sleep = false)

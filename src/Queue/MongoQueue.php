@@ -3,7 +3,7 @@
 namespace Phive\Queue\Queue;
 
 use Phive\Queue\Exception\InvalidArgumentException;
-use Phive\Queue\Exception\NoItemException;
+use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\QueueUtils;
 
 class MongoQueue implements QueueInterface
@@ -78,7 +78,7 @@ class MongoQueue implements QueueInterface
             return $result['value']['item'];
         }
 
-        throw new NoItemException();
+        throw new NoItemAvailableException();
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Queue;
 
-use Phive\Queue\Exception\NoItemException;
+use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\Exception\RuntimeException;
 use Phive\Queue\QueueUtils;
 
@@ -61,7 +61,7 @@ class SysVQueue implements QueueInterface
         }
 
         if (MSG_ENOMSG === $errorCode) {
-            throw new NoItemException();
+            throw new NoItemAvailableException();
         }
 
         throw new RuntimeException('Pop failed.', $errorCode);

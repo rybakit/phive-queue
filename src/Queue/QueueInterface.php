@@ -13,7 +13,7 @@ interface QueueInterface extends \Countable
     /**
      * @return string
      *
-     * @throws \Phive\Queue\Exception\NoItemException
+     * @throws \Phive\Queue\Exception\NoItemAvailableException
      */
     public function pop();
 
