@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Queue\Pdo;
 
-use Phive\Queue\Exception\NoItemException;
+use Phive\Queue\Exception\NoItemAvailableException;
 
 class MysqlQueue extends AbstractPdoQueue
 {
@@ -36,7 +36,7 @@ class MysqlQueue extends AbstractPdoQueue
             return $row['item'];
         }
 
-        throw new NoItemException();
+        throw new NoItemAvailableException();
     }
 
     public function getSupportedDrivers()

@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Queue;
 
-use Phive\Queue\Exception\NoItemException;
+use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\Exception\RuntimeException;
 use Phive\Queue\QueueUtils;
 
@@ -62,7 +62,7 @@ LUA;
         $this->assertResult($result);
 
         if (-1 === $result) {
-            throw new NoItemException();
+            throw new NoItemAvailableException();
         }
 
         if (\Redis::SERIALIZER_NONE !== $this->redis->getOption(\Redis::OPT_SERIALIZER)) {

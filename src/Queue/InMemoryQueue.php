@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Queue;
 
-use Phive\Queue\Exception\NoItemException;
+use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\QueueUtils;
 
 class InMemoryQueue implements QueueInterface
@@ -48,7 +48,7 @@ class InMemoryQueue implements QueueInterface
             }
         }
 
-        throw new NoItemException();
+        throw new NoItemAvailableException();
     }
 
     /**

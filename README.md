@@ -48,7 +48,7 @@ Currently, there are the following queues available:
 ``` php
 <?php
 
-use Phive\Queue\Exception\NoItemException;
+use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\Queue\InMemoryQueue;
 
 $queue = new InMemoryQueue();
@@ -67,7 +67,7 @@ try {
     while (1) {
         $item = $queue->pop(); // $item = 'item1', 'item2', 'item3';
     }
-} catch (NoItemException $e) {
+} catch (NoItemAvailableException $e) {
     // no items are available
     ...
 }
