@@ -8,7 +8,8 @@ use Phive\Queue\QueueUtils;
 
 class SysVQueue implements QueueInterface
 {
-    const MSG_MAX_SIZE = 512;
+    const DEFAULT_MSG_MAX_SIZE = 512;
+    const DEFAULT_PERMS = 0666;
 
     /**
      * @var int
@@ -28,18 +29,19 @@ class SysVQueue implements QueueInterface
     /**
      * @var int
      */
-    private $perms;
+    private $msgMaxSize;
 
     /**
-     * @param int       $key
-     * @param bool|null $serialize
-     * @param int|null  $perms
+     * @var int
      */
-    public function __construct($key, $serialize = null, $perms = null)
+    private $perms;
+
+    public function __construct($key, $serialize = null, $msgMaxSize = null, $perms = null)
     {
         $this->key = $key;
         $this->serialize = (bool) $serialize;
-        $this->perms = (null === $perms) ? 0666 : $perms;
+        $this->msgMaxSize = (null === $msgMaxSize) ? static::DEFAULT_MSG_MAX_SIZE : $msgMaxSize;
+        $this->perms = (null === $perms) ? static::DEFAULT_PERMS : $perms;
     }
 
     /**
@@ -56,7 +58,7 @@ class SysVQueue implements QueueInterface
      */
     public function pop()
     {
-        if (msg_receive($this->getQueue(), -time(), $eta, static::MSG_MAX_SIZE, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode)) {
+        if (msg_receive($this->getQueue(), -time(), $eta, $this->msgMaxSize, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode)) {
             return $item;
         }
 
