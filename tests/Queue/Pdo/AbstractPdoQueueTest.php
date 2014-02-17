@@ -2,10 +2,13 @@
 
 namespace Phive\Queue\Tests\Queue\Pdo;
 
-use Phive\Queue\Tests\Queue\AbstractPersistentQueueTest;
+use Phive\Queue\Tests\Queue\AbstractQueueTest;
+use Phive\Queue\Tests\Queue\PersistenceTrait;
 
-abstract class AbstractPdoQueueTest extends AbstractPersistentQueueTest
+abstract class AbstractPdoQueueTest extends AbstractQueueTest
 {
+    use PersistenceTrait;
+
     /**
      * @expectedException \Phive\Queue\Exception\InvalidArgumentException
      */

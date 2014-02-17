@@ -2,20 +2,9 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-abstract class AbstractPersistentQueueTest extends AbstractQueueTest
+trait ConcurrencyTrait
 {
-    /**
-     * @var \Phive\Queue\Tests\Handler\AbstractHandler
-     */
-    private static $handler;
-
-    /**
-     * @return \Phive\Queue\Queue\QueueInterface
-     */
-    public function createQueue()
-    {
-        return self::getHandler()->createQueue();
-    }
+    use PersistenceTrait;
 
     /**
      * @group concurrency
@@ -47,7 +36,7 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
             }
         });
 
-        $queueSize = (int) $GLOBALS['concurrency_queue_size'];
+        $queueSize = $this->getConcurrencyQueueSize();
         $this->assertGreaterThan(1, $queueSize, 'Queue size is too small to test concurrency.');
 
         $workload = serialize(self::getHandler());
@@ -71,49 +60,8 @@ abstract class AbstractPersistentQueueTest extends AbstractQueueTest
         $this->assertGreaterThan(1, count($workerIds), 'Not enough workers to test concurrency.');
     }
 
-    /**
-     * Abstract static class functions are not supported since v5.2.
-     *
-     * @param array $config
-     *
-     * @return \Phive\Queue\Tests\Handler\AbstractHandler
-     *
-     * @throws \BadMethodCallException
-     */
-    public static function createHandler(array $config)
+    protected function getConcurrencyQueueSize()
     {
-        throw new \BadMethodCallException(
-            sprintf('Method %s:%s is not implemented.', get_called_class(), __FUNCTION__)
-        );
-    }
-
-    public static function getHandler()
-    {
-        if (!self::$handler) {
-            self::$handler = static::createHandler($GLOBALS);
-        }
-
-        return self::$handler;
-    }
-
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-
-        self::getHandler()->reset();
-    }
-
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-
-        self::$handler = null;
-    }
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        self::getHandler()->clear();
+        return (int) getenv('PHIVE_CONCUR_QUEUE_SIZE');
     }
 }

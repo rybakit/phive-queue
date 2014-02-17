@@ -3,12 +3,18 @@
 namespace Phive\Queue\Tests\Queue\Pdo;
 
 use Phive\Queue\Tests\Handler\PdoHandler;
+use Phive\Queue\Tests\Queue\AbstractQueueTest;
+use Phive\Queue\Tests\Queue\ConcurrencyTrait;
+use Phive\Queue\Tests\Queue\PerformanceTrait;
 
 /**
  * @requires extension pdo_sqlite
  */
-class SqliteQueueTest extends AbstractPdoQueueTest
+class SqliteQueueTest extends AbstractQueueTest
 {
+    use PerformanceTrait;
+    use ConcurrencyTrait;
+
     public static function createHandler(array $config)
     {
         // Generate a new db file on every method call to prevent

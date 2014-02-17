@@ -7,14 +7,17 @@ use Phive\Queue\Tests\Handler\RedisHandler;
 /**
  * @requires extension redis
  */
-class RedisQueueTest extends AbstractPersistentQueueTest
+class RedisQueueTest extends AbstractQueueTest
 {
+    use PerformanceTrait;
+    use ConcurrencyTrait;
+
     public static function createHandler(array $config)
     {
         return new RedisHandler([
-            'host'   => $config['redis_host'],
-            'port'   => $config['redis_port'],
-            'prefix' => $config['redis_prefix'],
+            'host'   => $config['PHIVE_REDIS_HOST'],
+            'port'   => $config['PHIVE_REDIS_PORT'],
+            'prefix' => $config['PHIVE_REDIS_PREFIX'],
         ]);
     }
 

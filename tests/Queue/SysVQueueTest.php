@@ -7,11 +7,18 @@ use Phive\Queue\Tests\Handler\SysVHandler;
 /**
  * @requires extension sysvmsg
  */
-class SysVQueueTest extends AbstractPersistentQueueTest
+class SysVQueueTest extends AbstractQueueTest
 {
+    use PerformanceTrait {
+        PerformanceTrait::testPushPopPerformance as baseTestPushPopPerformance;
+    }
+    use ConcurrencyTrait;
+
     public static function createHandler(array $config)
     {
-        return new SysVHandler(['key' => $config['sysv_key']]);
+        return new SysVHandler([
+            'key' => $config['PHIVE_SYSV_KEY'],
+        ]);
     }
 
     /**
@@ -26,15 +33,15 @@ class SysVQueueTest extends AbstractPersistentQueueTest
         }
 
         $maxSize = (int) str_replace('kernel.msgmnb = ', '', $output[0]);
-        $queueSize = (int) $GLOBALS['performance_queue_size'];
+        $queueSize = $this->getPerformanceQueueSize();
 
-        if (self::PERF_ITEM_LENGTH * $queueSize > $maxSize) {
+        if ($this->getPerformanceItemLength() * $queueSize > $maxSize) {
             $this->markTestSkipped(
                 "The System V queue size is too small ($maxSize bytes) to run this test. ".
-                'Try to decrease the "performance_queue_size" value to '.floor($maxSize / self::PERF_ITEM_LENGTH).' in your phpunit.xml.'
+                'Try to decrease the "performance_queue_size" value to '.floor($maxSize / $this->getPerformanceItemLength()).' in your phpunit.xml.'
             );
         }
 
-        parent::testPushPopPerformance();
+        self::baseTestPushPopPerformance();
     }
 }

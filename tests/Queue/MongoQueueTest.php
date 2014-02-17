@@ -7,14 +7,17 @@ use Phive\Queue\Tests\Handler\MongoHandler;
 /**
  * @requires extension mongo
  */
-class MongoQueueTest extends AbstractPersistentQueueTest
+class MongoQueueTest extends AbstractQueueTest
 {
+    use PerformanceTrait;
+    use ConcurrencyTrait;
+
     public static function createHandler(array $config)
     {
         return new MongoHandler([
-            'server'    => $config['mongo_server'],
-            'db_name'   => $config['mongo_db_name'],
-            'coll_name' => $config['mongo_coll_name'],
+            'server'    => $config['PHIVE_MONGO_SERVER'],
+            'db_name'   => $config['PHIVE_MONGO_DB_NAME'],
+            'coll_name' => $config['PHIVE_MONGO_COLL_NAME'],
         ]);
     }
 

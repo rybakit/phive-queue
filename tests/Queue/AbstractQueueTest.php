@@ -7,8 +7,6 @@ use Phive\Queue\Queue\QueueInterface;
 
 abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 {
-    const PERF_ITEM_LENGTH = 16;
-
     /**
      * @var int Timestamp that will be returned by time().
      */
@@ -82,32 +80,6 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->queue->count());
     }
 
-    /**
-     * @group performance
-     */
-    public function testPushPopPerformance()
-    {
-        $queueSize = (int) $GLOBALS['performance_queue_size'];
-        $item = str_repeat('x', self::PERF_ITEM_LENGTH);
-
-        echo sprintf("\n%s::push()\n", get_class($this->queue));
-
-        $start = microtime(true);
-        for ($i = $queueSize; $i; $i--) {
-            $this->queue->push($item);
-        }
-        $this->printPerformanceResult($queueSize, microtime(true) - $start);
-
-        echo sprintf("\n%s::pop()\n", get_class($this->queue));
-
-        $start = microtime(true);
-        for ($i = $queueSize; $i; $i--) {
-            $this->queue->pop();
-        }
-
-        $this->printPerformanceResult($queueSize, microtime(true) - $start);
-    }
-
     protected function setUp()
     {
         $this->queue = $this->createQueue();
@@ -139,14 +111,6 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         self::$now = null;
 
         return $result;
-    }
-
-    protected function printPerformanceResult($total, $runtime)
-    {
-        echo sprintf("   Total operations:      %d\n", $total);
-        echo sprintf("   Operations per second: %01.3f [#/sec]\n", $total / $runtime);
-        echo sprintf("   Time per operation:    %01.3f [ms]\n", ($runtime / $total) * 1000000);
-        echo sprintf("   Time taken for test:   %01.3f [sec]\n", $runtime);
     }
 
     private function stubTimeFunction()
