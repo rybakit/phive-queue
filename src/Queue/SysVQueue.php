@@ -8,7 +8,7 @@ use Phive\Queue\QueueUtils;
 
 class SysVQueue implements QueueInterface
 {
-    const DEFAULT_MSG_MAX_SIZE = 128;
+    const DEFAULT_MSG_MAX_SIZE = 8192;
     const DEFAULT_PERMS = 0666;
 
     /**
