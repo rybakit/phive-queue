@@ -7,6 +7,8 @@ use Phive\Queue\Queue\QueueInterface;
 
 abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 {
+    const PERF_ITEM_LENGTH = 16;
+
     /**
      * @var int Timestamp that will be returned by time().
      */
@@ -86,7 +88,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     public function testPushPopPerformance()
     {
         $queueSize = (int) $GLOBALS['performance_queue_size'];
-        $item = str_repeat('x', 255);
+        $item = str_repeat('x', self::PERF_ITEM_LENGTH);
 
         echo sprintf("\n%s::push()\n", get_class($this->queue));
 
