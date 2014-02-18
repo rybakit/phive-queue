@@ -20,7 +20,7 @@ $worker->addFunction('pop', function(\GearmanJob $job) use ($workerId) {
 
     $item = $queues[$workload]->pop();
 
-    echo ++$i.': popped ('.$item.') from '.get_class($queues[$workload])."\n";
+    printf("%d: %s -> %s\n", ++$i, get_class($queues[$workload]), $item);
 
     return $workerId.':'.$item;
 });
