@@ -8,18 +8,10 @@ use Phive\Queue\QueueUtils;
 
 class SysVQueue implements QueueInterface
 {
-    const DEFAULT_MSG_MAX_SIZE = 8192;
-    const DEFAULT_PERMS = 0666;
-
     /**
      * @var int
      */
     private $key;
-
-    /**
-     * @var resource
-     */
-    private $queue;
 
     /**
      * @var bool
@@ -29,19 +21,29 @@ class SysVQueue implements QueueInterface
     /**
      * @var int
      */
-    private $msgMaxSize;
+    private $msgMaxSize = 8192;
 
     /**
      * @var int
      */
-    private $perms;
+    private $perms = 0666;
+
+    /**
+     * @var resource
+     */
+    private $queue;
 
     public function __construct($key, $serialize = null, $msgMaxSize = null, $perms = null)
     {
         $this->key = $key;
         $this->serialize = (bool) $serialize;
-        $this->msgMaxSize = (null === $msgMaxSize) ? static::DEFAULT_MSG_MAX_SIZE : $msgMaxSize;
-        $this->perms = (null === $perms) ? static::DEFAULT_PERMS : $perms;
+
+        if (null !== $msgMaxSize) {
+            $this->msgMaxSize = $msgMaxSize;
+        }
+        if (null !== $perms) {
+            $this->perms = $perms;
+        }
     }
 
     /**
