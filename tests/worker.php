@@ -2,25 +2,18 @@
 
 include __DIR__.'/bootstrap.php';
 
-echo "Starting\n";
-
 $worker = new \GearmanWorker();
 $worker->addServer();
 
 $workerId = uniqid(getmypid().'_', true);
 $worker->addFunction('pop', function(\GearmanJob $job) use ($workerId) {
     static $i = 0;
-    static $queues = [];
 
-    $workload = $job->workload();
-    if (!isset($queues[$workload])) {
-        $handler = unserialize($workload);
-        $queues[$workload] = $handler->createQueue();
-    }
+    $handler = unserialize($job->workload());
+    $queue = $handler->createQueue();
+    $item = $queue->pop();
 
-    $item = $queues[$workload]->pop();
-
-    printf("%d: %s -> %s\n", ++$i, get_class($queues[$workload]), $item);
+    printf("%d: %s -> %s\n", ++$i, get_class($queue), $item);
 
     return $workerId.':'.$item;
 });
