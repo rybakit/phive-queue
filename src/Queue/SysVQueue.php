@@ -52,7 +52,14 @@ class SysVQueue implements QueueInterface
     public function push($item, $eta = null)
     {
         $eta = QueueUtils::normalizeEta($eta);
-        msg_send($this->getQueue(), $eta, $item, $this->serialize, false);
+
+        set_error_handler(function() { return true; }, E_WARNING);
+        $result = msg_send($this->getQueue(), $eta, $item, $this->serialize, false, $errorCode);
+        restore_error_handler();
+
+        if (!$result) {
+            throw new RuntimeException(posix_strerror($errorCode), $errorCode);
+        }
     }
 
     /**
@@ -60,7 +67,11 @@ class SysVQueue implements QueueInterface
      */
     public function pop()
     {
-        if (msg_receive($this->getQueue(), -time(), $eta, $this->msgMaxSize, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode)) {
+        set_error_handler(function() { return true; }, E_WARNING);
+        $result = msg_receive($this->getQueue(), -time(), $eta, $this->msgMaxSize, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode);
+        restore_error_handler();
+
+        if ($result) {
             return $item;
         }
 
@@ -68,7 +79,7 @@ class SysVQueue implements QueueInterface
             throw new NoItemAvailableException();
         }
 
-        throw new RuntimeException('Pop failed.', $errorCode);
+        throw new RuntimeException(posix_strerror($errorCode), $errorCode);
     }
 
     /**
@@ -76,9 +87,13 @@ class SysVQueue implements QueueInterface
      */
     public function count()
     {
-        $stat = msg_stat_queue($this->getQueue());
+        $data = msg_stat_queue($this->getQueue());
 
-        return $stat['msg_qnum'];
+        if (!is_array($data)) {
+            throw new RuntimeException('Failed to get the meta data for the queue.');
+        }
+
+        return $data['msg_qnum'];
     }
 
     /**
@@ -86,7 +101,9 @@ class SysVQueue implements QueueInterface
      */
     public function clear()
     {
-        msg_remove_queue($this->getQueue());
+        if (!msg_remove_queue($this->getQueue())) {
+            throw new RuntimeException('Failed to destroy the queue.');
+        }
     }
 
     protected function getQueue()
