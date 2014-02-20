@@ -110,6 +110,10 @@ class SysVQueue implements QueueInterface
     {
         if (!is_resource($this->queue)) {
             $this->queue = msg_get_queue($this->key, $this->perms);
+
+            if (!is_resource($this->queue)) {
+                throw new RuntimeException('Failed to create/attach to the queue.');
+            }
         }
 
         return $this->queue;
