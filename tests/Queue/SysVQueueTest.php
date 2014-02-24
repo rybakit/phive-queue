@@ -32,14 +32,16 @@ class SysVQueueTest extends AbstractQueueTest
             $this->markTestSkipped('Unable to determine the max size of the System V queue.');
         }
 
-        $maxSize = (int) str_replace('kernel.msgmnb = ', '', $output[0]);
+        $maxSizeInBytes = (int) str_replace('kernel.msgmnb = ', '', $output[0]);
         $queueSize = $this->getPerformanceQueueSize();
 
-        if ($this->getPerformanceItemLength() * $queueSize > $maxSize) {
-            $this->markTestSkipped(
-                "The System V queue size is too small ($maxSize bytes) to run this test. ".
-                'Try to decrease the "performance_queue_size" value to '.floor($maxSize / $this->getPerformanceItemLength()).' in your phpunit.xml.'
-            );
+        if (static::$performanceItemLength * $queueSize > $maxSizeInBytes) {
+            $this->markTestSkipped(sprintf(
+                'The System V queue size is too small (%d bytes) to run this test. '.
+                'Try to decrease the "PHIVE_PERF_QUEUE_SIZE" environment variable to %d.',
+                $maxSizeInBytes,
+                floor($maxSizeInBytes / static::$performanceItemLength)
+            ));
         }
 
         self::baseTestPushPopPerformance();

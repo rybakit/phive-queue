@@ -12,7 +12,7 @@ trait PerformanceTrait
     public function testPushPopPerformance()
     {
         $queueSize = $this->getPerformanceQueueSize();
-        $item = str_repeat('x', $this->getPerformanceItemLength());
+        $item = str_repeat('x', static::$performanceItemLength);
 
         echo sprintf("\n%s::push()\n", get_class($this->queue));
 
@@ -43,10 +43,5 @@ trait PerformanceTrait
     protected function getPerformanceQueueSize()
     {
         return (int) getenv('PHIVE_PERF_QUEUE_SIZE');
-    }
-
-    protected function getPerformanceItemLength()
-    {
-        return self::$performanceItemLength;
     }
 }
