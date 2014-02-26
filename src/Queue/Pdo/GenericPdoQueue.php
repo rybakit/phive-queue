@@ -6,7 +6,7 @@ use Phive\Queue\Exception\NoItemAvailableException;
 
 class GenericPdoQueue extends AbstractPdoQueue
 {
-    protected static $popStatements = [
+    protected static $popSqls = [
         'mysql' => 'CALL %s_pop(%d)',
         'pgsql' => 'SELECT item FROM %s_pop(%d)',
     ];
@@ -16,7 +16,7 @@ class GenericPdoQueue extends AbstractPdoQueue
      */
     public function pop()
     {
-        $stmt = $this->conn->query($this->getPopStatement());
+        $stmt = $this->conn->query($this->getPopSql());
         $result = $stmt->fetchColumn();
         $stmt->closeCursor();
 
@@ -29,13 +29,13 @@ class GenericPdoQueue extends AbstractPdoQueue
 
     public function getSupportedDrivers()
     {
-        return array_keys(static::$popStatements);
+        return array_keys(static::$popSqls);
     }
 
-    protected function getPopStatement()
+    protected function getPopSql()
     {
         return sprintf(
-            static::$popStatements[$this->conn->getAttribute(\PDO::ATTR_DRIVER_NAME)],
+            static::$popSqls[$this->conn->getAttribute(\PDO::ATTR_DRIVER_NAME)],
             $this->tableName,
             time()
         );
