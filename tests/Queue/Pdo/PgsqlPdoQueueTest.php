@@ -10,7 +10,7 @@ use Phive\Queue\Tests\Queue\PerformanceTrait;
 /**
  * @requires extension pdo_pgsql
  */
-class PgsqlQueueTest extends AbstractQueueTest
+class PgsqlPdoQueueTest extends AbstractQueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;

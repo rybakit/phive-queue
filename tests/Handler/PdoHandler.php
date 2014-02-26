@@ -16,7 +16,9 @@ class PdoHandler extends AbstractHandler
 
     public function getQueueClass()
     {
-        return '\\Phive\\Queue\\Queue\\Pdo\\'.ucfirst($this->driverName).'Queue';
+        $prefix = 'sqlite' === $this->driverName ? 'Sqlite' : 'Generic';
+
+        return '\\Phive\\Queue\\Queue\\Pdo\\'.$prefix.'PdoQueue';
     }
 
     public function createQueue()
@@ -28,11 +30,16 @@ class PdoHandler extends AbstractHandler
 
     public function reset()
     {
-        $file = __DIR__.'/../Fixtures/sql/'.$this->driverName.'.sql';
-        $sql = file_get_contents($file);
-        $sql = str_replace('{{table_name}}', $this->getOption('table_name'), $sql);
+        $sqlDir = realpath(__DIR__.'/../../contrib/'.$this->driverName);
 
-        $this->conn->exec($sql);
+        foreach (glob($sqlDir.'/*.sql') as $file) {
+            $sql = strtr(file_get_contents($file), [
+                '{{table_name}}'    => $this->getOption('table_name'),
+                '{{routine_name}}'  => $this->getOption('table_name').'_pop',
+            ]);
+
+            $this->conn->exec($sql);
+        }
     }
 
     public function clear()

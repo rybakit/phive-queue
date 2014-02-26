@@ -4,7 +4,7 @@ namespace Phive\Queue\Queue\Pdo;
 
 use Phive\Queue\Exception\NoItemAvailableException;
 
-class MysqlQueue extends AbstractPdoQueue
+class SqlitePdoQueue extends AbstractPdoQueue
 {
     /**
      * {@inheritdoc}
@@ -12,9 +12,9 @@ class MysqlQueue extends AbstractPdoQueue
     public function pop()
     {
         $sql = 'SELECT id, item FROM '.$this->tableName
-            .' WHERE eta <= '.time().' ORDER BY eta LIMIT 1 FOR UPDATE';
+            .' WHERE eta <= '.time().' ORDER BY eta LIMIT 1';
 
-        $this->conn->beginTransaction();
+        $this->conn->exec('BEGIN IMMEDIATE');
 
         try {
             $stmt = $this->conn->query($sql);
@@ -26,9 +26,9 @@ class MysqlQueue extends AbstractPdoQueue
                 $this->conn->exec($sql);
             }
 
-            $this->conn->commit();
+            $this->conn->exec('COMMIT');
         } catch (\Exception $e) {
-            $this->conn->rollBack();
+            $this->conn->exec('ROLLBACK');
             throw $e;
         }
 
@@ -39,8 +39,16 @@ class MysqlQueue extends AbstractPdoQueue
         throw new NoItemAvailableException();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function clear()
+    {
+        return $this->conn->exec('DELETE FROM '.$this->tableName);
+    }
+
     public function getSupportedDrivers()
     {
-        return ['mysql'];
+        return ['sqlite'];
     }
 }

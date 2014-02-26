@@ -36,9 +36,8 @@ Currently, there are the following queues available:
 
 * `MongoQueue`
 * `RedisQueue`
-* `PgsqlQueue`
-* `MysqlQueue`
-* `SqliteQueue`
+* `GenericPdoQueue`
+* `SqlitePdoQueue`
 * `SysVQueue`
 * `InMemoryQueue`
 

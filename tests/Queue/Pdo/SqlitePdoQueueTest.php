@@ -10,7 +10,7 @@ use Phive\Queue\Tests\Queue\PerformanceTrait;
 /**
  * @requires extension pdo_sqlite
  */
-class SqliteQueueTest extends AbstractQueueTest
+class SqlitePdoQueueTest extends AbstractQueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;
