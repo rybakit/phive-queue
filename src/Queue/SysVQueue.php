@@ -104,6 +104,8 @@ class SysVQueue implements QueueInterface
         if (!msg_remove_queue($this->getQueue())) {
             throw new RuntimeException('Failed to destroy the queue.');
         }
+
+        $this->queue = null;
     }
 
     protected function getQueue()
