@@ -7,7 +7,7 @@ The recommended way to install Phive Queue is through [composer](http://getcompo
 
 Create a composer.json file inside your project directory:
 
-``` json
+```json
 {
     "require": {
         "rybakit/phive-queue": "*"
@@ -17,20 +17,23 @@ Create a composer.json file inside your project directory:
 
 Then run these two commands to install it:
 
-``` bash
+```sh
 $ curl -sS https://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
 To use library, just add the following line to your code's bootstrap process:
 
-``` php
+```php
 <?php
 
 require 'vendor/autoload.php';
 ```
 
+
 ## Queues
+
+TODO: Describe each queue (usage, requirements, limitations)
 
 Currently, there are the following queues available:
 
@@ -44,7 +47,7 @@ Currently, there are the following queues available:
 
 ## Usage example
 
-``` php
+```php
 <?php
 
 use Phive\Queue\Exception\NoItemAvailableException;
@@ -78,33 +81,75 @@ $item = $queue->pop(); // $item = 'item4';
 $queue->clear();
 ```
 
+## Exceptions
+
+TODO: Describe exception handling
+
 
 ## Tests
 
-Run the test suite using PHPUnit:
+Phive Queue uses PHPUnit for unit and acceptance testing. In order to run the tests, you'll first need to install the library dependencies using composer:
 
-``` bash
+```sh
+php composer.phar install
+```
+
+You can then run the tests:
+
+```sh
 $ phpunit
 ```
 
-To check performance run:
+You may also wish to specify your own default values of some tests (db names, passwords, queue sizes, etc.).
+Just create your own `phpunit.xml` file by copying the `phpunit.xml.dist` file and customize to your needs.
 
-``` bash
+
+#### Performance
+
+To check the performance of queues run:
+
+```sh
 $ phpunit --group performance
 ```
 
-To check concurrency you'll have to install [Gearman Server](http://gearman.org) and [pecl/german extension](http://pecl.php.net/package/gearman).
-After starting gearman server (gearmand) run as many workers as you need to test concurrency:
+This test inserts a number of items (1000 by default) into a queue, and then retrieves them back.
+It measures the average time for `push` and `pop` operations and outputs the resulting stats, e.g.:
 
-``` bash
+```sh
+Phive\Queue\Queue\SysVQueue::push()
+   Total operations:      1000
+   Operations per second: 67149.691 [#/sec]
+   Time per operation:    14.892 [ms]
+   Time taken for test:   0.015 [sec]
+
+Phive\Queue\Queue\SysVQueue::pop()
+   Total operations:      1000
+   Operations per second: 96908.667 [#/sec]
+   Time per operation:    10.319 [ms]
+   Time taken for test:   0.010 [sec]
+```
+
+You may also change the number of items involved in the test by changing the `PHIVE_PERF_QUEUE_SIZE` value in your `phpunit.xml` file.
+
+
+#### Concurrency
+
+In order to check the concurrency you'll have to install the [Gearman server](http://gearman.org) and the [pecl/german](http://pecl.php.net/package/gearman) extension.
+Once the server has been installed and started, create a number of processes (workers) by running:
+
+```sh
 $ php tests/worker.php
 ```
 
-Then run the concurrency tests:
+Then run the tests:
 
-``` bash
+```sh
 $ phpunit --group concurrency
 ```
+
+This test inserts a number of items (100 by default) into a queue, and then each worker tries to retrieve them back in parallel.
+
+You may also change the number of items involved in the test by changing the `PHIVE_CONCUR_QUEUE_SIZE` value in your `phpunit.xml` file.
 
 
 ## License
