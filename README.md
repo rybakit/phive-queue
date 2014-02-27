@@ -1,5 +1,9 @@
-Phive Queue [![Build Status](https://secure.travis-ci.org/rybakit/phive-queue.png?branch=master)](http://travis-ci.org/rybakit/phive-queue)
+Phive Queue
 ===========
+[![Build Status](https://secure.travis-ci.org/rybakit/phive-queue.png?branch=master)](http://travis-ci.org/rybakit/phive-queue)
+
+Phive Queue is a time-based scheduling queue with multiple backends support.
+
 
 ## Installation
 
