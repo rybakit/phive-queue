@@ -7,31 +7,12 @@ Phive Queue is a time-based scheduling queue with multiple backends support.
 
 ## Installation
 
-The recommended way to install Phive Queue is through [composer](http://getcomposer.org).
+The recommended way to install Phive Queue is through [Composer](http://getcomposer.org).
 
-Create a composer.json file inside your project directory:
-
-```json
-{
-    "require": {
-        "rybakit/phive-queue": "*"
-    }
-}
-```
-
-Then run these two commands to install it:
+To install the library run the following command:
 
 ```sh
-$ curl -sS https://getcomposer.org/installer | php
-$ php composer.phar install
-```
-
-To use library, just add the following line to your code's bootstrap process:
-
-```php
-<?php
-
-require 'vendor/autoload.php';
+$ composer require rybakit/phive-queue:*
 ```
 
 
