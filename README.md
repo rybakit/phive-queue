@@ -85,7 +85,7 @@ $queue = new MongoQueue(...);
 $queue->push('item'); // throws \MongoConnectionException
 ```
 
-But sometimes you may want to catch all exceptions coming from a queue regardless of the underlying driver.
+But sometimes you may want to catch exceptions coming from a queue regardless of the underlying driver.
 To do this just wrap your queue object with the `ExceptionalQueue` decorator:
 
 ```php
@@ -103,19 +103,21 @@ $queue->push('item'); // throws \Phive\Queue\Exception\RuntimeException
 
 ```
 
-And then, to catch such exceptions use `ExceptionInterface` marker interface:
+And then, to catch queue level exceptions use `ExceptionInterface` [marker interface](http://en.wikipedia.org/wiki/Marker_interface_pattern):
 
 ```php
 <?php
 
 use Phive\Queue\Exception\ExceptionInterface;
 
-$queue = new ExceptionalQueue(...);
+...
 
 try {
-    $queue->push('item');
+    do_something_with_a_queue();
 } catch (ExceptionInterface $e) {
-    // handle exception
+    // handle queue exception
+} catch (\Exception $e) {
+    // handle base exception
 }
 ```
 
