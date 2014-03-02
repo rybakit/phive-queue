@@ -66,9 +66,58 @@ $item = $queue->pop(); // $item = 'item4';
 $queue->clear();
 ```
 
+
 ## Exceptions
 
-TODO: Describe exception handling
+Every queue method declared in the `QueueInterface` interface will throw an exception if a run-time error occurs at the time the method is called.
+
+For example, in the code below, the `push()` call will fail with a `\MongoConnectionException` exception in a case a remote server unreachable:
+
+```php
+<?php
+
+use Phive\Queue\Queue\MongoQueue;
+
+$queue = new MongoQueue(...);
+
+// mongodb server goes down here
+
+$queue->push('item'); // throws \MongoConnectionException
+```
+
+But sometimes you may want to catch all exceptions coming from a queue regardless of the underlying driver.
+To do this just wrap your queue object with the `ExceptionalQueue` decorator:
+
+```php
+<?php
+
+use Phive\Queue\Queue\ExceptionalQueue;
+use Phive\Queue\Queue\MongoQueue;
+
+$queue = new MongoQueue(...);
+$queue = new ExceptionalQueue($queue);
+
+// mongodb server goes down here
+
+$queue->push('item'); // throws \Phive\Queue\Exception\RuntimeException
+
+```
+
+And then, to catch such exceptions use `ExceptionInterface` marker interface:
+
+```php
+<?php
+
+use Phive\Queue\Exception\ExceptionInterface;
+
+$queue = new ExceptionalQueue(...);
+
+try {
+    $queue->push('item');
+} catch (ExceptionInterface $e) {
+    // handle exception
+}
+```
 
 
 ## Tests
