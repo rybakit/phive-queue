@@ -12,7 +12,7 @@ The recommended way to install Phive Queue is through [Composer](http://getcompo
 To install the library run the following command:
 
 ```sh
-$ composer require rybakit/phive-queue:*
+$ php composer.phar require rybakit/phive-queue:*
 ```
 
 
