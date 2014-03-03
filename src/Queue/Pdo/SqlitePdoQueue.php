@@ -11,8 +11,11 @@ class SqlitePdoQueue extends AbstractPdoQueue
      */
     public function pop()
     {
-        $sql = 'SELECT id, item FROM '.$this->tableName
-            .' WHERE eta <= '.time().' ORDER BY eta LIMIT 1';
+        $sql = sprintf(
+            'SELECT id, item FROM %s WHERE eta <= %d ORDER BY eta LIMIT 1',
+            $this->tableName,
+            time()
+        );
 
         $this->conn->exec('BEGIN IMMEDIATE');
 
@@ -22,7 +25,7 @@ class SqlitePdoQueue extends AbstractPdoQueue
             $stmt->closeCursor();
 
             if ($row) {
-                $sql = 'DELETE FROM '.$this->tableName.' WHERE id = '.(int) $row['id'];
+                $sql = sprintf('DELETE FROM %s WHERE id = %d', $this->tableName, $row['id']);
                 $this->conn->exec($sql);
             }
 
