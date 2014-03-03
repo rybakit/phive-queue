@@ -23,12 +23,6 @@ class MongoQueue implements QueueInterface
      */
     private $options;
 
-    /**
-     * @param \MongoClient $client
-     * @param array        $options
-     *
-     * @throws InvalidArgumentException
-     */
     public function __construct(\MongoClient $client, array $options)
     {
         if (!isset($options['db'], $options['coll'])) {

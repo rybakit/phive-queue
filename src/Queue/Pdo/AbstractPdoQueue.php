@@ -18,12 +18,6 @@ abstract class AbstractPdoQueue implements QueueInterface
      */
     protected $tableName;
 
-    /**
-     * @param \PDO   $conn
-     * @param string $tableName
-     *
-     * @throws InvalidArgumentException
-     */
     public function __construct(\PDO $conn, $tableName)
     {
         if (\PDO::ERRMODE_EXCEPTION !== $conn->getAttribute(\PDO::ATTR_ERRMODE)) {
