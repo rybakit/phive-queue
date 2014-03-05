@@ -40,7 +40,7 @@ $queue = new MongoQueue($client, 'my_db', 'my_collection');
 
 #### RedisQueue
 
-For the RedisQueue you have to install [Redis](http://pecl.php.net/package/redis) PECL extension.
+For the RedisQueue you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension.
 
 ```php
 <?php
