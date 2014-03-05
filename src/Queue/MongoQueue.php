@@ -2,7 +2,6 @@
 
 namespace Phive\Queue\Queue;
 
-use Phive\Queue\Exception\InvalidArgumentException;
 use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\QueueUtils;
 
@@ -14,25 +13,25 @@ class MongoQueue implements QueueInterface
     private $client;
 
     /**
+     * @var string
+     */
+    private $dbName;
+
+    /**
+     * @var string
+     */
+    private $collName;
+
+    /**
      * @var \MongoCollection
      */
     private $coll;
 
-    /**
-     * @var array
-     */
-    private $options;
-
-    public function __construct(\MongoClient $client, array $options)
+    public function __construct(\MongoClient $client, $dbName, $collName)
     {
-        if (!isset($options['db'], $options['coll'])) {
-            throw new InvalidArgumentException(sprintf(
-                'The "db" and "coll" option are required for %s.', __CLASS__
-            ));
-        }
-
         $this->client = $client;
-        $this->options = $options;
+        $this->dbName = $dbName;
+        $this->collName = $collName;
     }
 
     public function getClient()
@@ -61,7 +60,7 @@ class MongoQueue implements QueueInterface
         $coll = $this->getCollection();
 
         $result = $coll->db->command([
-            'findandmodify' => $coll->getName(),
+            'findandmodify' => $this->collName,
             'remove'        => 1,
             'fields'        => ['item' => 1],
             'query'         => ['eta' => ['$lte' => time()]],
@@ -95,8 +94,8 @@ class MongoQueue implements QueueInterface
     {
         if (!$this->coll) {
             $this->coll = $this->client->selectCollection(
-                $this->options['db'],
-                $this->options['coll']
+                $this->dbName,
+                $this->collName
             );
         }
 

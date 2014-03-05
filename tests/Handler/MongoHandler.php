@@ -18,10 +18,11 @@ class MongoHandler extends AbstractHandler
 
     public function createQueue()
     {
-        return new MongoQueue($this->client, [
-            'db'   => $this->getOption('db_name'),
-            'coll' => $this->getOption('coll_name'),
-        ]);
+        return new MongoQueue(
+            $this->client,
+            $this->getOption('db_name'),
+            $this->getOption('coll_name')
+        );
     }
 
     public function reset()
