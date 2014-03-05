@@ -40,6 +40,8 @@ $queue = new MongoQueue($client, 'my_db', 'my_collection');
 
 #### RedisQueue
 
+For the RedisQueue you have to install [Redis](http://pecl.php.net/package/redis) PECL extension.
+
 ```php
 <?php
 
@@ -240,7 +242,7 @@ You may also change the number of items involved in the test by changing the `PH
 
 #### Concurrency
 
-In order to check the concurrency you'll have to install the [Gearman server](http://gearman.org) and the [pecl/german](http://pecl.php.net/package/gearman) extension.
+In order to check the concurrency you'll have to install the [Gearman server](http://gearman.org) and the [German](http://pecl.php.net/package/gearman) PECL extension.
 Once the server has been installed and started, create a number of processes (workers) by running:
 
 ```sh
