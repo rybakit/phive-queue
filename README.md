@@ -80,6 +80,8 @@ $queue = new SqlitePdoQueue($pdo, 'my_table');
 
 #### SysVQueue
 
+The SysVQueue requires PHP to be compiled with the option **--enable-sysvmsg**.
+
 ```php
 <?php
 
