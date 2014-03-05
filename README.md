@@ -32,7 +32,7 @@ Currently, there are the following queues available:
 ```php
 <?php
 
-use use Phive\Queue\Queue\MongoQueue;
+use Phive\Queue\Queue\MongoQueue;
 
 $client = new MongoClient();
 $queue = new MongoQueue($client, 'my_db', 'my_collection');
