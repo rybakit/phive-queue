@@ -47,7 +47,7 @@ use Phive\Queue\Queue\RedisQueue;
 
 $redis = new Redis();
 $redis->connect('127.0.0.1');
-$redis->setOption(Redis::OPT_PREFIX, 'my_queue:');
+$redis->setOption(Redis::OPT_PREFIX, 'my_prefix:');
 
 $queue = new RedisQueue($redis);
 ```
