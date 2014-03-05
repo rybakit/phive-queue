@@ -110,7 +110,7 @@ use Phive\Queue\Queue\InMemoryQueue;
 $queue = new InMemoryQueue();
 
 $queue->push('item1');
-$queue->push('item2', new \DateTime());
+$queue->push('item2', new DateTime());
 $queue->push('item3', time());
 $queue->push('item4', '+5 seconds');
 $queue->push('item5', 'next Monday');
@@ -140,7 +140,7 @@ $queue->clear();
 
 Every queue method declared in the `QueueInterface` interface will throw an exception if a run-time error occurs at the time the method is called.
 
-For example, in the code below, the `push()` call will fail with a `\MongoConnectionException` exception in a case a remote server unreachable:
+For example, in the code below, the `push()` call will fail with a `MongoConnectionException` exception in a case a remote server unreachable:
 
 ```php
 <?php
@@ -151,7 +151,7 @@ $queue = new MongoQueue(...);
 
 // mongodb server goes down here
 
-$queue->push('item'); // throws \MongoConnectionException
+$queue->push('item'); // throws MongoConnectionException
 ```
 
 But sometimes you may want to catch exceptions coming from a queue regardless of the underlying driver.
@@ -168,7 +168,7 @@ $queue = new ExceptionalQueue($queue);
 
 // mongodb server goes down here
 
-$queue->push('item'); // throws \Phive\Queue\Exception\RuntimeException
+$queue->push('item'); // throws Phive\Queue\Exception\RuntimeException
 
 ```
 
