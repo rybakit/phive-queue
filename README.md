@@ -169,7 +169,6 @@ $queue = new ExceptionalQueue($queue);
 // mongodb server goes down here
 
 $queue->push('item'); // throws Phive\Queue\Exception\RuntimeException
-
 ```
 
 And then, to catch queue level exceptions use `ExceptionInterface` [marker interface](http://en.wikipedia.org/wiki/Marker_interface_pattern):
