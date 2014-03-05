@@ -18,8 +18,6 @@ $ php composer.phar require rybakit/phive-queue:*
 
 ## Queues
 
-TODO: Describe each queue (usage, requirements, limitations)
-
 Currently, there are the following queues available:
 
 * `MongoQueue`
@@ -28,6 +26,77 @@ Currently, there are the following queues available:
 * `SqlitePdoQueue`
 * `SysVQueue`
 * `InMemoryQueue`
+
+#### MongoQueue
+
+```php
+<?php
+
+use use Phive\Queue\Queue\MongoQueue;
+
+$client = new MongoClient();
+$queue = new MongoQueue($client, 'my_db', 'my_collection');
+```
+
+#### RedisQueue
+
+```php
+<?php
+
+use Phive\Queue\Queue\RedisQueue;
+
+$redis = new Redis();
+$redis->connect('127.0.0.1');
+$redis->setOption(Redis::OPT_PREFIX, 'my_queue:');
+
+$queue = new RedisQueue($redis);
+```
+
+#### GenericPdoQueue
+
+```php
+<?php
+
+use Phive\Queue\Queue\Pdo\GenericPdoQueue;
+
+$pdo = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=foo', 'db_user', 'db_pass');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$queue = new GenericPdoQueue($pdo, 'my_table');
+```
+
+#### SqlitePdoQueue
+
+```php
+<?php
+
+use Phive\Queue\Queue\Pdo\SqlitePdoQueue;
+
+$pdo = new PDO('sqlite:/opt/databases/mydb.sq3');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$queue = new SqlitePdoQueue($pdo, 'my_table');
+```
+
+#### SysVQueue
+
+```php
+<?php
+
+use Phive\Queue\Queue\SysVQueue;
+
+$queue = new SysVQueue(123456);
+```
+
+#### InMemoryQueue
+
+```php
+<?php
+
+use Phive\Queue\Queue\InMemoryQueue;
+
+$queue = new InMemoryQueue();
+```
 
 
 ## Usage example
