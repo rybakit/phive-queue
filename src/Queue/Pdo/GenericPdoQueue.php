@@ -6,10 +6,25 @@ use Phive\Queue\Exception\NoItemAvailableException;
 
 class GenericPdoQueue extends AbstractPdoQueue
 {
+    /**
+     * @var array
+     */
     protected static $popSqls = [
-        'mysql' => 'CALL %s_pop(%d)',
-        'pgsql' => 'SELECT item FROM %s_pop(%d)',
+        'mysql' => 'CALL %s(%d)',
+        'pgsql' => 'SELECT item FROM %s(%d)',
     ];
+
+    /**
+     * @var string
+     */
+    private $routineName;
+
+    public function __construct(\PDO $conn, $tableName, $routineName = null)
+    {
+        parent::__construct($conn, $tableName);
+
+        $this->routineName = $routineName ?: $this->tableName.'_pop';
+    }
 
     /**
      * {@inheritdoc}
@@ -36,7 +51,7 @@ class GenericPdoQueue extends AbstractPdoQueue
     {
         return sprintf(
             static::$popSqls[$this->conn->getAttribute(\PDO::ATTR_DRIVER_NAME)],
-            $this->tableName,
+            $this->routineName,
             time()
         );
     }
