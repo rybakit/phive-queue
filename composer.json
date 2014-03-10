@@ -1,6 +1,6 @@
 {
     "name": "rybakit/phive-queue",
-    "description": "A time-based scheduling queue with multiple backends support",
+    "description": "$queue->push('I can be popped off after', '10 minutes')",
     "keywords": ["queue scheduler priority delayed"],
     "homepage": "https://github.com/rybakit/phive-queue",
     "type": "library",
