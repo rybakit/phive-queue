@@ -66,7 +66,7 @@ Currently, there are the following queues available:
 
 #### MongoQueue
 
-The MongoQueue requires the [Mongo](http://pecl.php.net/package/mongo) PECL extension (v1.3.0 or higher).
+The MongoQueue requires the [Mongo](http://pecl.php.net/package/mongo) PECL extension *(v1.3.0 or higher)*.
 
 ##### Parameters
 
@@ -87,7 +87,7 @@ $queue = new MongoQueue($client, 'my_db', 'my_coll');
 
 #### RedisQueue
 
-For the RedisQueue you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension (v2.2.4 or higher).
+For the RedisQueue you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension *(v2.2.3 or higher)*.
 
 ##### Parameters
 
