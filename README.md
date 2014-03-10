@@ -16,93 +16,6 @@ $ php composer.phar require rybakit/phive-queue:*
 ```
 
 
-## Queues
-
-Currently, there are the following queues available:
-
-* `MongoQueue`
-* `RedisQueue`
-* `GenericPdoQueue`
-* `SqlitePdoQueue`
-* `SysVQueue`
-* `InMemoryQueue`
-
-#### MongoQueue
-
-```php
-<?php
-
-use Phive\Queue\Queue\MongoQueue;
-
-$client = new MongoClient();
-$queue = new MongoQueue($client, 'my_db', 'my_collection');
-```
-
-#### RedisQueue
-
-For the RedisQueue you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension.
-
-```php
-<?php
-
-use Phive\Queue\Queue\RedisQueue;
-
-$redis = new Redis();
-$redis->connect('127.0.0.1');
-$redis->setOption(Redis::OPT_PREFIX, 'my_prefix:');
-
-$queue = new RedisQueue($redis);
-```
-
-#### GenericPdoQueue
-
-```php
-<?php
-
-use Phive\Queue\Queue\Pdo\GenericPdoQueue;
-
-$pdo = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=foo', 'db_user', 'db_pass');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-$queue = new GenericPdoQueue($pdo, 'my_table');
-```
-
-#### SqlitePdoQueue
-
-```php
-<?php
-
-use Phive\Queue\Queue\Pdo\SqlitePdoQueue;
-
-$pdo = new PDO('sqlite:/opt/databases/mydb.sq3');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-$queue = new SqlitePdoQueue($pdo, 'my_table');
-```
-
-#### SysVQueue
-
-The SysVQueue requires PHP to be compiled with the option **--enable-sysvmsg**.
-
-```php
-<?php
-
-use Phive\Queue\Queue\SysVQueue;
-
-$queue = new SysVQueue(123456);
-```
-
-#### InMemoryQueue
-
-```php
-<?php
-
-use Phive\Queue\Queue\InMemoryQueue;
-
-$queue = new InMemoryQueue();
-```
-
-
 ## Usage example
 
 ```php
@@ -137,6 +50,138 @@ $item = $queue->pop(); // $item = 'item4';
 
 // clear the queue (will remove 'item5')
 $queue->clear();
+```
+
+
+## Queues
+
+Currently, there are the following queues available:
+
+* MongoQueue
+* RedisQueue
+* GenericPdoQueue
+* SqlitePdoQueue
+* SysVQueue
+* InMemoryQueue
+
+#### MongoQueue
+
+The MongoQueue requires the [Mongo](http://pecl.php.net/package/mongo) PECL extension (v1.3.0 or higher).
+
+##### Parameters
+
+> <b>client</b>   The MongoClient instance<br>
+> <b>dbName</b>   The database name<br>
+> <b>collName</b> The collection name<br>
+
+##### Example
+
+```php
+<?php
+
+use Phive\Queue\Queue\MongoQueue;
+
+$client = new MongoClient();
+$queue = new MongoQueue($client, 'my_db', 'my_coll');
+```
+
+#### RedisQueue
+
+For the RedisQueue you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension (v2.2.4 or higher).
+
+##### Parameters
+
+> <b>redis</b> The Redis instance<br>
+
+##### Example
+
+```php
+<?php
+
+use Phive\Queue\Queue\RedisQueue;
+
+$redis = new Redis();
+$redis->connect('127.0.0.1');
+$redis->setOption(Redis::OPT_PREFIX, 'my_prefix:');
+
+// Since the Redis client v2.2.5 the RedisQueue have the ability to utilize serialization:
+// $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+
+$queue = new RedisQueue($redis);
+```
+
+#### GenericPdoQueue
+
+##### Parameters
+
+> <b>conn</b>        The PDO instance<br>
+> <b>tableName</b>   The table name<br>
+> <b>routineName</b> <i>Optional</i>. The routine name. Default to <b>tableName</b>_pop<br>
+
+##### Example
+
+```php
+<?php
+
+use Phive\Queue\Queue\Pdo\GenericPdoQueue;
+
+$pdo = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=foo', 'db_user', 'db_pass');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
+```
+
+#### SqlitePdoQueue
+
+##### Parameters
+
+> <b>conn</b>      The PDO instance<br>
+> <b>tableName</b> The table name<br>
+
+##### Example
+
+```php
+<?php
+
+use Phive\Queue\Queue\Pdo\SqlitePdoQueue;
+
+$pdo = new PDO('sqlite:/opt/databases/mydb.sq3');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$queue = new SqlitePdoQueue($pdo, 'my_table');
+```
+
+#### SysVQueue
+
+The SysVQueue requires PHP to be compiled with the option **--enable-sysvmsg**.
+
+##### Parameters
+
+> <b>key</b>        The message queue numeric ID<br>
+> <b>serialize</b>  <i>Optional</i>. Whether to serialize an item or not. Default to false<br>
+> <b>msgMaxSize</b> <i>Optional</i>. The maximum size of message to be accepted. Default to 8192<br>
+> <b>perms</b>      <i>Optional</i>. Queue permissions. Default to 0666<br>
+
+##### Example
+
+```php
+<?php
+
+use Phive\Queue\Queue\SysVQueue;
+
+$queue = new SysVQueue(123456);
+```
+
+#### InMemoryQueue
+
+##### Example
+
+```php
+<?php
+
+use Phive\Queue\Queue\InMemoryQueue;
+
+$queue = new InMemoryQueue();
 ```
 
 
