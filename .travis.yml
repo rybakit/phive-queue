@@ -15,7 +15,7 @@ services:
     - redis-server
     
 install:
-    - composer require phpunit/phpunit:4.0
+    - composer require phpunit/phpunit:~4.0
     - composer install
 
 before_script:
