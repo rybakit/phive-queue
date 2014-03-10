@@ -104,7 +104,7 @@ $redis = new Redis();
 $redis->connect('127.0.0.1');
 $redis->setOption(Redis::OPT_PREFIX, 'my_prefix:');
 
-// Since the Redis client v2.2.5 the RedisQueue have the ability to utilize serialization:
+// Since the Redis client v2.2.5 the RedisQueue has the ability to utilize serialization:
 // $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 
 $queue = new RedisQueue($redis);
