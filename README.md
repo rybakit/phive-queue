@@ -2,7 +2,7 @@ Phive Queue
 ===========
 [![Build Status](https://secure.travis-ci.org/rybakit/phive-queue.png?branch=master)](http://travis-ci.org/rybakit/phive-queue)
 
-Phive Queue is a time-based scheduling queue with multiple backends support.
+Phive Queue is a time-based scheduling queue with multiple backend support.
 
 
 ## Installation
@@ -57,12 +57,12 @@ $queue->clear();
 
 Currently, there are the following queues available:
 
-* MongoQueue
-* RedisQueue
-* GenericPdoQueue
-* SqlitePdoQueue
-* SysVQueue
-* InMemoryQueue
+* [MongoQueue](#mongoqueue)
+* [RedisQueue](#redisqueue)
+* [GenericPdoQueue](#genericpdoqueue)
+* [SqlitePdoQueue](#sqlitepdoqueue)
+* [SysVQueue](#sysvqueue)
+* [InMemoryQueue](#inmemoryqueue)
 
 #### MongoQueue
 
