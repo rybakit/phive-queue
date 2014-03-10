@@ -174,6 +174,8 @@ $queue = new SysVQueue(123456);
 
 #### InMemoryQueue
 
+As you might guess, the `InMemoryQueue` exists only in RAM and therefore operates faster than other queues. It can be useful in cases where the persistence is not necessary.
+
 ##### Example
 
 ```php
