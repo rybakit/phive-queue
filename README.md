@@ -147,10 +147,10 @@ The SysVQueue requires PHP to be compiled with the option **--enable-sysvmsg**.
 
 ##### Parameters
 
-> <b>key</b>        The message queue numeric ID<br>
-> <b>serialize</b>  <i>Optional</i>. Whether to serialize an item or not. Default to false<br>
-> <b>msgMaxSize</b> <i>Optional</i>. The maximum size of message to be accepted. Default to 8192<br>
-> <b>perms</b>      <i>Optional</i>. Queue permissions. Default to 0666<br>
+> <b>key</b>           The message queue numeric ID<br>
+> <b>serialize</b>     <i>Optional</i>. Whether to serialize an item or not. Default to false<br>
+> <b>itemMaxLength</b> <i>Optional</i>. The maximum length of the item to be accepted. Default to 8192<br>
+> <b>perms</b>         <i>Optional</i>. The queue permissions. Default to 0666<br>
 
 ##### Example
 

@@ -21,7 +21,7 @@ class SysVQueue implements QueueInterface
     /**
      * @var int
      */
-    private $msgMaxSize = 8192;
+    private $itemMaxLength = 8192;
 
     /**
      * @var int
@@ -33,13 +33,13 @@ class SysVQueue implements QueueInterface
      */
     private $queue;
 
-    public function __construct($key, $serialize = null, $msgMaxSize = null, $perms = null)
+    public function __construct($key, $serialize = null, $itemMaxLength = null, $perms = null)
     {
         $this->key = $key;
         $this->serialize = (bool) $serialize;
 
-        if (null !== $msgMaxSize) {
-            $this->msgMaxSize = $msgMaxSize;
+        if (null !== $itemMaxLength) {
+            $this->itemMaxLength = $itemMaxLength;
         }
         if (null !== $perms) {
             $this->perms = $perms;
@@ -68,7 +68,7 @@ class SysVQueue implements QueueInterface
     public function pop()
     {
         set_error_handler(function() { return true; }, E_WARNING);
-        $result = msg_receive($this->getQueue(), -time(), $eta, $this->msgMaxSize, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode);
+        $result = msg_receive($this->getQueue(), -time(), $eta, $this->itemMaxLength, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode);
         restore_error_handler();
 
         if ($result) {
