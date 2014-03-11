@@ -19,8 +19,6 @@ $ php composer.phar require rybakit/phive-queue:*
 ## Usage example
 
 ```php
-<?php
-
 use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\Queue\InMemoryQueue;
 
@@ -77,8 +75,6 @@ The MongoQueue requires the [Mongo](http://pecl.php.net/package/mongo) PECL exte
 ##### Example
 
 ```php
-<?php
-
 use Phive\Queue\Queue\MongoQueue;
 
 $client = new MongoClient();
@@ -96,8 +92,6 @@ For the RedisQueue you have to install the [Redis](http://pecl.php.net/package/r
 ##### Example
 
 ```php
-<?php
-
 use Phive\Queue\Queue\RedisQueue;
 
 $redis = new Redis();
@@ -121,8 +115,6 @@ $queue = new RedisQueue($redis);
 ##### Example
 
 ```php
-<?php
-
 use Phive\Queue\Queue\Pdo\GenericPdoQueue;
 
 $pdo = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=foo', 'db_user', 'db_pass');
@@ -141,8 +133,6 @@ $queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
 ##### Example
 
 ```php
-<?php
-
 use Phive\Queue\Queue\Pdo\SqlitePdoQueue;
 
 $pdo = new PDO('sqlite:/opt/databases/mydb.sq3');
@@ -165,8 +155,6 @@ The SysVQueue requires PHP to be compiled with the option **--enable-sysvmsg**.
 ##### Example
 
 ```php
-<?php
-
 use Phive\Queue\Queue\SysVQueue;
 
 $queue = new SysVQueue(123456);
@@ -179,8 +167,6 @@ As you might guess, the `InMemoryQueue` exists only in RAM and therefore operate
 ##### Example
 
 ```php
-<?php
-
 use Phive\Queue\Queue\InMemoryQueue;
 
 $queue = new InMemoryQueue();
@@ -194,8 +180,6 @@ Every queue method declared in the `QueueInterface` interface will throw an exce
 For example, in the code below, the `push()` call will fail with a `MongoConnectionException` exception in a case a remote server unreachable:
 
 ```php
-<?php
-
 use Phive\Queue\Queue\MongoQueue;
 
 $queue = new MongoQueue(...);
@@ -209,8 +193,6 @@ But sometimes you may want to catch exceptions coming from a queue regardless of
 To do this just wrap your queue object with the `ExceptionalQueue` decorator:
 
 ```php
-<?php
-
 use Phive\Queue\Queue\ExceptionalQueue;
 use Phive\Queue\Queue\MongoQueue;
 
@@ -225,8 +207,6 @@ $queue->push('item'); // throws Phive\Queue\Exception\RuntimeException
 And then, to catch queue level exceptions use `ExceptionInterface` [marker interface](http://en.wikipedia.org/wiki/Marker_interface_pattern):
 
 ```php
-<?php
-
 use Phive\Queue\Exception\ExceptionInterface;
 
 ...
