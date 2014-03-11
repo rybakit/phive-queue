@@ -7,9 +7,7 @@ Phive Queue is a time-based scheduling queue with multiple backend support.
 
 ## Installation
 
-The recommended way to install Phive Queue is through [Composer](http://getcomposer.org).
-
-To install the library run the following command:
+The recommended way to install Phive Queue is through [Composer](http://getcomposer.org):
 
 ```sh
 $ php composer.phar require rybakit/phive-queue:*
