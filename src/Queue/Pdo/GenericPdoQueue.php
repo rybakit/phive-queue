@@ -10,10 +10,14 @@ class GenericPdoQueue extends AbstractPdoQueue
      * @var array
      */
     protected static $popSqls = [
-        'mysql'     => 'CALL %s(%d)',
         'pgsql'     => 'SELECT item FROM %s(%d)',
+        'firebird'  => 'SELECT item FROM %s(%d)',
         'informix'  => 'EXECUTE PROCEDURE %s(%d)',
+        'mysql'     => 'CALL %s(%d)',
         'cubrid'    => 'CALL %s(%d)',
+        'ibm'       => 'CALL %s(%d)',
+        'oci'       => 'CALL %s(%d)',
+        'odbc'      => 'CALL %s(%d)',
     ];
 
     /**
