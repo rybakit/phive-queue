@@ -13,6 +13,7 @@ class GenericPdoQueue extends AbstractPdoQueue
         'mysql'     => 'CALL %s(%d)',
         'pgsql'     => 'SELECT item FROM %s(%d)',
         'informix'  => 'EXECUTE PROCEDURE %s(%d)',
+        'cubrid'    => 'CALL %s(%d)',
     ];
 
     /**
