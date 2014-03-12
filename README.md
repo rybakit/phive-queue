@@ -64,13 +64,13 @@ Currently, there are the following queues available:
 
 The MongoQueue requires the [Mongo](http://pecl.php.net/package/mongo) PECL extension *(v1.3.0 or higher)*.
 
-##### Signature
+##### Constructor
 
 ```php
 public function __construct(\MongoClient $client, $dbName, $collName)
 ```
 
-##### Parameters
+Parameters:
 
 > <b>client</b>   The MongoClient instance<br>
 > <b>dbName</b>   The database name<br>
@@ -89,13 +89,13 @@ $queue = new MongoQueue($client, 'my_db', 'my_coll');
 
 For the RedisQueue you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension *(v2.2.3 or higher)*.
 
-##### Signature
+##### Constructor
 
 ```php
 public function __construct(\Redis $redis)
 ```
 
-##### Parameters
+Parameters:
 
 > <b>redis</b> The Redis instance<br>
 
@@ -116,13 +116,13 @@ $queue = new RedisQueue($redis);
 
 #### GenericPdoQueue
 
-##### Signature
+##### Constructor
 
 ```php
 public function __construct(\PDO $conn, $tableName, $routineName = null)
 ```
 
-##### Parameters
+Parameters:
 
 > <b>conn</b>        The PDO instance<br>
 > <b>tableName</b>   The table name<br>
@@ -141,13 +141,13 @@ $queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
 
 #### SqlitePdoQueue
 
-##### Signature
+##### Constructor
 
 ```php
 public function __construct(\PDO $conn, $tableName)
 ```
 
-##### Parameters
+Parameters:
 
 > <b>conn</b>      The PDO instance<br>
 > <b>tableName</b> The table name<br>
@@ -167,13 +167,13 @@ $queue = new SqlitePdoQueue($pdo, 'my_table');
 
 The SysVQueue requires PHP to be compiled with the option **--enable-sysvmsg**.
 
-##### Signature
+##### Constructor
 
 ```php
 public function __construct($key, $serialize = null, $itemMaxLength = null, $perms = null)
 ```
 
-##### Parameters
+Parameters:
 
 > <b>key</b>           The message queue numeric ID<br>
 > <b>serialize</b>     <i>Optional</i>. Whether to serialize an item or not. Default to false<br>
@@ -192,7 +192,7 @@ $queue = new SysVQueue(123456);
 
 As you might guess, the `InMemoryQueue` exists only in RAM and therefore operates faster than other queues. It can be useful in cases where the persistence is not necessary.
 
-##### Signature
+##### Constructor
 
 ```php
 public function __construct()
