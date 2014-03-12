@@ -64,6 +64,12 @@ Currently, there are the following queues available:
 
 The MongoQueue requires the [Mongo](http://pecl.php.net/package/mongo) PECL extension *(v1.3.0 or higher)*.
 
+##### Signature
+
+```php
+public function __construct(\MongoClient $client, $dbName, $collName)
+```
+
 ##### Parameters
 
 > <b>client</b>   The MongoClient instance<br>
@@ -82,6 +88,12 @@ $queue = new MongoQueue($client, 'my_db', 'my_coll');
 #### RedisQueue
 
 For the RedisQueue you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension *(v2.2.3 or higher)*.
+
+##### Signature
+
+```php
+public function __construct(\Redis $redis)
+```
 
 ##### Parameters
 
@@ -104,6 +116,12 @@ $queue = new RedisQueue($redis);
 
 #### GenericPdoQueue
 
+##### Signature
+
+```php
+public function __construct(\PDO $conn, $tableName, $routineName = null)
+```
+
 ##### Parameters
 
 > <b>conn</b>        The PDO instance<br>
@@ -122,6 +140,12 @@ $queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
 ```
 
 #### SqlitePdoQueue
+
+##### Signature
+
+```php
+public function __construct(\PDO $conn, $tableName)
+```
 
 ##### Parameters
 
@@ -143,6 +167,12 @@ $queue = new SqlitePdoQueue($pdo, 'my_table');
 
 The SysVQueue requires PHP to be compiled with the option **--enable-sysvmsg**.
 
+##### Signature
+
+```php
+public function __construct($key, $serialize = null, $itemMaxLength = null, $perms = null)
+```
+
 ##### Parameters
 
 > <b>key</b>           The message queue numeric ID<br>
@@ -161,6 +191,12 @@ $queue = new SysVQueue(123456);
 #### InMemoryQueue
 
 As you might guess, the `InMemoryQueue` exists only in RAM and therefore operates faster than other queues. It can be useful in cases where the persistence is not necessary.
+
+##### Signature
+
+```php
+public function __construct()
+```
 
 ##### Example
 
