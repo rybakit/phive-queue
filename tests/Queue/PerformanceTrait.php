@@ -12,9 +12,10 @@ trait PerformanceTrait
     public function testPushPopPerformance()
     {
         $queueSize = $this->getPerformanceQueueSize();
+        $queueName = preg_replace('~^'.preg_quote(__NAMESPACE__).'\\\|Test$~', '', get_class($this));
         $item = str_repeat('x', static::$performanceItemLength);
 
-        echo sprintf("\n%s::push()\n", get_class($this->queue));
+        echo sprintf("\n%s::push()\n", $queueName);
 
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
@@ -22,7 +23,7 @@ trait PerformanceTrait
         }
         $this->printPerformanceResult($queueSize, microtime(true) - $start);
 
-        echo sprintf("\n%s::pop()\n", get_class($this->queue));
+        echo sprintf("\n%s::pop()\n", $queueName);
 
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {

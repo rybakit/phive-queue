@@ -285,13 +285,13 @@ This test inserts a number of items (1000 by default) into a queue, and then ret
 It measures the average time for `push` and `pop` operations and outputs the resulting stats, e.g.:
 
 ```sh
-Phive\Queue\Queue\SysVQueue::push()
+SysVQueue::push()
    Total operations:      1000
    Operations per second: 67149.691 [#/sec]
    Time per operation:    14.892 [ms]
    Time taken for test:   0.015 [sec]
 
-Phive\Queue\Queue\SysVQueue::pop()
+SysVQueue::pop()
    Total operations:      1000
    Operations per second: 96908.667 [#/sec]
    Time per operation:    10.319 [ms]
