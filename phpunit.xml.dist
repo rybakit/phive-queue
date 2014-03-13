@@ -30,6 +30,10 @@
         <env name="PHIVE_REDIS_PORT" value="6379" />
         <env name="PHIVE_REDIS_PREFIX" value="phive_tests:queue:" />
 
+        <env name="PHIVE_BEANSTALK_HOST" value="127.0.0.1" />
+        <env name="PHIVE_BEANSTALK_PORT" value="11300" />
+        <env name="PHIVE_BEANSTALK_TUBE" value="queue" />
+
         <env name="PHIVE_SYSV_KEY" value="3735928559" />
 
         <env name="PHIVE_CONCUR_QUEUE_SIZE" value="100" />

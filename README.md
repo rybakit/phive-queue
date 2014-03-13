@@ -55,6 +55,7 @@ Currently, there are the following queues available:
 
 * [MongoQueue](#mongoqueue)
 * [RedisQueue](#redisqueue)
+* [BeanstalkQueue](#beanstalkqueue)
 * [GenericPdoQueue](#genericpdoqueue)
 * [SqlitePdoQueue](#sqlitepdoqueue)
 * [SysVQueue](#sysvqueue)
@@ -119,6 +120,29 @@ $redis->setOption(Redis::OPT_PREFIX, 'my_prefix:');
 // $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 
 $queue = new RedisQueue($redis);
+```
+
+#### BeanstalkQueue
+
+##### Constructor
+
+```php
+public function __construct(Pheanstalk_Pheanstalk $client, $tubeName)
+```
+
+Parameters:
+
+> <b>client</b>   The Pheanstalk_Pheanstalk instance<br>
+> <b>tubeName</b> The tube name<br>
+
+##### Example
+
+```php
+use Pheanstalk_Pheanstalk as Pheanstalk;
+use Phive\Queue\Queue\BeanstalkQueue;
+
+$client = new Pheanstalk('127.0.0.1');
+$queue = new BeanstalkQueue($client, 'my_tube');
 ```
 
 #### GenericPdoQueue
