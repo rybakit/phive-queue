@@ -15,12 +15,14 @@ services:
     - redis-server
     
 install:
-    - composer require phpunit/phpunit:~4.0
-    - composer install
+    - sudo apt-get install -y beanstalkd
+    - sudo beanstalkd -d -l 127.0.0.1 -p 11300
+    - sh -c 'if [ "hhvm" != $TRAVIS_PHP_VERSION ]; then printf "extension = mongo.so\nextension = redis.so" >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini; fi;'
 
 before_script:
-    - sh -c 'if [ "hhvm" != $TRAVIS_PHP_VERSION ]; then printf "extension = mongo.so\nextension = redis.so" >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini; fi;'
     - mysql -e 'create database phive_tests;'
     - psql -c 'create database phive_tests;' -U postgres
+    - composer require phpunit/phpunit:~4.0
+    - composer install
 
 script: phpunit -v
