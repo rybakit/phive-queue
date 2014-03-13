@@ -116,7 +116,7 @@ $queue = new RedisQueue($redis);
 
 #### GenericPdoQueue
 
-The `GenericPdoQueue` requires requires PDO and a PDO driver for a particular database be installed.
+The `GenericPdoQueue` requires PDO and a PDO driver for a particular database be installed.
 On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
 
 ##### Constructor
