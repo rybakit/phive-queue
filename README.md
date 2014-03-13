@@ -163,7 +163,7 @@ Parameters:
 ```php
 use Phive\Queue\Queue\Pdo\SqlitePdoQueue;
 
-$pdo = new PDO('sqlite:/opt/databases/mydb.sq3');
+$pdo = new PDO('sqlite:/opt/databases/my_db.sq3');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $queue = new SqlitePdoQueue($pdo, 'my_table');
