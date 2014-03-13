@@ -67,9 +67,8 @@ The `MongoQueue` requires the [Mongo](http://pecl.php.net/package/mongo) PECL ex
 
 
 Before making use of the queue, it's *highly recommended* to create an index on a `eta` field:
-```js
-use my_db
-db.my_collection.ensureIndex({ eta: 1 })
+```sh
+$ mongo my_db --eval 'db.my_collection.ensureIndex({ eta: 1 })'
 ```
 
 ##### Constructor
