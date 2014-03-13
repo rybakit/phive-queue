@@ -62,7 +62,7 @@ Currently, there are the following queues available:
 
 #### MongoQueue
 
-The MongoQueue requires the [Mongo](http://pecl.php.net/package/mongo) PECL extension *(v1.3.0 or higher)*.
+The `MongoQueue` requires the [Mongo](http://pecl.php.net/package/mongo) PECL extension *(v1.3.0 or higher)*.
 
 ##### Constructor
 
@@ -87,7 +87,7 @@ $queue = new MongoQueue($client, 'my_db', 'my_coll');
 
 #### RedisQueue
 
-For the RedisQueue you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension *(v2.2.3 or higher)*.
+For the `RedisQueue` you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension *(v2.2.3 or higher)*.
 
 ##### Constructor
 
@@ -116,6 +116,9 @@ $queue = new RedisQueue($redis);
 
 #### GenericPdoQueue
 
+The `GenericPdoQueue` requires requires PDO and a PDO driver for a particular database be installed.
+On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
+
 ##### Constructor
 
 ```php
@@ -141,6 +144,9 @@ $queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
 
 #### SqlitePdoQueue
 
+The `SqlitePdoQueue` requires PDO and SQLite PDO driver.
+On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
+
 ##### Constructor
 
 ```php
@@ -165,7 +171,7 @@ $queue = new SqlitePdoQueue($pdo, 'my_table');
 
 #### SysVQueue
 
-The SysVQueue requires PHP to be compiled with the option **--enable-sysvmsg**.
+The `SysVQueue` requires PHP to be compiled with the option **--enable-sysvmsg**.
 
 ##### Constructor
 
