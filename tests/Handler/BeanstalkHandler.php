@@ -12,7 +12,7 @@ class BeanstalkHandler extends AbstractHandler
 
     public function createQueue()
     {
-        return new BeanstalkQueue($this->getClient(), $this->getOption('tube'));
+        return new BeanstalkQueue($this->getClient(), $this->getOption('tube_name'));
     }
 
     public function clear()
