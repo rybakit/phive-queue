@@ -66,7 +66,8 @@ Currently, there are the following queues available:
 The `MongoQueue` requires the [Mongo](http://pecl.php.net/package/mongo) PECL extension *(v1.3.0 or higher)*.
 
 
-Before making use of the queue, it's *highly recommended* to create an index on a `eta` field:
+*Note:* Before making use of the queue, it's highly recommended to create an index on a `eta` field:
+
 ```sh
 $ mongo my_db --eval 'db.my_collection.ensureIndex({ eta: 1 })'
 ```
@@ -176,6 +177,14 @@ $queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
 
 The `SqlitePdoQueue` requires PDO and SQLite PDO driver.
 On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
+
+
+*Note:* For performance reasons it's highly recommended to activate [WALL mode](http://www.sqlite.org/wal.html):
+
+```php
+$pdo = new PDO('sqlite:/opt/databases/my_db.sq3');
+$pdo->exec('PRAGMA journal_mode=WAL');
+```
 
 ##### Constructor
 
