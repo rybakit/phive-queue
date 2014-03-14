@@ -32,7 +32,7 @@
 
         <env name="PHIVE_BEANSTALK_HOST" value="127.0.0.1" />
         <env name="PHIVE_BEANSTALK_PORT" value="11300" />
-        <env name="PHIVE_BEANSTALK_TUBE" value="queue" />
+        <env name="PHIVE_BEANSTALK_TUBE" value="phive_queue" />
 
         <env name="PHIVE_SYSV_KEY" value="3735928559" />
 
