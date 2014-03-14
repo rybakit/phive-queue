@@ -74,7 +74,7 @@ $ mongo my_db --eval 'db.my_collection.ensureIndex({ eta: 1 })'
 ##### Constructor
 
 ```php
-public MongoQueue::__construct(MongoClient $client, $dbName, $collName)
+public MongoQueue::__construct(MongoClient $client, string $dbName, string $collName)
 ```
 
 Parameters:
@@ -126,7 +126,7 @@ $queue = new RedisQueue($redis);
 ##### Constructor
 
 ```php
-public BeanstalkQueue::__construct(Pheanstalk_Pheanstalk $client, $tubeName)
+public BeanstalkQueue::__construct(Pheanstalk_Pheanstalk $client, string $tubeName)
 ```
 
 Parameters:
@@ -152,7 +152,7 @@ On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXC
 ##### Constructor
 
 ```php
-public GenericPdoQueue::__construct(PDO $conn, $tableName [, $routineName = null ] )
+public GenericPdoQueue::__construct(PDO $conn, string $tableName [, string $routineName = null ] )
 ```
 
 Parameters:
@@ -180,7 +180,7 @@ On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXC
 ##### Constructor
 
 ```php
-public SqlitePdoQueue::__construct(PDO $conn, $tableName)
+public SqlitePdoQueue::__construct(PDO $conn, string $tableName)
 ```
 
 Parameters:
@@ -206,7 +206,7 @@ The `SysVQueue` requires PHP to be compiled with the option **--enable-sysvmsg**
 ##### Constructor
 
 ```php
-public SysVQueue::__construct($key [, $serialize = null [, $itemMaxLength = null [, $perms = null ]]] )
+public SysVQueue::__construct(int $key [, bool $serialize = null [, int $itemMaxLength = null [, int $perms = null ]]] )
 ```
 
 Parameters:
