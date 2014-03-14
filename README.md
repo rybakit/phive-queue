@@ -74,7 +74,7 @@ $ mongo my_db --eval 'db.my_collection.ensureIndex({ eta: 1 })'
 ##### Constructor
 
 ```php
-public function __construct(\MongoClient $client, $dbName, $collName)
+public MongoQueue::__construct(MongoClient $client, $dbName, $collName)
 ```
 
 Parameters:
@@ -99,7 +99,7 @@ For the `RedisQueue` you have to install the [Redis](http://pecl.php.net/package
 ##### Constructor
 
 ```php
-public function __construct(\Redis $redis)
+public RedisQueue::__construct(Redis $redis)
 ```
 
 Parameters:
@@ -126,7 +126,7 @@ $queue = new RedisQueue($redis);
 ##### Constructor
 
 ```php
-public function __construct(Pheanstalk_Pheanstalk $client, $tubeName)
+public BeanstalkQueue::__construct(Pheanstalk_Pheanstalk $client, $tubeName)
 ```
 
 Parameters:
@@ -152,7 +152,7 @@ On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXC
 ##### Constructor
 
 ```php
-public function __construct(\PDO $conn, $tableName, $routineName = null)
+public GenericPdoQueue::__construct(PDO $conn, $tableName [, $routineName = null ] )
 ```
 
 Parameters:
@@ -180,7 +180,7 @@ On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXC
 ##### Constructor
 
 ```php
-public function __construct(\PDO $conn, $tableName)
+public SqlitePdoQueue::__construct(PDO $conn, $tableName)
 ```
 
 Parameters:
@@ -206,7 +206,7 @@ The `SysVQueue` requires PHP to be compiled with the option **--enable-sysvmsg**
 ##### Constructor
 
 ```php
-public function __construct($key, $serialize = null, $itemMaxLength = null, $perms = null)
+public SysVQueue::__construct($key [, $serialize = null [, $itemMaxLength = null [, $perms = null ]]] )
 ```
 
 Parameters:
@@ -231,7 +231,7 @@ As you might guess, the `InMemoryQueue` exists only in RAM and therefore operate
 ##### Constructor
 
 ```php
-public function __construct()
+public InMemoryQueue::__construct()
 ```
 
 ##### Example
