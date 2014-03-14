@@ -12,16 +12,6 @@
          bootstrap="tests/bootstrap.php"
 >
     <php>
-        <env name="PHIVE_PDO_PGSQL_DSN" value="pgsql:host=127.0.0.1;port=5432;dbname=phive_tests" />
-        <env name="PHIVE_PDO_PGSQL_USERNAME" value="postgres" />
-        <env name="PHIVE_PDO_PGSQL_PASSWORD" value="" />
-        <env name="PHIVE_PDO_PGSQL_TABLE_NAME" value="queue" />
-
-        <env name="PHIVE_PDO_MYSQL_DSN" value="mysql:host=127.0.0.1;port=3306;dbname=phive_tests" />
-        <env name="PHIVE_PDO_MYSQL_USERNAME" value="root" />
-        <env name="PHIVE_PDO_MYSQL_PASSWORD" value="" />
-        <env name="PHIVE_PDO_MYSQL_TABLE_NAME" value="queue" />
-
         <env name="PHIVE_MONGO_SERVER" value="mongodb://127.0.0.1:27017" />
         <env name="PHIVE_MONGO_DB_NAME" value="phive_tests" />
         <env name="PHIVE_MONGO_COLL_NAME" value="queue" />
@@ -32,7 +22,17 @@
 
         <env name="PHIVE_BEANSTALK_HOST" value="127.0.0.1" />
         <env name="PHIVE_BEANSTALK_PORT" value="11300" />
-        <env name="PHIVE_BEANSTALK_TUBE" value="phive_queue" />
+        <env name="PHIVE_BEANSTALK_TUBE_NAME" value="phive_queue" />
+
+        <env name="PHIVE_PDO_PGSQL_DSN" value="pgsql:host=127.0.0.1;port=5432;dbname=phive_tests" />
+        <env name="PHIVE_PDO_PGSQL_USERNAME" value="postgres" />
+        <env name="PHIVE_PDO_PGSQL_PASSWORD" value="" />
+        <env name="PHIVE_PDO_PGSQL_TABLE_NAME" value="queue" />
+
+        <env name="PHIVE_PDO_MYSQL_DSN" value="mysql:host=127.0.0.1;port=3306;dbname=phive_tests" />
+        <env name="PHIVE_PDO_MYSQL_USERNAME" value="root" />
+        <env name="PHIVE_PDO_MYSQL_PASSWORD" value="" />
+        <env name="PHIVE_PDO_MYSQL_TABLE_NAME" value="queue" />
 
         <env name="PHIVE_SYSV_KEY" value="3735928559" />
 

@@ -18,11 +18,11 @@ class BeanstalkHandler extends AbstractHandler
     public function clear()
     {
         $client = $this->getClient();
-        $tube = $this->getOption('tube');
+        $tubeName = $this->getOption('tube_name');
 
-        self::doClear($client, $tube, 'ready');
-        self::doClear($client, $tube, 'buried');
-        self::doClear($client, $tube, 'delayed');
+        self::doClear($client, $tubeName, 'ready');
+        self::doClear($client, $tubeName, 'buried');
+        self::doClear($client, $tubeName, 'delayed');
     }
 
     protected function getClient()
@@ -34,10 +34,10 @@ class BeanstalkHandler extends AbstractHandler
         return $this->client;
     }
 
-    private static function doClear($client, $tube, $state)
+    private static function doClear($client, $tubeName, $state)
     {
         try {
-            while ($item = $client->{'peek'.$state}($tube)) {
+            while ($item = $client->{'peek'.$state}($tubeName)) {
                 $client->delete($item);
             }
         } catch (ServerException $e) {
