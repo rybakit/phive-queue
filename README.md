@@ -308,7 +308,7 @@ try {
 
 ## Tests
 
-Phive Queue uses PHPUnit for unit and acceptance testing. In order to run the tests, you'll first need to install the library dependencies using composer:
+Phive Queue uses [PHPUnit](http://phpunit.de/) for unit and acceptance testing. In order to run the tests, you'll first need to install the library dependencies using composer:
 
 ```sh
 composer install
