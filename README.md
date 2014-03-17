@@ -289,7 +289,7 @@ $queue = new ExceptionalQueue($queue);
 $queue->push('item'); // throws Phive\Queue\Exception\RuntimeException
 ```
 
-And then, to catch queue level exceptions use `ExceptionInterface` [marker interface](http://en.wikipedia.org/wiki/Marker_interface_pattern):
+And then, to catch queue level exceptions use the `ExceptionInterface` [marker interface](http://en.wikipedia.org/wiki/Marker_interface_pattern):
 
 ```php
 use Phive\Queue\Exception\ExceptionInterface;
@@ -311,7 +311,7 @@ try {
 Phive Queue uses [PHPUnit](http://phpunit.de) for unit and acceptance testing. In order to run the tests, you'll first need to install the library dependencies using composer:
 
 ```sh
-composer install
+$ composer install
 ```
 
 You can then run the tests:
