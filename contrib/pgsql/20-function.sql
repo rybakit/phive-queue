@@ -1,17 +1,18 @@
-CREATE OR REPLACE FUNCTION {{routine_name}}(now {{table_name}}.eta%TYPE)
+CREATE OR REPLACE FUNCTION {{routine_name}}(now {{table_name}}.eta%type)
 RETURNS SETOF {{table_name}} AS $$
 DECLARE
-    found_id {{table_name}}.id%TYPE;
+    r {{table_name}}%rowtype;
 BEGIN
-    SELECT id INTO found_id
+    SELECT * INTO r
     FROM {{table_name}}
-    WHERE eta <= now AND pg_try_advisory_xact_lock(id)
+    WHERE eta <= now
     ORDER BY eta
     LIMIT 1
     FOR UPDATE;
 
     IF FOUND THEN
-        RETURN QUERY EXECUTE 'DELETE FROM {{table_name}} WHERE id = $1 RETURNING *' USING found_id;
+        DELETE FROM {{table_name}} WHERE id = r.id;
+        RETURN NEXT r;
     END IF;
 END;
 $$ LANGUAGE plpgsql;
