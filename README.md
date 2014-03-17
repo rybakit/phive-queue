@@ -153,7 +153,7 @@ $queue = new BeanstalkQueue($client, 'my_tube');
 
 #### GenericPdoQueue
 
-The `GenericPdoQueue` requires PDO and a PDO driver for a particular database be installed.
+The `GenericPdoQueue` requires [PDO](http://php.net/pdo) and a [PDO driver](php.net/manual/en/pdo.drivers.php) for a particular database be installed.
 On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
 
 ##### Constructor
@@ -181,7 +181,7 @@ $queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
 
 #### SqlitePdoQueue
 
-The `SqlitePdoQueue` requires PDO and SQLite PDO driver.
+The `SqlitePdoQueue` requires [PDO](http://php.net/pdo) and [SQLite PDO driver](http://php.net/manual/en/ref.pdo-sqlite.php).
 On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
 
 
