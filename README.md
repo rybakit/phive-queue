@@ -63,7 +63,7 @@ Currently, there are the following queues available:
 
 #### MongoQueue
 
-The `MongoQueue` requires the [Mongo](http://pecl.php.net/package/mongo) PECL extension *(v1.3.0 or higher)*.
+The `MongoQueue` requires the [Mongo PECL](http://pecl.php.net/package/mongo) extension *(v1.3.0 or higher)*.
 
 
 *Note:* Before making use of the queue, it's highly recommended to create an index on a `eta` field:
@@ -95,7 +95,7 @@ $queue = new MongoQueue($client, 'my_db', 'my_coll');
 
 #### RedisQueue
 
-For the `RedisQueue` you have to install the [Redis](http://pecl.php.net/package/redis) PECL extension *(v2.2.3 or higher)*.
+For the `RedisQueue` you have to install the [Redis PECL](http://pecl.php.net/package/redis) extension *(v2.2.3 or higher)*.
 
 ##### Constructor
 
@@ -124,7 +124,7 @@ $queue = new RedisQueue($redis);
 
 #### BeanstalkQueue
 
-The `BeanstalkQueue` requires the [Pheanstalk](https://github.com/pda/pheanstalk) library ([Beanstalk](http://kr.github.io/beanstalkd/) client) to be installed:
+The `BeanstalkQueue` requires the [Pheanstalk](https://github.com/pda/pheanstalk) library ([Beanstalk](http://kr.github.io/beanstalkd) client) to be installed:
 
 ```sh
 $ composer require pda/pheanstalk:~2.1
@@ -308,7 +308,7 @@ try {
 
 ## Tests
 
-Phive Queue uses [PHPUnit](http://phpunit.de/) for unit and acceptance testing. In order to run the tests, you'll first need to install the library dependencies using composer:
+Phive Queue uses [PHPUnit](http://phpunit.de) for unit and acceptance testing. In order to run the tests, you'll first need to install the library dependencies using composer:
 
 ```sh
 composer install
@@ -354,7 +354,7 @@ You may also change the number of items involved in the test by changing the `PH
 
 #### Concurrency
 
-In order to check the concurrency you'll have to install the [Gearman server](http://gearman.org) and the [German](http://pecl.php.net/package/gearman) PECL extension.
+In order to check the concurrency you'll have to install the [Gearman](http://gearman.org) server and the [German PECL](http://pecl.php.net/package/gearman) extension.
 Once the server has been installed and started, create a number of processes (workers) by running:
 
 ```sh
