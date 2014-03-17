@@ -10,7 +10,7 @@ Phive Queue is a time-based scheduling queue with multiple backend support.
 The recommended way to install Phive Queue is through [Composer](http://getcomposer.org):
 
 ```sh
-$ php composer.phar require rybakit/phive-queue:*
+$ composer require rybakit/phive-queue:*
 ```
 
 
@@ -123,6 +123,12 @@ $queue = new RedisQueue($redis);
 ```
 
 #### BeanstalkQueue
+
+The `BeanstalkQueue` requires the [Pheanstalk](https://github.com/pda/pheanstalk) library ([Beanstalk](http://kr.github.io/beanstalkd/) client) to be installed:
+
+```sh
+$ composer require pda/pheanstalk:~2.1
+```
 
 ##### Constructor
 
@@ -305,7 +311,7 @@ try {
 Phive Queue uses PHPUnit for unit and acceptance testing. In order to run the tests, you'll first need to install the library dependencies using composer:
 
 ```sh
-php composer.phar install
+composer install
 ```
 
 You can then run the tests:
