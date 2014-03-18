@@ -3,8 +3,7 @@
 namespace Phive\Queue\Queue;
 
 use Pheanstalk_Exception_ServerException as ServerException;
-use Pheanstalk_PheanstalkInterface as PheanstalkInterface;
-use Pheanstalk_Pheanstalk as Pheanstalk;
+use Pheanstalk_PheanstalkInterface as Pheanstalk;
 use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\QueueUtils;
 
@@ -38,7 +37,7 @@ class BeanstalkQueue implements Queue
     {
         $delay = (null !== $eta) ? QueueUtils::normalizeEta($eta) - time() : 0;
 
-        $this->client->putInTube($this->tubeName, $item, PheanstalkInterface::DEFAULT_PRIORITY, $delay);
+        $this->client->putInTube($this->tubeName, $item, Pheanstalk::DEFAULT_PRIORITY, $delay);
     }
 
     /**
