@@ -8,7 +8,7 @@ use Pheanstalk_Pheanstalk as Pheanstalk;
 use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\QueueUtils;
 
-class BeanstalkQueue implements QueueInterface
+class BeanstalkQueue implements Queue
 {
     /**
      * @var Pheanstalk

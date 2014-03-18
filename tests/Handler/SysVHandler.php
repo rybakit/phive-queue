@@ -4,7 +4,7 @@ namespace Phive\Queue\Tests\Handler;
 
 use Phive\Queue\Queue\SysVQueue;
 
-class SysVHandler extends AbstractHandler
+class SysVHandler extends Handler
 {
     public function createQueue()
     {

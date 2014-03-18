@@ -260,7 +260,7 @@ $queue = new InMemoryQueue();
 
 ## Exceptions
 
-Every queue method declared in the `QueueInterface` interface will throw an exception if a run-time error occurs at the time the method is called.
+Every queue method declared in the `Queue` interface will throw an exception if a run-time error occurs at the time the method is called.
 
 For example, in the code below, the `push()` call will fail with a `MongoConnectionException` exception in a case a remote server unreachable:
 
@@ -289,16 +289,16 @@ $queue = new ExceptionalQueue($queue);
 $queue->push('item'); // throws Phive\Queue\Exception\RuntimeException
 ```
 
-And then, to catch queue level exceptions use the `ExceptionInterface` [marker interface](http://en.wikipedia.org/wiki/Marker_interface_pattern):
+And then, to catch queue level exceptions use the `QueueException` [marker interface](http://en.wikipedia.org/wiki/Marker_interface_pattern):
 
 ```php
-use Phive\Queue\Exception\ExceptionInterface;
+use Phive\Queue\Exception\QueueException;
 
 ...
 
 try {
     do_something_with_a_queue();
-} catch (ExceptionInterface $e) {
+} catch (QueueException $e) {
     // handle queue exception
 } catch (\Exception $e) {
     // handle base exception

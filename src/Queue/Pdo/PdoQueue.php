@@ -3,10 +3,10 @@
 namespace Phive\Queue\Queue\Pdo;
 
 use Phive\Queue\Exception\InvalidArgumentException;
-use Phive\Queue\Queue\QueueInterface;
+use Phive\Queue\Queue\Queue;
 use Phive\Queue\QueueUtils;
 
-abstract class AbstractPdoQueue implements QueueInterface
+abstract class PdoQueue implements Queue
 {
     /**
      * @var \PDO

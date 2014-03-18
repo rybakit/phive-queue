@@ -6,7 +6,7 @@ use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\Exception\RuntimeException;
 use Phive\Queue\QueueUtils;
 
-class SysVQueue implements QueueInterface
+class SysVQueue implements Queue
 {
     /**
      * @var int

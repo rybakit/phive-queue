@@ -5,7 +5,7 @@ namespace Phive\Queue\Queue;
 use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\QueueUtils;
 
-class InMemoryQueue implements QueueInterface
+class InMemoryQueue implements Queue
 {
     /**
      * @var \SplPriorityQueue

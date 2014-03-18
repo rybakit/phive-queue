@@ -4,7 +4,7 @@ namespace Phive\Queue\Tests\Queue;
 
 use Phive\Queue\Queue\InMemoryQueue;
 
-class InMemoryQueueTest extends AbstractQueueTest
+class InMemoryQueueTest extends QueueTest
 {
     use PerformanceTrait;
 

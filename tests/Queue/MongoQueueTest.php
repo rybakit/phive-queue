@@ -7,7 +7,7 @@ use Phive\Queue\Tests\Handler\MongoHandler;
 /**
  * @requires extension mongo
  */
-class MongoQueueTest extends AbstractQueueTest
+class MongoQueueTest extends QueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;

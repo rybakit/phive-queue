@@ -3,9 +3,9 @@
 namespace Phive\Queue\Tests\Queue;
 
 use Phive\Queue\Exception\NoItemAvailableException;
-use Phive\Queue\Queue\QueueInterface;
+use Phive\Queue\Queue\Queue;
 
-abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
+abstract class QueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var int Timestamp that will be returned by time().
@@ -13,7 +13,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     public static $now;
 
     /**
-     * @var \Phive\Queue\Queue\QueueInterface
+     * @var \Phive\Queue\Queue\Queue
      */
     protected $queue;
 
@@ -26,7 +26,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testQueueImplementsQueueInterface()
     {
-        $this->assertInstanceOf('Phive\Queue\Queue\QueueInterface', $this->queue);
+        $this->assertInstanceOf('Phive\Queue\Queue\Queue', $this->queue);
     }
 
     public function testPushPop()
@@ -88,7 +88,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
         $this->stubTimeFunction();
     }
 
-    protected function assertNoItemAvailableException(QueueInterface $queue)
+    protected function assertNoItemAvailableException(Queue $queue)
     {
         try {
             $queue->pop();
@@ -126,7 +126,7 @@ abstract class AbstractQueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Phive\Queue\Queue\QueueInterface
+     * @return \Phive\Queue\Queue\Queue
      */
     abstract public function createQueue();
 }

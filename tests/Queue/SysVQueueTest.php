@@ -7,7 +7,7 @@ use Phive\Queue\Tests\Handler\SysVHandler;
 /**
  * @requires extension sysvmsg
  */
-class SysVQueueTest extends AbstractQueueTest
+class SysVQueueTest extends QueueTest
 {
     use PerformanceTrait {
         PerformanceTrait::testPushPopPerformance as baseTestPushPopPerformance;

@@ -3,14 +3,14 @@
 namespace Phive\Queue\Tests\Queue\Pdo;
 
 use Phive\Queue\Tests\Handler\PdoHandler;
-use Phive\Queue\Tests\Queue\AbstractQueueTest;
 use Phive\Queue\Tests\Queue\ConcurrencyTrait;
 use Phive\Queue\Tests\Queue\PerformanceTrait;
+use Phive\Queue\Tests\Queue\QueueTest;
 
 /**
  * @requires extension pdo_mysql
  */
-class MysqlPdoQueueTest extends AbstractQueueTest
+class MysqlPdoQueueTest extends QueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;

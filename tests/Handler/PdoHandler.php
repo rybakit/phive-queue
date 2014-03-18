@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests\Handler;
 
-class PdoHandler extends AbstractHandler
+class PdoHandler extends Handler
 {
     /**
      * @var \PDO

@@ -4,7 +4,7 @@ namespace Phive\Queue\Tests\Queue;
 
 use Phive\Queue\Tests\Handler\BeanstalkHandler;
 
-class BeanstalkQueueTest extends AbstractQueueTest
+class BeanstalkQueueTest extends QueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;

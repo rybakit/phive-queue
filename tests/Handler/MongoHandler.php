@@ -4,7 +4,7 @@ namespace Phive\Queue\Tests\Handler;
 
 use Phive\Queue\Queue\MongoQueue;
 
-class MongoHandler extends AbstractHandler
+class MongoHandler extends Handler
 {
     /**
      * @var \MongoClient

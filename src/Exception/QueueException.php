@@ -2,6 +2,6 @@
 
 namespace Phive\Queue\Exception;
 
-interface ExceptionInterface
+interface QueueException
 {
 }

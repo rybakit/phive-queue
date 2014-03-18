@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests\Handler;
 
-abstract class AbstractHandler implements \Serializable
+abstract class Handler implements \Serializable
 {
     /**
      * @var array
@@ -63,7 +63,7 @@ abstract class AbstractHandler implements \Serializable
     }
 
     /**
-     * @return \Phive\Queue\Queue\QueueInterface
+     * @return \Phive\Queue\Queue\Queue
      */
     abstract public function createQueue();
 }

@@ -4,7 +4,7 @@ namespace Phive\Queue\Queue\Pdo;
 
 use Phive\Queue\Exception\NoItemAvailableException;
 
-class SqlitePdoQueue extends AbstractPdoQueue
+class SqlitePdoQueue extends PdoQueue
 {
     /**
      * {@inheritdoc}

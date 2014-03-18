@@ -4,7 +4,7 @@ namespace Phive\Queue\Queue\Pdo;
 
 use Phive\Queue\Exception\NoItemAvailableException;
 
-class GenericPdoQueue extends AbstractPdoQueue
+class GenericPdoQueue extends PdoQueue
 {
     /**
      * @var array

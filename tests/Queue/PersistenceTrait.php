@@ -5,12 +5,12 @@ namespace Phive\Queue\Tests\Queue;
 trait PersistenceTrait
 {
     /**
-     * @var \Phive\Queue\Tests\Handler\AbstractHandler
+     * @var \Phive\Queue\Tests\Handler\Handler
      */
     private static $handler;
 
     /**
-     * @return \Phive\Queue\Queue\QueueInterface
+     * @return \Phive\Queue\Queue\Queue
      */
     public function createQueue()
     {
@@ -22,7 +22,7 @@ trait PersistenceTrait
      *
      * @param array $config
      *
-     * @return \Phive\Queue\Tests\Handler\AbstractHandler
+     * @return \Phive\Queue\Tests\Handler\Handler
      *
      * @throws \BadMethodCallException
      */

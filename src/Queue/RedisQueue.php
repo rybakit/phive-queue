@@ -9,7 +9,7 @@ use Phive\Queue\QueueUtils;
 /**
  * RedisQueue requires redis server 2.6 or higher.
  */
-class RedisQueue implements QueueInterface
+class RedisQueue implements Queue
 {
     const SCRIPT_PUSH = <<<'LUA'
         local id = redis.call('INCR', KEYS[2])

@@ -2,14 +2,14 @@
 
 namespace Phive\Queue\Queue;
 
-use Phive\Queue\Exception\ExceptionInterface;
+use Phive\Queue\Exception\QueueException;
 use Phive\Queue\Exception\RuntimeException;
 
-class ExceptionalQueue implements QueueInterface
+class ExceptionalQueue implements Queue
 {
     private $queue;
 
-    public function __construct(QueueInterface $queue)
+    public function __construct(Queue $queue)
     {
         $this->queue = $queue;
     }
@@ -70,7 +70,7 @@ class ExceptionalQueue implements QueueInterface
     {
         try {
             $result = $func();
-        } catch (ExceptionInterface $e) {
+        } catch (QueueException $e) {
             throw $e;
         } catch (\Exception $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);

@@ -5,7 +5,7 @@ namespace Phive\Queue\Queue;
 use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\QueueUtils;
 
-class MongoQueue implements QueueInterface
+class MongoQueue implements Queue
 {
     /**
      * @var \MongoClient

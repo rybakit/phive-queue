@@ -2,10 +2,10 @@
 
 namespace Phive\Queue\Tests\Queue\Pdo;
 
-use Phive\Queue\Tests\Queue\AbstractQueueTest;
 use Phive\Queue\Tests\Queue\PersistenceTrait;
+use Phive\Queue\Tests\Queue\QueueTest;
 
-abstract class AbstractPdoQueueTest extends AbstractQueueTest
+abstract class PdoQueueTest extends QueueTest
 {
     use PersistenceTrait;
 

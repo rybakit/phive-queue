@@ -7,7 +7,7 @@ use Phive\Queue\Tests\Handler\RedisHandler;
 /**
  * @requires extension redis
  */
-class RedisQueueTest extends AbstractQueueTest
+class RedisQueueTest extends QueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;

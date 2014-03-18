@@ -6,7 +6,7 @@ use Pheanstalk_Exception_ServerException as ServerException;
 use Pheanstalk_Pheanstalk as Pheanstalk;
 use Phive\Queue\Queue\BeanstalkQueue;
 
-class BeanstalkHandler extends AbstractHandler
+class BeanstalkHandler extends Handler
 {
     private $client;
 

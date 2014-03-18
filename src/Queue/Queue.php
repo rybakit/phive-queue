@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Queue;
 
-interface QueueInterface extends \Countable
+interface Queue extends \Countable
 {
     /**
      * @param string $item
