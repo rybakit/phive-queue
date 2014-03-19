@@ -21,29 +21,31 @@ class SysVQueue implements Queue
     /**
      * @var int
      */
-    private $itemMaxLength = 8192;
+    private $perms = 0666;
 
     /**
      * @var int
      */
-    private $perms = 0666;
+    private $itemMaxLength = 8192;
 
     /**
      * @var resource
      */
     private $queue;
 
-    public function __construct($key, $serialize = null, $itemMaxLength = null, $perms = null)
+    public function __construct($key, $serialize = null, $perms = null)
     {
         $this->key = $key;
         $this->serialize = (bool) $serialize;
 
-        if (null !== $itemMaxLength) {
-            $this->itemMaxLength = $itemMaxLength;
-        }
         if (null !== $perms) {
             $this->perms = $perms;
         }
+    }
+
+    public function setItemMaxLength($length)
+    {
+        $this->itemMaxLength = $length;
     }
 
     /**
@@ -108,7 +110,7 @@ class SysVQueue implements Queue
         $this->queue = null;
     }
 
-    protected function getQueue()
+    private function getQueue()
     {
         if (!is_resource($this->queue)) {
             $this->queue = msg_get_queue($this->key, $this->perms);
