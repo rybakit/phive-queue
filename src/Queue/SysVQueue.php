@@ -55,13 +55,9 @@ class SysVQueue implements Queue
     {
         $eta = QueueUtils::normalizeEta($eta);
 
-        set_error_handler(function() { return true; }, E_WARNING);
-        $result = msg_send($this->getQueue(), $eta, $item, $this->serialize, false, $errorCode);
-        restore_error_handler();
-
-        if (!$result) {
-            throw new RuntimeException(posix_strerror($errorCode), $errorCode);
-        }
+        $this->exceptional(function (&$errorCode) use ($item, $eta) {
+            return msg_send($this->getQueue(), $eta, $item, $this->serialize, false, $errorCode);
+        });
     }
 
     /**
@@ -69,19 +65,14 @@ class SysVQueue implements Queue
      */
     public function pop()
     {
-        set_error_handler(function() { return true; }, E_WARNING);
-        $result = msg_receive($this->getQueue(), -time(), $eta, $this->itemMaxLength, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode);
-        restore_error_handler();
+        $item = null;
 
-        if ($result) {
-            return $item;
-        }
+        $this->exceptional(function (&$errorCode) use (&$item) {
+            return msg_receive($this->getQueue(), -time(), $eta, $this->itemMaxLength,
+                $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode);
+        });
 
-        if (MSG_ENOMSG === $errorCode) {
-            throw new NoItemAvailableException();
-        }
-
-        throw new RuntimeException(posix_strerror($errorCode), $errorCode);
+        return $item;
     }
 
     /**
@@ -121,5 +112,29 @@ class SysVQueue implements Queue
         }
 
         return $this->queue;
+    }
+
+    private function exceptional(\Closure $func)
+    {
+        $message = null;
+        $code = null;
+
+        set_error_handler(function ($errNo, $errStr) use (&$message) { $message = $errStr; }, E_NOTICE | E_WARNING);
+        $result = $func($code);
+        restore_error_handler();
+
+        if ($result) {
+            return $result;
+        }
+
+        if (MSG_ENOMSG === $code) {
+            throw new NoItemAvailableException();
+        }
+
+        if (!$message) {
+            $message = $code ? posix_strerror($code) : 'Unknown SysV error';
+        }
+
+        throw new RuntimeException($message);
     }
 }
