@@ -22,8 +22,8 @@ class RedisQueueTest extends QueueTest
 
     public function testSerialize()
     {
-        if (!method_exists('Redis','_serialize')) {
-            $this->markTestSkipped('Redis::_serialize() does not exists');
+        if (!method_exists('Redis', '_serialize')) {
+            $this->markTestSkipped('Redis::_serialize() is required.');
         }
 
         $redis = $this->queue->getRedis();
