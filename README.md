@@ -153,6 +153,8 @@ $queue = new BeanstalkQueue($client, 'my_tube');
 
 #### GenericPdoQueue
 
+The `GenericPdoQueue` is intended for PDO drivers whose databases support stored procedures/functions (in fact all drivers except SQLite).
+
 The `GenericPdoQueue` requires [PDO](http://php.net/pdo) and a [PDO driver](http://php.net/manual/en/pdo.drivers.php) for a particular database be installed.
 On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
 
