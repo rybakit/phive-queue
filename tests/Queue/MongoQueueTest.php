@@ -12,9 +12,9 @@ class MongoQueueTest extends QueueTest
     use PerformanceTrait;
     use ConcurrencyTrait;
 
-    public function provideItemsOfVariousSupportedTypes()
+    public function provideItemsOfVariousTypes()
     {
-        return array_diff_key(parent::provideItemsOfVariousSupportedTypes(), [
+        return array_diff_key(parent::provideItemsOfVariousTypes(), [
             'object' => false,
         ]);
     }

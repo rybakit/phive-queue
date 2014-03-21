@@ -12,9 +12,9 @@ class RedisQueueTest extends QueueTest
     use PerformanceTrait;
     use ConcurrencyTrait;
 
-    public function provideItemsOfVariousSupportedTypes()
+    public function provideItemsOfVariousTypes()
     {
-        return array_diff_key(parent::provideItemsOfVariousSupportedTypes(), [
+        return array_diff_key(parent::provideItemsOfVariousTypes(), [
             'array'     => false,
             'object'    => false,
         ]);
@@ -33,7 +33,7 @@ class RedisQueueTest extends QueueTest
             $serializers[] = \Redis::SERIALIZER_IGBINARY;
         }
 
-        $items = parent::provideItemsOfVariousSupportedTypes();
+        $items = parent::provideItemsOfVariousTypes();
 
         foreach ($serializers as $serializer) {
             $redis->setOption(\Redis::OPT_SERIALIZER, $serializer);

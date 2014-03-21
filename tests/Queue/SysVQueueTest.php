@@ -14,9 +14,9 @@ class SysVQueueTest extends QueueTest
     }
     use ConcurrencyTrait;
 
-    public function provideItemsOfVariousSupportedTypes()
+    public function provideItemsOfVariousTypes()
     {
-        return array_diff_key(parent::provideItemsOfVariousSupportedTypes(), [
+        return array_diff_key(parent::provideItemsOfVariousTypes(), [
             'null'      => false,
             'array'     => false,
             'object'    => false,

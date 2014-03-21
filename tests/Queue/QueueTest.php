@@ -81,7 +81,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideItemsOfVariousSupportedTypes
+     * @dataProvider provideItemsOfVariousTypes
      */
     public function testSupportedItemTypeLoose($item)
     {
@@ -89,7 +89,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($item, $this->queue->pop());
     }
 
-    public function provideItemsOfVariousSupportedTypes()
+    public function provideItemsOfVariousTypes()
     {
         return [
             'null'      => [null],

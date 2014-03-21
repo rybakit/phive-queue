@@ -11,9 +11,9 @@ class BeanstalkQueueTest extends QueueTest
 
     protected $supportsExpiredEta = false;
 
-    public function provideItemsOfVariousSupportedTypes()
+    public function provideItemsOfVariousTypes()
     {
-        return array_diff_key(parent::provideItemsOfVariousSupportedTypes(), [
+        return array_diff_key(parent::provideItemsOfVariousTypes(), [
             'array'     => false,
             'object'    => false,
         ]);
