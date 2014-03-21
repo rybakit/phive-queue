@@ -15,6 +15,14 @@ class MysqlPdoQueueTest extends QueueTest
     use PerformanceTrait;
     use ConcurrencyTrait;
 
+    public function provideItemsOfVariousSupportedTypes()
+    {
+        return array_diff_key(parent::provideItemsOfVariousSupportedTypes(), [
+            'array'     => false,
+            'object'    => false,
+        ]);
+    }
+
     public static function createHandler(array $config)
     {
         return new PdoHandler([

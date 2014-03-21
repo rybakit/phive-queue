@@ -12,12 +12,11 @@ class RedisQueueTest extends QueueTest
     use PerformanceTrait;
     use ConcurrencyTrait;
 
-    public static function createHandler(array $config)
+    public function provideItemsOfVariousSupportedTypes()
     {
-        return new RedisHandler([
-            'host'   => $config['PHIVE_REDIS_HOST'],
-            'port'   => $config['PHIVE_REDIS_PORT'],
-            'prefix' => $config['PHIVE_REDIS_PREFIX'],
+        return array_diff_key(parent::provideItemsOfVariousSupportedTypes(), [
+            'array'     => false,
+            'object'    => false,
         ]);
     }
 
@@ -34,15 +33,24 @@ class RedisQueueTest extends QueueTest
             $serializers[] = \Redis::SERIALIZER_IGBINARY;
         }
 
-        $items = [null, true, -1, 1.5, 'string', ['a','r','r','a','y'], new \stdClass()];
+        $items = parent::provideItemsOfVariousSupportedTypes();
 
         foreach ($serializers as $serializer) {
             $redis->setOption(\Redis::OPT_SERIALIZER, $serializer);
 
             foreach ($items as $item) {
-                $this->queue->push($item);
-                $this->assertEquals($item, $this->queue->pop());
+                $this->queue->push($item[0]);
+                $this->assertEquals($item[0], $this->queue->pop());
             }
         }
+    }
+
+    public static function createHandler(array $config)
+    {
+        return new RedisHandler([
+            'host'   => $config['PHIVE_REDIS_HOST'],
+            'port'   => $config['PHIVE_REDIS_PORT'],
+            'prefix' => $config['PHIVE_REDIS_PREFIX'],
+        ]);
     }
 }

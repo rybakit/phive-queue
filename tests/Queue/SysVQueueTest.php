@@ -14,10 +14,12 @@ class SysVQueueTest extends QueueTest
     }
     use ConcurrencyTrait;
 
-    public static function createHandler(array $config)
+    public function provideItemsOfVariousSupportedTypes()
     {
-        return new SysVHandler([
-            'key' => $config['PHIVE_SYSV_KEY'],
+        return array_diff_key(parent::provideItemsOfVariousSupportedTypes(), [
+            'null'      => false,
+            'array'     => false,
+            'object'    => false,
         ]);
     }
 
@@ -45,5 +47,12 @@ class SysVQueueTest extends QueueTest
         }
 
         self::baseTestPushPopPerformance();
+    }
+
+    public static function createHandler(array $config)
+    {
+        return new SysVHandler([
+            'key' => $config['PHIVE_SYSV_KEY'],
+        ]);
     }
 }

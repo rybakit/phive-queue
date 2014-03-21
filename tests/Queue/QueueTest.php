@@ -80,6 +80,28 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->queue->count());
     }
 
+    /**
+     * @dataProvider provideItemsOfVariousSupportedTypes
+     */
+    public function testSupportedItemTypeLoose($item)
+    {
+        $this->queue->push($item);
+        $this->assertEquals($item, $this->queue->pop());
+    }
+
+    public function provideItemsOfVariousSupportedTypes()
+    {
+        return [
+            'null'      => [null],
+            'bool'      => [true],
+            'int'       => [-1],
+            'float'     => [1.5],
+            'string'    => ['string'],
+            'array'     => [['a','r','r','a','y']],
+            'object'    => [new \stdClass()],
+        ];
+    }
+
     protected function setUp()
     {
         $this->queue = $this->createQueue();

@@ -15,6 +15,14 @@ class SqlitePdoQueueTest extends QueueTest
     use PerformanceTrait;
     use ConcurrencyTrait;
 
+    public function provideItemsOfVariousSupportedTypes()
+    {
+        return array_diff_key(parent::provideItemsOfVariousSupportedTypes(), [
+            'array'     => false,
+            'object'    => false,
+        ]);
+    }
+
     public static function createHandler(array $config)
     {
         // Generate a new db file on every method call to prevent

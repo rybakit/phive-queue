@@ -5,13 +5,13 @@ namespace Phive\Queue\Queue;
 interface Queue extends \Countable
 {
     /**
-     * @param string $item
-     * @param mixed  $eta
+     * @param mixed $item
+     * @param mixed $eta
      */
     public function push($item, $eta = null);
 
     /**
-     * @return string
+     * @return mixed
      *
      * @throws \Phive\Queue\Exception\NoItemAvailableException
      */
