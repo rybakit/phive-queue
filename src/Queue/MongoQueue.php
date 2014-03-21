@@ -57,18 +57,15 @@ class MongoQueue implements Queue
      */
     public function pop()
     {
-        $coll = $this->getCollection();
+        $result = $this->getCollection()->findAndModify(
+             ['eta' => ['$lte' => time()]],
+             [],
+             ['item' => 1, '_id' => 0],
+             ['remove' => 1, 'sort' => ['eta' => 1]]
+        );
 
-        $result = $coll->db->command([
-            'findandmodify' => $this->collName,
-            'remove'        => 1,
-            'fields'        => ['item' => 1],
-            'query'         => ['eta' => ['$lte' => time()]],
-            'sort'          => ['eta' => 1],
-        ]);
-
-        if (isset($result['value']['item'])) {
-            return $result['value']['item'];
+        if (array_key_exists('item', $result)) {
+            return $result['item'];
         }
 
         throw new NoItemAvailableException();
