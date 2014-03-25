@@ -17,7 +17,6 @@ $ composer require rybakit/phive-queue:*
 ## Usage example
 
 ```php
-use Phive\Queue\Exception\NoItemAvailableException;
 use Phive\Queue\Queue\InMemoryQueue;
 
 $queue = new InMemoryQueue();
@@ -29,20 +28,18 @@ $queue->push('item4', '+5 seconds');
 $queue->push('item5', 'next Monday');
 
 // get the queue size
-$count = $queue->count(); // $count = 5;
+$count = $queue->count(); // 5
 
 // pop items off the queue
-try {
-    while (1) {
-        $item = $queue->pop(); // $item = 'item1', 'item2', 'item3';
-    }
-} catch (NoItemAvailableException $e) {
-    // no items are available
-    ...
-}
+// note that is not guaranteed that the items with the same scheduled time 
+// will be recieved in the same order in which they were added
+$item123 = $queue->pop();
+$item123 = $queue->pop();
+$item123 = $queue->pop();
+$item4 = $queue->pop(); // throws Phive\Queue\Exception\NoItemAvailableException
 
 sleep(5);
-$item = $queue->pop(); // $item = 'item4';
+$item4 = $queue->pop();
 
 // clear the queue (will remove 'item5')
 $queue->clear();
