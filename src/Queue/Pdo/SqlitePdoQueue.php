@@ -42,14 +42,6 @@ class SqlitePdoQueue extends PdoQueue
         throw new NoItemAvailableException();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function clear()
-    {
-        return $this->conn->exec('DELETE FROM '.$this->tableName);
-    }
-
     public function getSupportedDrivers()
     {
         return ['sqlite'];

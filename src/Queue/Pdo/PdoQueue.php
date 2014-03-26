@@ -71,7 +71,7 @@ abstract class PdoQueue implements Queue
      */
     public function clear()
     {
-        return $this->conn->exec('TRUNCATE TABLE '.$this->tableName);
+        $this->conn->exec('DELETE FROM '.$this->tableName);
     }
 
     /**
