@@ -34,7 +34,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->queue->push('item');
 
         $this->assertEquals('item', $this->queue->pop());
-        $this->assertNoItemAvailableException($this->queue);
+        $this->assertNoItemIsAvailable($this->queue);
     }
 
     public function testPopOrder()
@@ -59,7 +59,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $eta = time() + 3;
 
         $this->queue->push('item', $eta);
-        $this->assertNoItemAvailableException($this->queue);
+        $this->assertNoItemIsAvailable($this->queue);
 
         $this->callInFuture(function () {
             $this->assertEquals('item', $this->queue->pop());
@@ -110,7 +110,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->stubTimeFunction();
     }
 
-    protected function assertNoItemAvailableException(Queue $queue)
+    protected function assertNoItemIsAvailable(Queue $queue)
     {
         try {
             $queue->pop();
