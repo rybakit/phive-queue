@@ -1,10 +1,6 @@
 <?php
 
-namespace Phive\Queue\Queue;
-
-use Phive\Queue\Exception\NoItemAvailableException;
-use Phive\Queue\Exception\RuntimeException;
-use Phive\Queue\QueueUtils;
+namespace Phive\Queue;
 
 class SysVQueue implements Queue
 {
@@ -83,7 +79,7 @@ class SysVQueue implements Queue
         $data = msg_stat_queue($this->getQueue());
 
         if (!is_array($data)) {
-            throw new RuntimeException('Failed to get the meta data for the queue.');
+            throw new QueueException($this, 'Failed to get the meta data for the queue.');
         }
 
         return $data['msg_qnum'];
@@ -95,7 +91,7 @@ class SysVQueue implements Queue
     public function clear()
     {
         if (!msg_remove_queue($this->getQueue())) {
-            throw new RuntimeException('Failed to destroy the queue.');
+            throw new QueueException($this, 'Failed to destroy the queue.');
         }
 
         $this->queue = null;
@@ -107,7 +103,7 @@ class SysVQueue implements Queue
             $this->queue = msg_get_queue($this->key, $this->perms);
 
             if (!is_resource($this->queue)) {
-                throw new RuntimeException('Failed to create/attach to the queue.');
+                throw new QueueException($this, 'Failed to create/attach to the queue.');
             }
         }
 
@@ -128,13 +124,13 @@ class SysVQueue implements Queue
         }
 
         if (MSG_ENOMSG === $code) {
-            throw new NoItemAvailableException();
+            throw new NoItemAvailableException($this);
         }
 
         if (!$message) {
             $message = $code ? posix_strerror($code) : 'Unknown SysV error';
         }
 
-        throw new RuntimeException($message);
+        throw new QueueException($this, $message);
     }
 }

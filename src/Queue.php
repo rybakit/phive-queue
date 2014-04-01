@@ -1,6 +1,6 @@
 <?php
 
-namespace Phive\Queue\Queue;
+namespace Phive\Queue;
 
 interface Queue extends \Countable
 {
@@ -17,7 +17,7 @@ interface Queue extends \Countable
      *
      * @return mixed
      *
-     * @throws \Phive\Queue\Exception\NoItemAvailableException
+     * @throws NoItemAvailableException
      */
     public function pop();
 

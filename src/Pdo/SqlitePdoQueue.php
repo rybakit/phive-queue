@@ -1,8 +1,8 @@
 <?php
 
-namespace Phive\Queue\Queue\Pdo;
+namespace Phive\Queue\Pdo;
 
-use Phive\Queue\Exception\NoItemAvailableException;
+use Phive\Queue\NoItemAvailableException;
 
 class SqlitePdoQueue extends PdoQueue
 {
@@ -39,7 +39,7 @@ class SqlitePdoQueue extends PdoQueue
             return $row['item'];
         }
 
-        throw new NoItemAvailableException();
+        throw new NoItemAvailableException($this);
     }
 
     public function getSupportedDrivers()

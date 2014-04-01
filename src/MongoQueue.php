@@ -1,9 +1,6 @@
 <?php
 
-namespace Phive\Queue\Queue;
-
-use Phive\Queue\Exception\NoItemAvailableException;
-use Phive\Queue\QueueUtils;
+namespace Phive\Queue;
 
 class MongoQueue implements Queue
 {
@@ -68,7 +65,7 @@ class MongoQueue implements Queue
             return $result['item'];
         }
 
-        throw new NoItemAvailableException();
+        throw new NoItemAvailableException($this);
     }
 
     /**

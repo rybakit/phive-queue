@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests\Handler;
 
-use Phive\Queue\Queue\SysVQueue;
+use Phive\Queue\SysVQueue;
 
 class SysVHandler extends Handler
 {

@@ -1,11 +1,9 @@
 <?php
 
-namespace Phive\Queue\Queue;
+namespace Phive\Queue;
 
 use Pheanstalk_Exception_ServerException as ServerException;
 use Pheanstalk_PheanstalkInterface as Pheanstalk;
-use Phive\Queue\Exception\NoItemAvailableException;
-use Phive\Queue\QueueUtils;
 
 class BeanstalkQueue implements Queue
 {
@@ -46,7 +44,7 @@ class BeanstalkQueue implements Queue
     public function pop()
     {
         if (!$item = $this->client->reserveFromTube($this->tubeName, 0)) {
-            throw new NoItemAvailableException();
+            throw new NoItemAvailableException($this);
         }
 
         $this->client->bury($item);

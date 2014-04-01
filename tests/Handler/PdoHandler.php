@@ -18,7 +18,7 @@ class PdoHandler extends Handler
     {
         $prefix = 'sqlite' === $this->driverName ? 'Sqlite' : 'Generic';
 
-        return '\\Phive\\Queue\\Queue\\Pdo\\'.$prefix.'PdoQueue';
+        return '\\Phive\\Queue\\Pdo\\'.$prefix.'PdoQueue';
     }
 
     public function createQueue()

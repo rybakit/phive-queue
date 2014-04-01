@@ -1,8 +1,8 @@
 <?php
 
-namespace Phive\Queue\Queue\Pdo;
+namespace Phive\Queue\Pdo;
 
-use Phive\Queue\Exception\NoItemAvailableException;
+use Phive\Queue\NoItemAvailableException;
 
 class GenericPdoQueue extends PdoQueue
 {
@@ -42,7 +42,7 @@ class GenericPdoQueue extends PdoQueue
         $stmt->closeCursor();
 
         if (false === $result) {
-            throw new NoItemAvailableException();
+            throw new NoItemAvailableException($this);
         }
 
         return $result;

@@ -1,10 +1,6 @@
 <?php
 
-namespace Phive\Queue\Queue;
-
-use Phive\Queue\Exception\NoItemAvailableException;
-use Phive\Queue\Exception\RuntimeException;
-use Phive\Queue\QueueUtils;
+namespace Phive\Queue;
 
 /**
  * RedisQueue requires redis server 2.6 or higher.
@@ -62,7 +58,7 @@ LUA;
         $this->assertResult($result);
 
         if (-1 === $result) {
-            throw new NoItemAvailableException();
+            throw new NoItemAvailableException($this);
         }
 
         if (\Redis::SERIALIZER_NONE !== $this->redis->getOption(\Redis::OPT_SERIALIZER)) {
@@ -95,12 +91,12 @@ LUA;
     /**
      * @param mixed $result
      *
-     * @throws RuntimeException
+     * @throws QueueException
      */
     protected function assertResult($result)
     {
         if (false === $result) {
-            throw new RuntimeException($this->redis->getLastError());
+            throw new QueueException($this, $this->redis->getLastError());
         }
     }
 }

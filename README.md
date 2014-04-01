@@ -17,7 +17,7 @@ $ composer require rybakit/phive-queue:*
 ## Usage example
 
 ```php
-use Phive\Queue\Queue\InMemoryQueue;
+use Phive\Queue\InMemoryQueue;
 
 $queue = new InMemoryQueue();
 
@@ -36,7 +36,7 @@ $count = $queue->count(); // 5
 $item123 = $queue->pop();
 $item123 = $queue->pop();
 $item123 = $queue->pop();
-$item4 = $queue->pop(); // throws Phive\Queue\Exception\NoItemAvailableException
+$item4 = $queue->pop(); // throws Phive\Queue\NoItemAvailableException
 
 sleep(5);
 $item4 = $queue->pop();
@@ -84,7 +84,7 @@ Parameters:
 ##### Example
 
 ```php
-use Phive\Queue\Queue\MongoQueue;
+use Phive\Queue\MongoQueue;
 
 $client = new MongoClient();
 $queue = new MongoQueue($client, 'my_db', 'my_coll');
@@ -107,7 +107,7 @@ Parameters:
 ##### Example
 
 ```php
-use Phive\Queue\Queue\RedisQueue;
+use Phive\Queue\RedisQueue;
 
 $redis = new Redis();
 $redis->connect('127.0.0.1');
@@ -142,7 +142,7 @@ Parameters:
 
 ```php
 use Pheanstalk_Pheanstalk as Pheanstalk;
-use Phive\Queue\Queue\BeanstalkQueue;
+use Phive\Queue\BeanstalkQueue;
 
 $client = new Pheanstalk('127.0.0.1');
 $queue = new BeanstalkQueue($client, 'my_tube');
@@ -170,7 +170,7 @@ Parameters:
 ##### Example
 
 ```php
-use Phive\Queue\Queue\Pdo\GenericPdoQueue;
+use Phive\Queue\Pdo\GenericPdoQueue;
 
 $pdo = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=foo', 'db_user', 'db_pass');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -205,7 +205,7 @@ Parameters:
 ##### Example
 
 ```php
-use Phive\Queue\Queue\Pdo\SqlitePdoQueue;
+use Phive\Queue\Pdo\SqlitePdoQueue;
 
 $pdo = new PDO('sqlite:/opt/databases/my_db.sq3');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -232,7 +232,7 @@ Parameters:
 ##### Example
 
 ```php
-use Phive\Queue\Queue\SysVQueue;
+use Phive\Queue\SysVQueue;
 
 $queue = new SysVQueue(123456);
 ```
@@ -250,7 +250,7 @@ public InMemoryQueue::__construct()
 ##### Example
 
 ```php
-use Phive\Queue\Queue\InMemoryQueue;
+use Phive\Queue\InMemoryQueue;
 
 $queue = new InMemoryQueue();
 ```
@@ -263,7 +263,7 @@ Every queue method declared in the `Queue` interface will throw an exception if 
 For example, in the code below, the `push()` call will fail with a `MongoConnectionException` exception in a case a remote server unreachable:
 
 ```php
-use Phive\Queue\Queue\MongoQueue;
+use Phive\Queue\MongoQueue;
 
 $queue = new MongoQueue(...);
 
@@ -276,21 +276,21 @@ But sometimes you may want to catch exceptions coming from a queue regardless of
 To do this just wrap your queue object with the `ExceptionalQueue` decorator:
 
 ```php
-use Phive\Queue\Queue\ExceptionalQueue;
-use Phive\Queue\Queue\MongoQueue;
+use Phive\Queue\ExceptionalQueue;
+use Phive\Queue\MongoQueue;
 
 $queue = new MongoQueue(...);
 $queue = new ExceptionalQueue($queue);
 
 // mongodb server goes down here
 
-$queue->push('item'); // throws Phive\Queue\Exception\RuntimeException
+$queue->push('item'); // throws Phive\Queue\QueueException
 ```
 
-And then, to catch queue level exceptions use the `QueueException` [marker interface](http://en.wikipedia.org/wiki/Marker_interface_pattern):
+And then, to catch queue level exceptions use the `QueueException`:
 
 ```php
-use Phive\Queue\Exception\QueueException;
+use Phive\Queue\QueueException;
 
 ...
 

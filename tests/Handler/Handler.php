@@ -63,7 +63,7 @@ abstract class Handler implements \Serializable
     }
 
     /**
-     * @return \Phive\Queue\Queue\Queue
+     * @return \Phive\Queue\Queue
      */
     abstract public function createQueue();
 }

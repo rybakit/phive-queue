@@ -1,9 +1,6 @@
 <?php
 
-namespace Phive\Queue\Queue;
-
-use Phive\Queue\Exception\QueueException;
-use Phive\Queue\Exception\RuntimeException;
+namespace Phive\Queue;
 
 class ExceptionalQueue implements Queue
 {
@@ -73,7 +70,7 @@ class ExceptionalQueue implements Queue
         } catch (QueueException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
+            throw new QueueException($this->queue, $e->getMessage(), 0, $e);
         }
 
         return $result;

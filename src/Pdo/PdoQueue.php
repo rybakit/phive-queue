@@ -1,9 +1,8 @@
 <?php
 
-namespace Phive\Queue\Queue\Pdo;
+namespace Phive\Queue\Pdo;
 
-use Phive\Queue\Exception\InvalidArgumentException;
-use Phive\Queue\Queue\Queue;
+use Phive\Queue\Queue;
 use Phive\Queue\QueueUtils;
 
 abstract class PdoQueue implements Queue
@@ -21,14 +20,14 @@ abstract class PdoQueue implements Queue
     public function __construct(\PDO $conn, $tableName)
     {
         if (\PDO::ERRMODE_EXCEPTION !== $conn->getAttribute(\PDO::ATTR_ERRMODE)) {
-            throw new InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw exceptions.', get_class($this)));
+            throw new \InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw exceptions.', get_class($this)));
         }
 
         $supportedDrivers = (array) $this->getSupportedDrivers();
         $driver = $conn->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
         if (!in_array($driver, $supportedDrivers)) {
-            throw new InvalidArgumentException(sprintf('PDO driver "%s" is unsupported by "%s".', $driver, get_class($this)));
+            throw new \InvalidArgumentException(sprintf('PDO driver "%s" is unsupported by "%s".', $driver, get_class($this)));
         }
 
         $this->conn = $conn;

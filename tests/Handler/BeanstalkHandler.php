@@ -4,7 +4,7 @@ namespace Phive\Queue\Tests\Handler;
 
 use Pheanstalk_Exception_ServerException as ServerException;
 use Pheanstalk_Pheanstalk as Pheanstalk;
-use Phive\Queue\Queue\BeanstalkQueue;
+use Phive\Queue\BeanstalkQueue;
 
 class BeanstalkHandler extends Handler
 {

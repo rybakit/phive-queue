@@ -2,8 +2,6 @@
 
 namespace Phive\Queue;
 
-use Phive\Queue\Exception\InvalidArgumentException;
-
 class QueueUtils
 {
     private function __construct()
@@ -15,7 +13,7 @@ class QueueUtils
      *
      * @return int The Unix timestamp.
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function normalizeEta($eta)
     {
@@ -32,6 +30,6 @@ class QueueUtils
             return $eta;
         }
 
-        throw new InvalidArgumentException('The eta parameter is not valid.');
+        throw new \InvalidArgumentException('The eta parameter is not valid.');
     }
 }

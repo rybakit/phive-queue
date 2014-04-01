@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests\Handler;
 
-use Phive\Queue\Queue\MongoQueue;
+use Phive\Queue\MongoQueue;
 
 class MongoHandler extends Handler
 {

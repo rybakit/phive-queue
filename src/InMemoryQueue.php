@@ -1,9 +1,6 @@
 <?php
 
-namespace Phive\Queue\Queue;
-
-use Phive\Queue\Exception\NoItemAvailableException;
-use Phive\Queue\QueueUtils;
+namespace Phive\Queue;
 
 class InMemoryQueue implements Queue
 {
@@ -48,7 +45,7 @@ class InMemoryQueue implements Queue
             }
         }
 
-        throw new NoItemAvailableException();
+        throw new NoItemAvailableException($this);
     }
 
     /**

@@ -10,7 +10,7 @@ abstract class PdoQueueTest extends QueueTest
     use PersistenceTrait;
 
     /**
-     * @expectedException \Phive\Queue\Exception\InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testWrongErrorMode()
     {

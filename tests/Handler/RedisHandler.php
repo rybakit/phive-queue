@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests\Handler;
 
-use Phive\Queue\Queue\RedisQueue;
+use Phive\Queue\RedisQueue;
 
 class RedisHandler extends Handler
 {

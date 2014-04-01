@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-use Phive\Queue\Queue\InMemoryQueue;
+use Phive\Queue\InMemoryQueue;
 
 class InMemoryQueueTest extends QueueTest
 {

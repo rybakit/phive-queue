@@ -2,8 +2,8 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-use Phive\Queue\Exception\NoItemAvailableException;
-use Phive\Queue\Queue\Queue;
+use Phive\Queue\NoItemAvailableException;
+use Phive\Queue\Queue;
 
 abstract class QueueTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     public static $now;
 
     /**
-     * @var \Phive\Queue\Queue\Queue
+     * @var \Phive\Queue\Queue
      */
     protected $queue;
 
@@ -26,7 +26,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
 
     public function testQueueImplementsQueueInterface()
     {
-        $this->assertInstanceOf('Phive\Queue\Queue\Queue', $this->queue);
+        $this->assertInstanceOf('Phive\Queue\Queue', $this->queue);
     }
 
     public function testPushPop()
@@ -148,7 +148,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Phive\Queue\Queue\Queue
+     * @return \Phive\Queue\Queue
      */
     abstract public function createQueue();
 }

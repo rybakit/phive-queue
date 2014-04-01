@@ -10,7 +10,7 @@ trait PersistenceTrait
     private static $handler;
 
     /**
-     * @return \Phive\Queue\Queue\Queue
+     * @return \Phive\Queue\Queue
      */
     public function createQueue()
     {
