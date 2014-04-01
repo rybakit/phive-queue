@@ -61,7 +61,7 @@ class ExceptionalQueue implements Queue
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws QueueException
      */
     protected function exceptional(\Closure $func)
     {
