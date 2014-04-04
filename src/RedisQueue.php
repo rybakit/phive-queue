@@ -39,7 +39,7 @@ LUA;
      */
     public function push($item, $eta = null)
     {
-        $eta = QueueUtils::normalizeEta($eta);
+        $eta = normalize_eta($eta);
 
         if (\Redis::SERIALIZER_NONE !== $this->redis->getOption(\Redis::OPT_SERIALIZER)) {
             $item = $this->redis->_serialize($item);

@@ -49,7 +49,7 @@ class SysVQueue implements Queue
      */
     public function push($item, $eta = null)
     {
-        $eta = QueueUtils::normalizeEta($eta);
+        $eta = normalize_eta($eta);
 
         $this->exceptional(function (&$errorCode) use ($item, $eta) {
             return msg_send($this->getQueue(), $eta, $item, $this->serialize, false, $errorCode);
