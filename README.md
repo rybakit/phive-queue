@@ -172,7 +172,7 @@ Parameters:
 ```php
 use Phive\Queue\Pdo\GenericPdoQueue;
 
-$pdo = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=foo', 'db_user', 'db_pass');
+$pdo = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=my_db', 'db_user', 'db_pass');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
