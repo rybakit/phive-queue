@@ -16,14 +16,14 @@ abstract class PdoQueueTest extends QueueTest
     {
         $handler = self::getHandler();
 
-        $conn = new \PDO(
+        $pdo = new \PDO(
             $handler->getOption('dsn'),
             $handler->getOption('username'),
             $handler->getOption('password')
         );
-        $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
+        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
 
         $class = $handler->getQueueClass();
-        new $class($conn, $handler->getOption('table_name'));
+        new $class($pdo, $handler->getOption('table_name'));
     }
 }

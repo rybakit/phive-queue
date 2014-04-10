@@ -17,21 +17,21 @@ class SqlitePdoQueue extends PdoQueue
             time()
         );
 
-        $this->conn->exec('BEGIN IMMEDIATE');
+        $this->pdo->exec('BEGIN IMMEDIATE');
 
         try {
-            $stmt = $this->conn->query($sql);
+            $stmt = $this->pdo->query($sql);
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
             if ($row) {
                 $sql = sprintf('DELETE FROM %s WHERE id = %d', $this->tableName, $row['id']);
-                $this->conn->exec($sql);
+                $this->pdo->exec($sql);
             }
 
-            $this->conn->exec('COMMIT');
+            $this->pdo->exec('COMMIT');
         } catch (\Exception $e) {
-            $this->conn->exec('ROLLBACK');
+            $this->pdo->exec('ROLLBACK');
             throw $e;
         }
 

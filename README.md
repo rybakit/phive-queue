@@ -158,12 +158,12 @@ On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXC
 ##### Constructor
 
 ```php
-public GenericPdoQueue::__construct(PDO $conn, string $tableName [, string $routineName = null ] )
+public GenericPdoQueue::__construct(PDO $pdo, string $tableName [, string $routineName = null ] )
 ```
 
 Parameters:
 
-> <b>conn</b>        The PDO instance<br>
+> <b>pdo</b>         The PDO instance<br>
 > <b>tableName</b>   The table name<br>
 > <b>routineName</b> <i>Optional</i>. The routine name. Default to <b>tableName</b>_pop<br>
 
@@ -194,12 +194,12 @@ $pdo->exec('PRAGMA journal_mode=WAL');
 ##### Constructor
 
 ```php
-public SqlitePdoQueue::__construct(PDO $conn, string $tableName)
+public SqlitePdoQueue::__construct(PDO $pdo, string $tableName)
 ```
 
 Parameters:
 
-> <b>conn</b>      The PDO instance<br>
+> <b>pdo</b>       The PDO instance<br>
 > <b>tableName</b> The table name<br>
 
 ##### Example

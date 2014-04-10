@@ -10,33 +10,33 @@ abstract class PdoQueue implements Queue
     /**
      * @var \PDO
      */
-    protected $conn;
+    protected $pdo;
 
     /**
      * @var string
      */
     protected $tableName;
 
-    public function __construct(\PDO $conn, $tableName)
+    public function __construct(\PDO $pdo, $tableName)
     {
-        if (\PDO::ERRMODE_EXCEPTION !== $conn->getAttribute(\PDO::ATTR_ERRMODE)) {
+        if (\PDO::ERRMODE_EXCEPTION !== $pdo->getAttribute(\PDO::ATTR_ERRMODE)) {
             throw new \InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw exceptions.', get_class($this)));
         }
 
         $supportedDrivers = (array) $this->getSupportedDrivers();
-        $driver = $conn->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $driver = $pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
         if (!in_array($driver, $supportedDrivers)) {
             throw new \InvalidArgumentException(sprintf('PDO driver "%s" is unsupported by "%s".', $driver, get_class($this)));
         }
 
-        $this->conn = $conn;
+        $this->pdo = $pdo;
         $this->tableName = (string) $tableName;
     }
 
-    public function getConnection()
+    public function getPdo()
     {
-        return $this->conn;
+        return $this->pdo;
     }
 
     /**
@@ -47,10 +47,10 @@ abstract class PdoQueue implements Queue
         $sql = sprintf('INSERT INTO %s (eta, item) VALUES (%d, %s)',
             $this->tableName,
             Q\normalize_eta($eta),
-            $this->conn->quote($item)
+            $this->pdo->quote($item)
         );
 
-        $this->conn->exec($sql);
+        $this->pdo->exec($sql);
     }
 
     /**
@@ -58,7 +58,7 @@ abstract class PdoQueue implements Queue
      */
     public function count()
     {
-        $stmt = $this->conn->query('SELECT COUNT(*) FROM '.$this->tableName);
+        $stmt = $this->pdo->query('SELECT COUNT(*) FROM '.$this->tableName);
         $result = $stmt->fetchColumn();
         $stmt->closeCursor();
 
@@ -70,7 +70,7 @@ abstract class PdoQueue implements Queue
      */
     public function clear()
     {
-        $this->conn->exec('DELETE FROM '.$this->tableName);
+        $this->pdo->exec('DELETE FROM '.$this->tableName);
     }
 
     /**

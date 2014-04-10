@@ -7,7 +7,7 @@ class PdoHandler extends Handler
     /**
      * @var \PDO
      */
-    private $conn;
+    private $pdo;
 
     /**
      * @var string
@@ -25,7 +25,7 @@ class PdoHandler extends Handler
     {
         $class = $this->getQueueClass();
 
-        return new $class($this->conn, $this->getOption('table_name'));
+        return new $class($this->pdo, $this->getOption('table_name'));
     }
 
     public function reset()
@@ -38,24 +38,24 @@ class PdoHandler extends Handler
                 '{{routine_name}}'  => $this->getOption('table_name').'_pop',
             ]);
 
-            $this->conn->exec($sql);
+            $this->pdo->exec($sql);
         }
     }
 
     public function clear()
     {
-        $this->conn->exec('DELETE FROM '.$this->getOption('table_name'));
+        $this->pdo->exec('DELETE FROM '.$this->getOption('table_name'));
     }
 
     protected function configure()
     {
-        $this->conn = new \PDO(
+        $this->pdo = new \PDO(
             $this->getOption('dsn'),
             $this->getOption('username'),
             $this->getOption('password')
         );
-        $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $this->driverName = $this->conn->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->driverName = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
         $this->configureDriver();
     }
@@ -64,7 +64,7 @@ class PdoHandler extends Handler
     {
         switch ($this->driverName) {
             case 'sqlite':
-                $this->conn->exec('PRAGMA journal_mode=WAL');
+                $this->pdo->exec('PRAGMA journal_mode=WAL');
                 break;
         }
     }

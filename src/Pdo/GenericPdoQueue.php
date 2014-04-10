@@ -25,9 +25,9 @@ class GenericPdoQueue extends PdoQueue
      */
     private $routineName;
 
-    public function __construct(\PDO $conn, $tableName, $routineName = null)
+    public function __construct(\PDO $pdo, $tableName, $routineName = null)
     {
-        parent::__construct($conn, $tableName);
+        parent::__construct($pdo, $tableName);
 
         $this->routineName = $routineName ?: $this->tableName.'_pop';
     }
@@ -37,7 +37,7 @@ class GenericPdoQueue extends PdoQueue
      */
     public function pop()
     {
-        $stmt = $this->conn->query($this->getPopSql());
+        $stmt = $this->pdo->query($this->getPopSql());
         $result = $stmt->fetchColumn();
         $stmt->closeCursor();
 
@@ -56,7 +56,7 @@ class GenericPdoQueue extends PdoQueue
     protected function getPopSql()
     {
         return sprintf(
-            static::$popSqls[$this->conn->getAttribute(\PDO::ATTR_DRIVER_NAME)],
+            static::$popSqls[$this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME)],
             $this->routineName,
             time()
         );
