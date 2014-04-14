@@ -141,7 +141,8 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $namespace = substr($class, 0, strrpos($class, '\\'));
 
         // this code should be evaluated directly after the queue class is loaded
-        // and before any queue method is called
+        // and before any queue method is called,
+        // see https://bugs.php.net/bug.php?id=64346
         if (!is_callable("$namespace\\time")) {
             eval('namespace '.$namespace.' { function time() { return \\'.__CLASS__.'::$now ?: \time(); }}');
         }
