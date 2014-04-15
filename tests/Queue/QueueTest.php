@@ -13,7 +13,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     public static $now;
 
     /**
-     * @var \Phive\Queue\Queue
+     * @var Queue
      */
     protected $queue;
 
@@ -149,7 +149,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Phive\Queue\Queue
+     * @return Queue
      */
     abstract public function createQueue();
 }
