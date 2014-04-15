@@ -125,7 +125,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     {
         if ($sleep) {
             sleep($futureTime - time());
-            return $func($this);
+            return $func();
         }
 
         self::$now = $futureTime;
