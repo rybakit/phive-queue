@@ -5,15 +5,17 @@ php:
     - 5.5
     - 5.6
     - hhvm
-    
+    - hhvm-nightly
+
 matrix:
     allow_failures:
         - php: hhvm
+        - php: hhvm-nightly
 
 services:
     - mongodb
     - redis-server
-    
+
 install:
     - sudo apt-get install -y beanstalkd
     - sudo beanstalkd -d -l 127.0.0.1 -p 11300
