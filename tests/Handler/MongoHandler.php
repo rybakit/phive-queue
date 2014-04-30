@@ -27,7 +27,7 @@ class MongoHandler extends Handler
 
     public function reset()
     {
-        $this->client->dropDB($this->getOption('db_name'));
+        $this->client->selectDB($this->getOption('db_name'))->drop();
     }
 
     public function clear()
