@@ -61,7 +61,7 @@ class MongoQueue implements Queue
              ['remove' => 1, 'sort' => ['eta' => 1]]
         );
 
-        if (array_key_exists('item', $result)) {
+        if ($result && array_key_exists('item', $result)) {
             return $result['item'];
         }
 
