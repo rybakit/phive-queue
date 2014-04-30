@@ -30,7 +30,7 @@ class PdoHandler extends Handler
 
     public function reset()
     {
-        $sqlDir = realpath(__DIR__.'/../../contrib/'.$this->driverName);
+        $sqlDir = realpath(__DIR__.'/../../res/'.$this->driverName);
 
         foreach (glob($sqlDir.'/*.sql') as $file) {
             $sql = strtr(file_get_contents($file), [
