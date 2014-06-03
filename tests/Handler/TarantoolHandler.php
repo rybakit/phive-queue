@@ -15,8 +15,8 @@ class TarantoolHandler extends Handler
     {
         return new TarantoolQueue(
             $this->tarantool,
-            $this->getOption('space'),
-            $this->getOption('tube_name')
+            $this->getOption('tube_name'),
+            $this->getOption('space')
         );
     }
 
