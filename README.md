@@ -132,7 +132,7 @@ Parameters:
 
 > <b>tarantool</b>  The Tarantool instance<br>
 > <b>tubeName</b>   The tube name<br>
-> <b>space</b>      <i>Optional</i>. The space number<br>. Default to 0
+> <b>space</b>      <i>Optional</i>. The space number. Default to 0
 
 ##### Example
 
