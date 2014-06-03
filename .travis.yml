@@ -16,7 +16,16 @@ services:
     - mongodb
     - redis-server
 
+before_install:
+    - wget http://tarantool.org/dist/public.key && sudo apt-key add ./public.key && release=`lsb_release -c -s` && echo "deb http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list && echo "deb-src http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list
+    - sudo apt-get update
+
 install:
+    - sudo apt-get install tarantool tarantool-client
+    - sudo wget https://raw.githubusercontent.com/rybakit/queue/truncate/init.lua -O /usr/share/tarantool/lua/init.lua
+    - sudo wget https://raw.githubusercontent.com/rybakit/queue/truncate/tarantool.cfg -O /etc/tarantool/instances.enabled/queue.cfg
+    - sudo service tarantool restart
+
     - sudo apt-get install -y beanstalkd
     - sudo beanstalkd -d -l 127.0.0.1 -p 11300
     - bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then printf "extension = mongo.so\nextension = redis.so" >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini; fi;'
