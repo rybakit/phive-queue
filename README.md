@@ -52,6 +52,7 @@ Currently, there are the following queues available:
 
 * [MongoQueue](#mongoqueue)
 * [RedisQueue](#redisqueue)
+* [TarantoolQueue](#tarantoolqueue)
 * [BeanstalkQueue](#beanstalkqueue)
 * [GenericPdoQueue](#genericpdoqueue)
 * [SqlitePdoQueue](#sqlitepdoqueue)
@@ -117,6 +118,29 @@ $redis->setOption(Redis::OPT_PREFIX, 'my_prefix:');
 // $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 
 $queue = new RedisQueue($redis);
+```
+
+#### TarantoolQueue
+
+##### Constructor
+
+```php
+public TarantoolQueue::__construct(Tarantool $tarantool, string $tubeName[, int $space = null ])
+```
+
+Parameters:
+
+> <b>tarantool</b>  The Tarantool instance<br>
+> <b>tubeName</b>   The tube name<br>
+> <b>space</b>      <i>Optional</i>. The space number<br>. Default to 0
+
+##### Example
+
+```php
+use Phive\Queue\TarantoolQueue;
+
+$tarantool = new Tarantool('127.0.0.1', 33013);
+$queue = new TarantoolQueue($tarantool, 'my_tube');
 ```
 
 #### BeanstalkQueue

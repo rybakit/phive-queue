@@ -20,6 +20,11 @@
         <env name="PHIVE_REDIS_PORT" value="6379" />
         <env name="PHIVE_REDIS_PREFIX" value="phive_tests:queue:" />
 
+        <env name="PHIVE_TARANTOOL_HOST" value="127.0.0.1" />
+        <env name="PHIVE_TARANTOOL_PORT" value="33013" />
+        <env name="PHIVE_TARANTOOL_SPACE" value="0" />
+        <env name="PHIVE_TARANTOOL_TUBE_NAME" value="phive_queue" />
+
         <env name="PHIVE_BEANSTALK_HOST" value="127.0.0.1" />
         <env name="PHIVE_BEANSTALK_PORT" value="11300" />
         <env name="PHIVE_BEANSTALK_TUBE_NAME" value="phive_queue" />
