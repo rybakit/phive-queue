@@ -125,7 +125,7 @@ $queue = new RedisQueue($redis);
 ##### Constructor
 
 ```php
-public TarantoolQueue::__construct(Tarantool $tarantool, string $tubeName[, int $space = null ])
+public TarantoolQueue::__construct(Tarantool $tarantool, string $tubeName [, int $space = null ])
 ```
 
 Parameters:
