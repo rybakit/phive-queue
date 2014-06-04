@@ -25,7 +25,8 @@ install:
     - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/init.lua -O /usr/share/tarantool/lua/init.lua
     - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/tarantool.cfg -O /etc/tarantool/instances.enabled/queue.cfg
     - sudo service tarantool restart
-    - git clone https://github.com/tarantool/tarantool-php.git && cd ./tarantool-php && phpize && ./configure && make && sudo make install
+    #- git clone https://github.com/tarantool/tarantool-php.git && cd ./tarantool-php && phpize && ./configure && make && sudo make install
+    - git clone https://github.com/tony2001/tarantool-php.git && cd ./tarantool-php && phpize && ./configure && make && sudo make install
 
     - sudo apt-get install -y beanstalkd
     - sudo beanstalkd -d -l 127.0.0.1 -p 11300
