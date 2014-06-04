@@ -23,8 +23,8 @@ class TarantoolHandler extends Handler
     public function clear()
     {
         $this->tarantool->call('queue.truncate', [
-            $this->getOption('tube_name'),
             $this->getOption('space'),
+            $this->getOption('tube_name'),
         ]);
     }
 
