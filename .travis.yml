@@ -21,7 +21,6 @@ before_install:
     - sudo apt-get update
 
 install:
-    - sudo apt-get install php5-dev
     - sudo apt-get install tarantool tarantool-client
     - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/init.lua -O /usr/share/tarantool/lua/init.lua
     - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/tarantool.cfg -O /etc/tarantool/instances.enabled/queue.cfg
