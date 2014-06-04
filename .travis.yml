@@ -22,8 +22,8 @@ before_install:
 
 install:
     - sudo apt-get install tarantool tarantool-client
-    - sudo wget https://raw.githubusercontent.com/rybakit/queue/truncate/init.lua -O /usr/share/tarantool/lua/init.lua
-    - sudo wget https://raw.githubusercontent.com/rybakit/queue/truncate/tarantool.cfg -O /etc/tarantool/instances.enabled/queue.cfg
+    - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/init.lua -O /usr/share/tarantool/lua/init.lua
+    - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/tarantool.cfg -O /etc/tarantool/instances.enabled/queue.cfg
     - sudo service tarantool restart
     - git clone https://github.com/tarantool/tarantool-php.git && cd ./tarantool-php && phpize && ./configure && make && sudo make install
 
