@@ -17,7 +17,7 @@ class TarantoolQueueTest extends QueueTest
     /**
      * @see https://github.com/tarantool/tarantool/issues/336
      */
-    public function testItemsOfDifferentLengths()
+    public function testItemsOfDifferentLength()
     {
         for ($item = 'x'; strlen($item) < 9; $item .= 'x') {
             $this->queue->push($item);
