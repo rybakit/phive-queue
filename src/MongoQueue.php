@@ -41,10 +41,8 @@ class MongoQueue implements Queue
      */
     public function push($item, $eta = null)
     {
-        $eta = normalize_eta($eta);
-
         $this->getCollection()->insert([
-            'eta'  => $eta,
+            'eta'  => norm_eta($eta),
             'item' => $item,
         ]);
     }

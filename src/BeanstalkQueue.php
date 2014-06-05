@@ -33,9 +33,12 @@ class BeanstalkQueue implements Queue
      */
     public function push($item, $eta = null)
     {
-        $delay = (null !== $eta) ? normalize_eta($eta) - time() : 0;
-
-        $this->client->putInTube($this->tubeName, $item, Pheanstalk::DEFAULT_PRIORITY, $delay);
+        $this->client->putInTube(
+            $this->tubeName,
+            $item,
+            Pheanstalk::DEFAULT_PRIORITY,
+            calc_delay($eta)
+        );
     }
 
     /**

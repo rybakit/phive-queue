@@ -9,7 +9,7 @@ namespace Phive\Queue;
  *
  * @throws \InvalidArgumentException
  */
-function normalize_eta($eta)
+function norm_eta($eta)
 {
     if (null === $eta) {
         return time();
@@ -25,4 +25,18 @@ function normalize_eta($eta)
     }
 
     throw new \InvalidArgumentException('The eta parameter is not valid.');
+}
+
+/**
+ * @param mixed $eta
+ *
+ * @return int
+ */
+function calc_delay($eta)
+{
+    if (null === $eta) {
+        return 0;
+    }
+
+    return -time() + norm_eta($eta);
 }

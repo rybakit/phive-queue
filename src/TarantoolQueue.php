@@ -31,15 +31,13 @@ class TarantoolQueue implements Queue
      */
     public function push($item, $eta = null)
     {
-        $delay = (null !== $eta) ? normalize_eta($eta) - time() : 0;
-
         // see https://github.com/tarantool/tarantool/issues/336
         $item = pack('a9', $item);
 
         $this->tarantool->call('queue.put', [
             $this->space,
             $this->tubeName,
-            "$delay",
+            (string) calc_delay($eta),
             '0',
             '0',
             '0',
@@ -55,7 +53,7 @@ class TarantoolQueue implements Queue
         $result = $this->tarantool->call('queue.take', [
             $this->space,
             $this->tubeName,
-            '0.0001',
+            '0.00000001',
         ]);
 
         if (empty($result['count'])) {

@@ -46,7 +46,7 @@ abstract class PdoQueue implements Queue
     {
         $sql = sprintf('INSERT INTO %s (eta, item) VALUES (%d, %s)',
             $this->tableName,
-            Q\normalize_eta($eta),
+            Q\norm_eta($eta),
             $this->pdo->quote($item)
         );
 
