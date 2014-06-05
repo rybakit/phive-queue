@@ -14,16 +14,22 @@ class TarantoolQueueTest extends QueueTest
 
     protected $supportsExpiredEta = false;
 
+    /**
+     * @see https://github.com/tarantool/tarantool/issues/336
+     */
+    public function testItemsOfDifferentLengths()
+    {
+        for ($item = 'x'; strlen($item) < 9; $item .= 'x') {
+            $this->queue->push($item);
+            $this->assertEquals($item, $this->queue->pop());
+        }
+    }
+
     public function provideItemsOfVariousTypes()
     {
         return array_diff_key(parent::provideItemsOfVariousTypes(), [
-            'null'      => false,
-            'bool'      => false,
-            'int'       => false,
-            'float'     => false,
             'array'     => false,
             'object'    => false,
-
         ]);
     }
 

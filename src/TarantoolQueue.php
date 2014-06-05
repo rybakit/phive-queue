@@ -26,17 +26,15 @@ class TarantoolQueue implements Queue
         $this->tubeName = $tubeName;
     }
 
-    public function getTarantool()
-    {
-        return $this->tarantool;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function push($item, $eta = null)
     {
         $delay = (null !== $eta) ? normalize_eta($eta) - time() : 0;
+
+        // see https://github.com/tarantool/tarantool/issues/336
+        $item = pack('a9', $item);
 
         $this->tarantool->call('queue.put', [
             $this->space,
@@ -64,7 +62,10 @@ class TarantoolQueue implements Queue
             throw new NoItemAvailableException($this);
         }
 
-        return $result['tuples_list'][0][3];
+        $item = $result['tuples_list'][0][3];
+        $item = rtrim($item, "\0");
+
+        return $item;
     }
 
     /**
