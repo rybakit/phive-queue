@@ -10,7 +10,7 @@ class TarantoolQueue implements Queue
     private $tarantool;
 
     /**
-     * @var int
+     * @var string
      */
     private $space;
 
@@ -22,7 +22,7 @@ class TarantoolQueue implements Queue
     public function __construct(\Tarantool $tarantool, $tubeName, $space = null)
     {
         $this->tarantool = $tarantool;
-        $this->space = null === $space ? 0 : $space;
+        $this->space = null === $space ? '0' : (string) $space;
         $this->tubeName = $tubeName;
     }
 
@@ -72,19 +72,23 @@ class TarantoolQueue implements Queue
      */
     public function count()
     {
-        $result = $this->tarantool->call('queue.statistics', []);
-        if (empty($result['count'])) {
-            return 0;
+        $result = $this->tarantool->call('queue.statistics', [
+            $this->space,
+            $this->tubeName,
+        ]);
+
+        if (empty($result['tuples_list'][0])) {
+            throw new QueueException($this, 'Failed to count items.');
         }
 
-        $tuples = $result['tuples_list'];
-        $index = array_search("space{$this->space}.{$this->tubeName}.tasks.total", $tuples[0], true);
+        $tuple = $result['tuples_list'][0];
+        $index = array_search("space{$this->space}.{$this->tubeName}.tasks.total", $tuple, true);
 
-        if (false !== $index) {
-            return (int) $tuples[0][$index + 1];
+        if (false === $index || !isset($tuple[$index + 1])) {
+            throw new QueueException($this, 'Failed to count items.');
         }
 
-        return 0;
+        return (int) $tuple[$index + 1];
     }
 
     /**
