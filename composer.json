@@ -20,6 +20,7 @@
     "suggest": {
         "ext-mongo":      ">=1.3.0",
         "ext-phpredis":   ">=2.2.3",
+        "ext-tarantool":  "",
         "ext-pdo":        "",
         "ext-pdo_mysql":  "",
         "ext-pdo_pgsql":  "",
