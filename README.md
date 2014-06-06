@@ -53,7 +53,7 @@ Currently, there are the following queues available:
 * [MongoQueue](#mongoqueue)
 * [RedisQueue](#redisqueue)
 * [TarantoolQueue](#tarantoolqueue)
-* [BeanstalkQueue](#beanstalkqueue)
+* [PheanstalkQueue](#pheanstalkqueue)
 * [GenericPdoQueue](#genericpdoqueue)
 * [SqlitePdoQueue](#sqlitepdoqueue)
 * [SysVQueue](#sysvqueue)
@@ -143,9 +143,9 @@ $tarantool = new Tarantool('127.0.0.1', 33013);
 $queue = new TarantoolQueue($tarantool, 'my_tube');
 ```
 
-#### BeanstalkQueue
+#### PheanstalkQueue
 
-The `BeanstalkQueue` requires the [Pheanstalk](https://github.com/pda/pheanstalk) library ([Beanstalk](http://kr.github.io/beanstalkd) client) to be installed:
+The `PheanstalkQueue` requires the [Pheanstalk](https://github.com/pda/pheanstalk) library ([Beanstalk](http://kr.github.io/beanstalkd) client) to be installed:
 
 ```sh
 $ composer require pda/pheanstalk:~2.1
@@ -154,22 +154,22 @@ $ composer require pda/pheanstalk:~2.1
 ##### Constructor
 
 ```php
-public BeanstalkQueue::__construct(Pheanstalk_Pheanstalk $client, string $tubeName)
+public PheanstalkQueue::__construct(Pheanstalk_Pheanstalk $pheanstalk, string $tubeName)
 ```
 
 Parameters:
 
-> <b>client</b>   The Pheanstalk_Pheanstalk instance<br>
-> <b>tubeName</b> The tube name<br>
+> <b>$pheanstalk</b>    The Pheanstalk_Pheanstalk instance<br>
+> <b>tubeName</b>       The tube name<br>
 
 ##### Example
 
 ```php
 use Pheanstalk_Pheanstalk as Pheanstalk;
-use Phive\Queue\BeanstalkQueue;
+use Phive\Queue\PheanstalkQueue;
 
-$client = new Pheanstalk('127.0.0.1');
-$queue = new BeanstalkQueue($client, 'my_tube');
+$pheanstalk = new Pheanstalk('127.0.0.1');
+$queue = new PheanstalkQueue($pheanstalk, 'my_tube');
 ```
 
 #### GenericPdoQueue

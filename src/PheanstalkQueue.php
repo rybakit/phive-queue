@@ -5,27 +5,22 @@ namespace Phive\Queue;
 use Pheanstalk_Exception_ServerException as ServerException;
 use Pheanstalk_PheanstalkInterface as Pheanstalk;
 
-class BeanstalkQueue implements Queue
+class PheanstalkQueue implements Queue
 {
     /**
      * @var Pheanstalk
      */
-    private $client;
+    private $pheanstalk;
 
     /**
      * @var string
      */
     private $tubeName;
 
-    public function __construct(Pheanstalk $client, $tubeName)
+    public function __construct(Pheanstalk $pheanstalk, $tubeName)
     {
-        $this->client = $client;
+        $this->pheanstalk = $pheanstalk;
         $this->tubeName = $tubeName;
-    }
-
-    public function getClient()
-    {
-        return $this->client;
     }
 
     /**
@@ -33,7 +28,7 @@ class BeanstalkQueue implements Queue
      */
     public function push($item, $eta = null)
     {
-        $this->client->putInTube(
+        $this->pheanstalk->putInTube(
             $this->tubeName,
             $item,
             Pheanstalk::DEFAULT_PRIORITY,
@@ -46,11 +41,11 @@ class BeanstalkQueue implements Queue
      */
     public function pop()
     {
-        if (!$item = $this->client->reserveFromTube($this->tubeName, 0)) {
+        if (!$item = $this->pheanstalk->reserveFromTube($this->tubeName, 0)) {
             throw new NoItemAvailableException($this);
         }
 
-        $this->client->bury($item);
+        $this->pheanstalk->bury($item);
 
         return $item->getData();
     }
@@ -60,7 +55,7 @@ class BeanstalkQueue implements Queue
      */
     public function count()
     {
-        $stats =  $this->client->statsTube($this->tubeName);
+        $stats = $this->pheanstalk->statsTube($this->tubeName);
 
         return $stats->current_jobs_ready;
     }
@@ -78,8 +73,8 @@ class BeanstalkQueue implements Queue
     protected function doClear($state)
     {
         try {
-            while ($item = $this->client->{'peek'.$state}($this->tubeName)) {
-                $this->client->delete($item);
+            while ($item = $this->pheanstalk->{'peek'.$state}($this->tubeName)) {
+                $this->pheanstalk->delete($item);
             }
         } catch (ServerException $e) {
         }

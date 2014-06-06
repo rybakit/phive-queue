@@ -2,9 +2,9 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-use Phive\Queue\Tests\Handler\BeanstalkHandler;
+use Phive\Queue\Tests\Handler\PheanstalkHandler;
 
-class BeanstalkQueueTest extends QueueTest
+class PheanstalkQueueTest extends QueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;
@@ -21,7 +21,7 @@ class BeanstalkQueueTest extends QueueTest
 
     public static function createHandler(array $config)
     {
-        return new BeanstalkHandler([
+        return new PheanstalkHandler([
             'host'      => $config['PHIVE_BEANSTALK_HOST'],
             'port'      => $config['PHIVE_BEANSTALK_PORT'],
             'tube_name' => $config['PHIVE_BEANSTALK_TUBE_NAME'],
