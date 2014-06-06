@@ -1,7 +1,7 @@
 {
     "name": "rybakit/phive-queue",
     "description": "$queue->push('I can be popped off after', '10 minutes');",
-    "keywords": ["queue scheduler priority delayed"],
+    "keywords": ["queue schedule priority delayed mongodb redis tarantool beanstalk sysv pdo"],
     "homepage": "https://github.com/rybakit/phive-queue",
     "type": "library",
     "license": "MIT",
