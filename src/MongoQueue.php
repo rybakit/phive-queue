@@ -7,7 +7,7 @@ class MongoQueue implements Queue
     /**
      * @var \MongoClient
      */
-    private $client;
+    private $mongoClient;
 
     /**
      * @var string
@@ -24,16 +24,11 @@ class MongoQueue implements Queue
      */
     private $coll;
 
-    public function __construct(\MongoClient $client, $dbName, $collName)
+    public function __construct(\MongoClient $mongoClient, $dbName, $collName)
     {
-        $this->client = $client;
+        $this->mongoClient = $mongoClient;
         $this->dbName = $dbName;
         $this->collName = $collName;
-    }
-
-    public function getClient()
-    {
-        return $this->client;
     }
 
     /**
@@ -85,7 +80,7 @@ class MongoQueue implements Queue
     protected function getCollection()
     {
         if (!$this->coll) {
-            $this->coll = $this->client->selectCollection(
+            $this->coll = $this->mongoClient->selectCollection(
                 $this->dbName,
                 $this->collName
             );

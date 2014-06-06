@@ -73,14 +73,14 @@ $ mongo my_db --eval 'db.my_coll.ensureIndex({ eta: 1 })'
 ##### Constructor
 
 ```php
-public MongoQueue::__construct(MongoClient $client, string $dbName, string $collName)
+public MongoQueue::__construct(MongoClient $mongoClient, string $dbName, string $collName)
 ```
 
 Parameters:
 
-> <b>client</b>   The MongoClient instance<br>
-> <b>dbName</b>   The database name<br>
-> <b>collName</b> The collection name<br>
+> <b>mongoClient</b>    The MongoClient instance<br>
+> <b>dbName</b>         The database name<br>
+> <b>collName</b>       The collection name<br>
 
 ##### Example
 
@@ -159,8 +159,8 @@ public PheanstalkQueue::__construct(Pheanstalk_Pheanstalk $pheanstalk, string $t
 
 Parameters:
 
-> <b>$pheanstalk</b>    The Pheanstalk_Pheanstalk instance<br>
-> <b>tubeName</b>       The tube name<br>
+> <b>pheanstalk</b> The Pheanstalk_Pheanstalk instance<br>
+> <b>tubeName</b>   The tube name<br>
 
 ##### Example
 

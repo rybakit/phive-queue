@@ -29,11 +29,6 @@ LUA;
         $this->redis = $redis;
     }
 
-    public function getRedis()
-    {
-        return $this->redis;
-    }
-
     /**
      * {@inheritdoc}
      */

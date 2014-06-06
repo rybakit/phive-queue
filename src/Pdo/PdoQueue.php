@@ -34,11 +34,6 @@ abstract class PdoQueue implements Queue
         $this->tableName = (string) $tableName;
     }
 
-    public function getPdo()
-    {
-        return $this->pdo;
-    }
-
     /**
      * {@inheritdoc}
      */

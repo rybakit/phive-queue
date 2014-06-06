@@ -9,7 +9,7 @@ class MongoHandler extends Handler
     /**
      * @var \MongoClient
      */
-    private $client;
+    private $mongoClient;
 
     /**
      * @var \MongoCollection
@@ -19,7 +19,7 @@ class MongoHandler extends Handler
     public function createQueue()
     {
         return new MongoQueue(
-            $this->client,
+            $this->mongoClient,
             $this->getOption('db_name'),
             $this->getOption('coll_name')
         );
@@ -27,7 +27,7 @@ class MongoHandler extends Handler
 
     public function reset()
     {
-        $this->client->selectDB($this->getOption('db_name'))->drop();
+        $this->mongoClient->selectDB($this->getOption('db_name'))->drop();
     }
 
     public function clear()
@@ -37,8 +37,8 @@ class MongoHandler extends Handler
 
     protected function configure()
     {
-        $this->client = new \MongoClient($this->getOption('server'));
-        $this->coll = $this->client->selectCollection($this->getOption('db_name'), $this->getOption('coll_name'));
+        $this->mongoClient = new \MongoClient($this->getOption('server'));
+        $this->coll = $this->mongoClient->selectCollection($this->getOption('db_name'), $this->getOption('coll_name'));
         $this->coll->ensureIndex(['eta' => 1]);
     }
 }
