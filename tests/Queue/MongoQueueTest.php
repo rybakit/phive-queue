@@ -27,5 +27,4 @@ class MongoQueueTest extends QueueTest
             'coll_name' => $config['PHIVE_MONGO_COLL_NAME'],
         ]);
     }
-
 }
