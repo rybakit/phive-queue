@@ -8,22 +8,23 @@ trait PerformanceTrait
 
     /**
      * @group performance
+     * @dataProvider providePerformanceData
      */
-    public function testPushPopPerformance()
+    public function testPushPopPerformance($benchmarkMethod, $delay)
     {
         $queueSize = $this->getPerformanceQueueSize();
         $queueName = preg_replace('~^'.preg_quote(__NAMESPACE__).'\\\|Test$~', '', get_class($this));
         $item = str_repeat('x', static::$performanceItemLength);
 
-        echo sprintf("\n%s::push()\n", $queueName);
+        echo sprintf("\n%s::push()%s\n", $queueName, $delay ? ' (delayed)' : '');
 
-        $start = microtime(true);
-        for ($i = $queueSize; $i; $i--) {
-            $this->queue->push($item);
+        $this->printPerformanceResult($queueSize, $this->$benchmarkMethod($queueSize, $item));
+
+        if ($delay) {
+            sleep($delay);
         }
-        $this->printPerformanceResult($queueSize, microtime(true) - $start);
 
-        echo sprintf("\n%s::pop()\n", $queueName);
+        echo sprintf("\n%s::pop()%s\n", $queueName, $delay ? ' (delayed)' : '');
 
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
@@ -31,6 +32,34 @@ trait PerformanceTrait
         }
 
         $this->printPerformanceResult($queueSize, microtime(true) - $start);
+    }
+
+    public function providePerformanceData()
+    {
+        return [
+            ['benchmarkPush', 0],
+            ['benchmarkPushDelayed', 1],
+        ];
+    }
+
+    public function benchmarkPush($queueSize, $item)
+    {
+        $start = microtime(true);
+        for ($i = $queueSize; $i; $i--) {
+            $this->queue->push($item);
+        }
+
+        return microtime(true) - $start;
+    }
+
+    public function benchmarkPushDelayed($queueSize, $item)
+    {
+        $start = microtime(true);
+        for ($i = $queueSize; $i; $i--) {
+            $this->queue->push($item, time() + 1);
+        }
+
+        return microtime(true) - $start;
     }
 
     protected function printPerformanceResult($total, $runtime)

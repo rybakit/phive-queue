@@ -358,17 +358,29 @@ This test inserts a number of items (1000 by default) into a queue, and then ret
 It measures the average time for `push` and `pop` operations and outputs the resulting stats, e.g.:
 
 ```sh
-SysVQueue::push()
+RedisQueue::push()
    Total operations:      1000
-   Operations per second: 67149.691 [#/sec]
-   Time per operation:    14.892 [ms]
-   Time taken for test:   0.015 [sec]
+   Operations per second: 14031.762 [#/sec]
+   Time per operation:    71.267 [ms]
+   Time taken for test:   0.071 [sec]
 
-SysVQueue::pop()
+RedisQueue::pop()
    Total operations:      1000
-   Operations per second: 96908.667 [#/sec]
-   Time per operation:    10.319 [ms]
-   Time taken for test:   0.010 [sec]
+   Operations per second: 16869.390 [#/sec]
+   Time per operation:    59.279 [ms]
+   Time taken for test:   0.059 [sec]
+.
+RedisQueue::push() (delayed)
+   Total operations:      1000
+   Operations per second: 15106.226 [#/sec]
+   Time per operation:    66.198 [ms]
+   Time taken for test:   0.066 [sec]
+
+RedisQueue::pop() (delayed)
+   Total operations:      1000
+   Operations per second: 14096.416 [#/sec]
+   Time per operation:    70.940 [ms]
+   Time taken for test:   0.071 [sec]
 ```
 
 You may also change the number of items involved in the test by changing the `PHIVE_PERF_QUEUE_SIZE` value in your `phpunit.xml` file.
