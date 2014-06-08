@@ -45,7 +45,7 @@ class PheanstalkQueue implements Queue
             throw new NoItemAvailableException($this);
         }
 
-        $this->pheanstalk->bury($item);
+        $this->pheanstalk->delete($item);
 
         return $item->getData();
     }
