@@ -60,10 +60,14 @@ class TarantoolQueue implements Queue
             throw new NoItemAvailableException($this);
         }
 
-        $item = $result['tuples_list'][0][3];
-        $item = rtrim($item, "\0");
+        $tuple = $result['tuples_list'][0];
 
-        return $item;
+        $this->tarantool->call('queue.delete', [
+            $this->space,
+            $tuple[0],
+        ]);
+
+        return rtrim($tuple[3], "\0");
     }
 
     /**
