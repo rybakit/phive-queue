@@ -20,12 +20,16 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testQueueReturnsOriginalResult($method)
     {
+        if (in_array($method, ['push', 'clear'], true)) {
+            return;
+        }
+
         $mock = $this->getQueueMock();
         $mock->expects($this->any())->method($method)->will($this->returnValue($method));
 
         $queue = new ExceptionalQueue($mock);
 
-        $result = $this->call($queue, $method);
+        $this->assertEquals($method, $this->call($queue, $method));
     }
 
     /**
@@ -40,7 +44,7 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
 
         $queue = new ExceptionalQueue($mock);
 
-        $this->assertEquals($method, $this->call($queue, $method));
+        $this->call($queue, $method);
     }
 
     /**
