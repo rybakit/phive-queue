@@ -58,4 +58,10 @@
             <group>performance</group>
         </exclude>
     </groups>
+
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+        </whitelist>
+    </filter>
 </phpunit>
