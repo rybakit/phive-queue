@@ -2,6 +2,7 @@
 
 namespace Phive\Queue\Tests\Queue;
 
+use Phive\Queue\RedisQueue;
 use Phive\Queue\Tests\Handler\RedisHandler;
 
 /**
@@ -26,7 +27,13 @@ class RedisQueueTest extends QueueTest
             $this->markTestSkipped('Redis::_serialize() is required.');
         }
 
-        $redis = $this->queue->getRedis();
+        $handler = self::getHandler();
+
+        $redis = new \Redis();
+        $redis->connect($handler->getOption('host'), $handler->getOption('port'));
+        $redis->setOption(\Redis::OPT_PREFIX, $handler->getOption('prefix'));
+
+        $queue = new RedisQueue($redis);
 
         $serializers = [\Redis::SERIALIZER_PHP];
         if (defined('Redis::SERIALIZER_IGBINARY')) {
@@ -39,8 +46,8 @@ class RedisQueueTest extends QueueTest
             $redis->setOption(\Redis::OPT_SERIALIZER, $serializer);
 
             foreach ($items as $item) {
-                $this->queue->push($item[0]);
-                $this->assertEquals($item[0], $this->queue->pop());
+                $queue->push($item[0]);
+                $this->assertEquals($item[0], $queue->pop());
             }
         }
     }
