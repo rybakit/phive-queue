@@ -1,6 +1,8 @@
 Phive Queue
 ===========
 [![Build Status](https://secure.travis-ci.org/rybakit/phive-queue.png?branch=master)](http://travis-ci.org/rybakit/phive-queue)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rybakit/phive-queue/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rybakit/phive-queue/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/rybakit/phive-queue/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rybakit/phive-queue/?branch=master)
 
 Phive Queue is a time-based scheduling queue with multiple backend support.
 
