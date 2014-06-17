@@ -27,11 +27,12 @@ install:
     - sudo service tarantool restart
     #- git clone https://github.com/tarantool/tarantool-php.git && cd ./tarantool-php && phpize && ./configure && make && sudo make install
     #- git clone https://github.com/tony2001/tarantool-php.git && cd ./tarantool-php && phpize && ./configure && make && sudo make install
+    - git clone https://github.com/rybakit/tarantool-php.git && cd ./tarantool-php && phpize && ./configure && make && sudo make install
 
     - sudo apt-get install -y beanstalkd
     - sudo beanstalkd -d -l 127.0.0.1 -p 11300
 
-    - bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then printf "extension = mongo.so\nextension = redis.so\n" >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini; fi;'
+    - bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then printf "extension = mongo.so\nextension = redis.so\nextension = tarantool.so" >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini; fi;'
 
 before_script:
     - mysql -e 'create database phive_tests;'
