@@ -35,8 +35,10 @@ install:
 before_script:
     - mysql -e 'create database phive_tests;'
     - psql -c 'create database phive_tests;' -U postgres
-    - composer require phpunit/phpunit:~4.0
+
     - bash -c 'if [[ $TRAVIS_PHP_VERSION == hhvm* ]]; then composer require mongofill/mongofill:dev-master; fi;'
+    - composer require phpunit/phpunit-mock-objects:2.2.*@dev
+    - composer require phpunit/phpunit:4.2.*@dev
     - composer install
 
 script: phpunit --coverage-clover coverage.clover
