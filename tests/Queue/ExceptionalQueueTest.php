@@ -7,6 +7,8 @@ use Phive\Queue\QueueException;
 
 class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
 {
+    use UtilTrait;
+
     public function testGetInnerQueue()
     {
         $mock = $this->getQueueMock();
@@ -16,7 +18,7 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideQueueMethods
+     * @dataProvider provideQueueInterfaceMethods
      */
     public function testQueueReturnsOriginalResult($method)
     {
@@ -29,11 +31,11 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
 
         $queue = new ExceptionalQueue($mock);
 
-        $this->assertEquals($method, $this->call($queue, $method));
+        $this->assertEquals($method, $this->callQueueMethod($queue, $method));
     }
 
     /**
-     * @dataProvider provideQueueMethods
+     * @dataProvider provideQueueInterfaceMethods
      * @expectedException \Phive\Queue\QueueException
      */
     public function testQueueThrowsOriginalQueueException($method)
@@ -44,11 +46,11 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
 
         $queue = new ExceptionalQueue($mock);
 
-        $this->call($queue, $method);
+        $this->callQueueMethod($queue, $method);
     }
 
     /**
-     * @dataProvider provideQueueMethods
+     * @dataProvider provideQueueInterfaceMethods
      * @expectedException \Phive\Queue\QueueException
      */
     public function testQueueThrowsWrappedQueueException($method)
@@ -59,32 +61,6 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
 
         $queue = new ExceptionalQueue($mock);
 
-        $this->call($queue, $method);
-    }
-
-    public function provideQueueMethods()
-    {
-        return array_chunk($this->getQueueMethods(), 1);
-    }
-
-    private function getQueueMethods()
-    {
-        return get_class_methods('Phive\Queue\Queue');
-    }
-
-    private function getQueueMock()
-    {
-        return $this->getMock('Phive\Queue\Queue');
-    }
-
-    private function call(ExceptionalQueue $queue, $method)
-    {
-        $r = new \ReflectionMethod($queue, $method);
-
-        if ($num = $r->getNumberOfRequiredParameters()) {
-            return call_user_func_array([$queue, $method], array_fill(0, $num, 'foo'));
-        }
-
-        return $queue->$method();
+        $this->callQueueMethod($queue, $method);
     }
 }

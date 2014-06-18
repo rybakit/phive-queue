@@ -6,6 +6,8 @@ use Phive\Queue\QueueException;
 
 class QueueExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    use UtilTrait;
+
     /**
      * @var \Phive\Queue\Queue
      */
@@ -16,7 +18,7 @@ class QueueExceptionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->queue = $this->getMock('Phive\Queue\Queue');
+        $this->queue = $this->getQueueMock();
     }
 
     public function testQueueExceptionExtendsBaseException()

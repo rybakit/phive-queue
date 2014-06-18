@@ -2,6 +2,8 @@
 
 namespace Phive\Queue\Tests\Queue;
 
+use Phive\Queue\NoItemAvailableException;
+use Phive\Queue\QueueException;
 use Phive\Queue\Tests\Handler\SysVHandler;
 
 /**
@@ -13,14 +15,26 @@ class SysVQueueTest extends QueueTest
         PerformanceTrait::testPushPopPerformance as baseTestPushPopPerformance;
     }
     use ConcurrencyTrait;
+    use UtilTrait;
 
-    public function provideItemsOfVariousTypes()
+    /**
+     * @dataProvider provideQueueInterfaceMethods
+     */
+    public function testQueueThrowsExceptionIfResourceIsNotExist($method)
     {
-        return array_diff_key(parent::provideItemsOfVariousTypes(), [
-            'null'      => false,
-            'array'     => false,
-            'object'    => false,
-        ]);
+        // force a resource creation
+        $this->queue->count();
+
+        self::removeResource();
+
+        try {
+            $this->callQueueMethod($this->queue, $method);
+        } catch (NoItemAvailableException $e) {
+        } catch (QueueException $e) {
+            return;
+        }
+
+        $this->fail();
     }
 
     /**
@@ -50,10 +64,39 @@ class SysVQueueTest extends QueueTest
         self::baseTestPushPopPerformance($benchmarkMethod, $delay);
     }
 
+    public function provideItemsOfVariousTypes()
+    {
+        return array_diff_key(parent::provideItemsOfVariousTypes(), [
+            'null'      => false,
+            'array'     => false,
+            'object'    => false,
+        ]);
+    }
+
     public static function createHandler(array $config)
     {
         return new SysVHandler([
             'key' => $config['PHIVE_SYSV_KEY'],
         ]);
+    }
+
+    private static function removeResource()
+    {
+        $key = self::getHandler()->getOption('key');
+        $key = '0x'.dechex($key);
+
+        exec('ipcs -q', $output);
+
+        $count = count($output);
+        if ($count < 4) {
+            return;
+        }
+
+        for ($i = 3; $i < $count; $i++) {
+            if (0 === strpos($output[$i], $key)) {
+                exec('ipcrm -Q '.$key, $output);
+                break;
+            }
+        }
     }
 }
