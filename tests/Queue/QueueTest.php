@@ -24,6 +24,17 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
      */
     protected $supportsExpiredEta = true;
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->queue = $this->createQueue();
+
+        self::$now = null;
+        $this->stubTimeFunction();
+    }
+
     public function testQueueImplementsQueueInterface()
     {
         $this->assertInstanceOf('Phive\Queue\Queue', $this->queue);
@@ -100,14 +111,6 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
             'array'     => [['a','r','r','a','y']],
             'object'    => [new \stdClass()],
         ];
-    }
-
-    protected function setUp()
-    {
-        $this->queue = $this->createQueue();
-
-        self::$now = null;
-        $this->stubTimeFunction();
     }
 
     protected function assertNoItemIsAvailable(Queue $queue)
