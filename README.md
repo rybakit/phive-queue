@@ -282,6 +282,20 @@ $queue = new InMemoryQueue();
 ```
 
 
+## Supported Item Types
+
+|              Queue/Type               | string  |  null   |  bool   |   int   |  float  |  array  | object  |
+|---------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| [MongoQueue](#mongoqueue)             |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |
+| [RedisQueue](#redisqueue)             |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓*   |    ✓*   |
+| [TarantoolQueue](#tarantoolqueue)     |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
+| [PheanstalkQueue](#pheanstalkqueue)   |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
+| [GenericPdoQueue](#genericpdoqueue)   |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
+| [SqlitePdoQueue](#sqlitepdoqueue)     |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
+| [SysVQueue](#sysvqueue)               |    ✓    |    ✓*   |    ✓    |    ✓    |    ✓    |    ✓*   |    ✓*   |
+| [InMemoryQueue](#inmemoryqueue)       |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |
+
+
 ## Exceptions
 
 Every queue method declared in the `Queue` interface will throw an exception if a run-time error occurs at the time the method is called.
