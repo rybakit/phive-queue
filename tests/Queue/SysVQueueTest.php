@@ -114,17 +114,11 @@ class SysVQueueTest extends QueueTest
 
     private static function removeResource()
     {
-        $key = self::getHandler()->getOption('key');
-        $key = '0x'.dechex($key);
-
-        self::exec('ipcrm -Q '.$key);
+        self::exec('ipcrm -Q '.self::getResourceKey());
     }
 
     private static function getResourceInfo()
     {
-        $key = self::getHandler()->getOption('key');
-        $key = '0x'.dechex($key);
-
         $result = self::exec('ipcs -q');
 
         $count = count($result);
@@ -132,16 +126,25 @@ class SysVQueueTest extends QueueTest
             throw new \UnexpectedValueException('No queues were found.');
         }
 
+        $key = self::getResourceKey();
+
         for ($i = 3; $i < $count; $i++) {
             if (0 === strpos($result[$i], $key)) {
                 return array_combine(
-                    ['key', 'msqid', 'owner', 'perms', 'used_bytes', 'messages'],
+                    preg_split('/\s+/', $result[2]), // key, msqid, owner, perms, used_bytes, messages
                     preg_split('/\s+/', $result[$i])
                 );
             }
         }
 
         throw new \UnexpectedValueException(sprintf('A queue with the key "%s" was not found.', $key));
+    }
+
+    private static function getResourceKey()
+    {
+        $key = self::getHandler()->getOption('key');
+
+        return '0x'.dechex($key);
     }
 
     private static function exec($command)
