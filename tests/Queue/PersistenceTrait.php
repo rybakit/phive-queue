@@ -9,6 +9,13 @@ trait PersistenceTrait
      */
     private static $handler;
 
+    protected function setUp()
+    {
+        parent::setUp();
+
+        self::getHandler()->clear();
+    }
+
     /**
      * @return \Phive\Queue\Queue
      */
@@ -54,12 +61,5 @@ trait PersistenceTrait
         parent::tearDownAfterClass();
 
         self::$handler = null;
-    }
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        self::getHandler()->clear();
     }
 }
