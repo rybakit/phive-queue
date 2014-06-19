@@ -4,6 +4,7 @@ namespace Phive\Queue\Tests\Queue;
 
 use Phive\Queue\NoItemAvailableException;
 use Phive\Queue\QueueException;
+use Phive\Queue\SysVQueue;
 use Phive\Queue\Tests\Handler\SysVHandler;
 
 /**
@@ -32,6 +33,37 @@ class SysVQueueTest extends QueueTest
         } catch (NoItemAvailableException $e) {
         } catch (QueueException $e) {
             return;
+        }
+
+        $this->fail();
+    }
+
+    public function testSetPermissions()
+    {
+        $handler = self::getHandler();
+        $key = $handler->getOption('key');
+
+        $queue = new SysVQueue($key, null, 0606);
+
+        // force a resource creation
+        $queue->count();
+
+        $info = self::getResourceInfo();
+
+        $this->assertEquals('606', $info['perms']);
+    }
+
+    public function testSetItemMaxLength()
+    {
+        $this->queue->push('xx');
+        $this->queue->setItemMaxLength(1);
+
+        try {
+            $this->queue->pop();
+        } catch (\Exception $e) {
+            if (7 === $e->getCode() && 'Argument list too long' === $e->getMessage()) {
+                return;
+            }
         }
 
         $this->fail();
@@ -85,18 +117,41 @@ class SysVQueueTest extends QueueTest
         $key = self::getHandler()->getOption('key');
         $key = '0x'.dechex($key);
 
-        exec('ipcs -q', $output);
+        self::exec('ipcrm -Q '.$key);
+    }
 
-        $count = count($output);
+    private static function getResourceInfo()
+    {
+        $key = self::getHandler()->getOption('key');
+        $key = '0x'.dechex($key);
+
+        $result = self::exec('ipcs -q');
+
+        $count = count($result);
         if ($count < 4) {
-            return;
+            throw new \UnexpectedValueException('No queues were found.');
         }
 
         for ($i = 3; $i < $count; $i++) {
-            if (0 === strpos($output[$i], $key)) {
-                exec('ipcrm -Q '.$key, $output);
-                break;
+            if (0 === strpos($result[$i], $key)) {
+                return array_combine(
+                    ['key', 'msqid', 'owner', 'perms', 'used_bytes', 'messages'],
+                    preg_split('/\s+/', $result[$i])
+                );
             }
         }
+
+        throw new \UnexpectedValueException(sprintf('A queue with the key "%s" was not found.', $key));
+    }
+
+    private static function exec($command)
+    {
+        exec($command, $result, $status);
+
+        if (0 !== $status) {
+            throw new \RuntimeException(sprintf('En error occurs while executing "%s": %s.', $command, implode("\n", $result)));
+        }
+
+        return $result;
     }
 }

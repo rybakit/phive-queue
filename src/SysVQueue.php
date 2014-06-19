@@ -131,6 +131,6 @@ class SysVQueue implements Queue
             $message = $code ? posix_strerror($code) : 'Unknown SysV error';
         }
 
-        throw new QueueException($this, $message);
+        throw new QueueException($this, $message, $code);
     }
 }
