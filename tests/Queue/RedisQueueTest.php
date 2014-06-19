@@ -13,15 +13,15 @@ class RedisQueueTest extends QueueTest
     use PerformanceTrait;
     use ConcurrencyTrait;
 
-    public function provideItemsOfVariousTypes()
+    public function getUnsupportedItemTypes()
     {
-        return array_diff_key(parent::provideItemsOfVariousTypes(), [
-            'array'     => false,
-            'object'    => false,
-        ]);
+        return ['array', 'object'];
     }
 
-    public function testSerialize()
+    /**
+     * @dataProvider provideItemsOfVariousTypes
+     */
+    public function testSupportedItemTypeLooseWithSerializer($item)
     {
         if (!method_exists('Redis', '_serialize')) {
             $this->markTestSkipped('Redis::_serialize() is required.');
@@ -40,15 +40,11 @@ class RedisQueueTest extends QueueTest
             $serializers[] = \Redis::SERIALIZER_IGBINARY;
         }
 
-        $items = parent::provideItemsOfVariousTypes();
-
         foreach ($serializers as $serializer) {
             $redis->setOption(\Redis::OPT_SERIALIZER, $serializer);
 
-            foreach ($items as $item) {
-                $queue->push($item[0]);
-                $this->assertEquals($item[0], $queue->pop());
-            }
+            $queue->push($item);
+            $this->assertEquals($item, $queue->pop());
         }
     }
 

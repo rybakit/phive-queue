@@ -12,11 +12,9 @@ class MongoQueueTest extends QueueTest
     use PerformanceTrait;
     use ConcurrencyTrait;
 
-    public function provideItemsOfVariousTypes()
+    public function getUnsupportedItemTypes()
     {
-        return array_diff_key(parent::provideItemsOfVariousTypes(), [
-            'object' => false,
-        ]);
+        return ['object'];
     }
 
     public static function createHandler(array $config)

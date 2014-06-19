@@ -15,12 +15,9 @@ class PgsqlPdoQueueTest extends QueueTest
     use PerformanceTrait;
     use ConcurrencyTrait;
 
-    public function provideItemsOfVariousTypes()
+    public function getUnsupportedItemTypes()
     {
-        return array_diff_key(parent::provideItemsOfVariousTypes(), [
-            'array'     => false,
-            'object'    => false,
-        ]);
+        return ['array', 'object'];
     }
 
     public static function createHandler(array $config)

@@ -92,7 +92,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideItemsOfVariousTypes
+     * @dataProvider provideItemsOfSupportedTypes
      */
     public function testSupportedItemTypeLoose($item)
     {
@@ -105,12 +105,25 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         return [
             'null'      => [null],
             'bool'      => [true],
-            'int'       => [-1],
+            'int'       => [42],
             'float'     => [1.5],
             'string'    => ['string'],
             'array'     => [['a','r','r','a','y']],
             'object'    => [new \stdClass()],
         ];
+    }
+
+    public function provideItemsOfSupportedTypes()
+    {
+        return array_diff_key(
+            $this->provideItemsOfVariousTypes(),
+            array_fill_keys($this->getUnsupportedItemTypes(), false)
+        );
+    }
+
+    public function getUnsupportedItemTypes()
+    {
+        return [];
     }
 
     protected function assertNoItemIsAvailable(Queue $queue)

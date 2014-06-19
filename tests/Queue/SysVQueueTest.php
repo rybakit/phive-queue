@@ -18,6 +18,25 @@ class SysVQueueTest extends QueueTest
     use ConcurrencyTrait;
     use UtilTrait;
 
+    public function getUnsupportedItemTypes()
+    {
+        return ['null', 'array', 'object'];
+    }
+
+    /**
+     * @dataProvider provideItemsOfVariousTypes
+     */
+    public function testSupportedItemTypeLooseWithSerializer($item)
+    {
+        $handler = self::getHandler();
+        $key = $handler->getOption('key');
+
+        $queue = new SysVQueue($key, true);
+
+        $queue->push($item);
+        $this->assertEquals($item, $queue->pop());
+    }
+
     /**
      * @dataProvider provideQueueInterfaceMethods
      */
@@ -94,15 +113,6 @@ class SysVQueueTest extends QueueTest
         }
 
         self::baseTestPushPopPerformance($benchmarkMethod, $delay);
-    }
-
-    public function provideItemsOfVariousTypes()
-    {
-        return array_diff_key(parent::provideItemsOfVariousTypes(), [
-            'null'      => false,
-            'array'     => false,
-            'object'    => false,
-        ]);
     }
 
     public static function createHandler(array $config)

@@ -14,6 +14,11 @@ class TarantoolQueueTest extends QueueTest
 
     protected $supportsExpiredEta = false;
 
+    public function getUnsupportedItemTypes()
+    {
+        return ['array', 'object'];
+    }
+
     /**
      * @see https://github.com/tarantool/tarantool/issues/336
      */
@@ -23,14 +28,6 @@ class TarantoolQueueTest extends QueueTest
             $this->queue->push($item);
             $this->assertEquals($item, $this->queue->pop());
         }
-    }
-
-    public function provideItemsOfVariousTypes()
-    {
-        return array_diff_key(parent::provideItemsOfVariousTypes(), [
-            'array'     => false,
-            'object'    => false,
-        ]);
     }
 
     public static function createHandler(array $config)
