@@ -424,4 +424,4 @@ You may also change the number of items involved in the test by changing the `PH
 
 ## License
 
-Phive Queue is released under the MIT License. See the bundled LICENSE file for details.
+Phive Queue is released under the MIT License. See the bundled [LICENSE](LICENSE) file for details.
