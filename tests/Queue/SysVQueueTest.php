@@ -152,7 +152,7 @@ class SysVQueueTest extends QueueTest
         exec($command, $result, $status);
 
         if (0 !== $status) {
-            throw new \RuntimeException(sprintf('En error occurs while executing "%s": %s.', $command, implode("\n", $result)));
+            throw new \RuntimeException(sprintf('An error occurs while executing "%s": %s.', $command, implode("\n", $result)));
         }
 
         return $result;
