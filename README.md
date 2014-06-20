@@ -284,6 +284,8 @@ $queue = new InMemoryQueue();
 
 ## Supported Item Types
 
+Each queue has its own set of supported item types. The following table details the types available across queues.
+
 |              Queue/Type               | string  |  null   |  bool   |   int   |  float  |  array  | object  |
 |---------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
 | [MongoQueue](#mongoqueue)             |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |
@@ -295,6 +297,7 @@ $queue = new InMemoryQueue();
 | [SysVQueue](#sysvqueue)               |    ✓    |    ✓*   |    ✓    |    ✓    |    ✓    |    ✓*   |    ✓*   |
 | [InMemoryQueue](#inmemoryqueue)       |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |
 
+> ✓*  — supported if the serializer is enabled.
 
 ## Exceptions
 
