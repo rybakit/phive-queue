@@ -45,7 +45,7 @@ class SysVQueueTest extends QueueTest
         // force a resource creation
         $this->queue->count();
 
-        self::removeResource();
+        self::getHandler()->clear();
 
         try {
             $this->callQueueMethod($this->queue, $method);
@@ -67,9 +67,9 @@ class SysVQueueTest extends QueueTest
         // force a resource creation
         $queue->count();
 
-        $info = self::getResourceInfo();
+        $meta = $handler->getMeta();
 
-        $this->assertEquals('606', $info['perms']);
+        $this->assertEquals(0606, $meta['msg_perm.mode']);
     }
 
     public function testSetItemMaxLength()
@@ -120,51 +120,5 @@ class SysVQueueTest extends QueueTest
         return new SysVHandler([
             'key' => $config['PHIVE_SYSV_KEY'],
         ]);
-    }
-
-    private static function removeResource()
-    {
-        self::exec('ipcrm -Q '.self::getResourceKey());
-    }
-
-    private static function getResourceInfo()
-    {
-        $result = self::exec('ipcs -q');
-
-        $count = count($result);
-        if ($count < 4) {
-            throw new \UnexpectedValueException('No queues were found.');
-        }
-
-        $key = self::getResourceKey();
-
-        for ($i = 3; $i < $count; $i++) {
-            if (0 === strpos($result[$i], $key)) {
-                return array_combine(
-                    preg_split('/\s+/', $result[2]), // key, msqid, owner, perms, used_bytes, messages
-                    preg_split('/\s+/', $result[$i])
-                );
-            }
-        }
-
-        throw new \UnexpectedValueException(sprintf('A queue with the key "%s" was not found.', $key));
-    }
-
-    private static function getResourceKey()
-    {
-        $key = self::getHandler()->getOption('key');
-
-        return '0x'.dechex($key);
-    }
-
-    private static function exec($command)
-    {
-        exec($command, $result, $status);
-
-        if (0 !== $status) {
-            throw new \RuntimeException(sprintf('An error occurs while executing "%s": %s.', $command, implode("\n", $result)));
-        }
-
-        return $result;
     }
 }

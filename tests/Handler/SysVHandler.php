@@ -15,4 +15,9 @@ class SysVHandler extends Handler
     {
         msg_remove_queue(msg_get_queue($this->getOption('key')));
     }
+
+    public function getMeta()
+    {
+        return msg_stat_queue(msg_get_queue($this->getOption('key')));
+    }
 }
