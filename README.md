@@ -282,7 +282,7 @@ $queue = new InMemoryQueue();
 ```
 
 
-## Supported Item Types
+## Item Types
 
 Each queue has its own set of supported item types. The following table details the types available across queues.
 
