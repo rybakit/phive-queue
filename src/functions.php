@@ -38,5 +38,7 @@ function calc_delay($eta)
         return 0;
     }
 
-    return -time() + norm_eta($eta);
+    $delay = -time() + norm_eta($eta);
+
+    return ($delay < 0) ? 0 : $delay;
 }

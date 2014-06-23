@@ -4,14 +4,10 @@ namespace Phive\Queue\Tests\Queue;
 
 use Phive\Queue\NoItemAvailableException;
 use Phive\Queue\Queue;
+use Phive\Queue\Tests as t;
 
 abstract class QueueTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var int Timestamp that will be returned by time().
-     */
-    public static $now;
-
     /**
      * @var Queue
      */
@@ -30,9 +26,6 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->queue = $this->createQueue();
-
-        self::$now = null;
-        $this->stubTimeFunction();
     }
 
     public function testQueueImplementsQueueInterface()
@@ -72,9 +65,20 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->queue->push('item', $eta);
         $this->assertNoItemIsAvailable($this->queue);
 
-        $this->callInFuture(function () {
+        if (!$this->supportsExpiredEta) {
+            sleep(3);
             $this->assertEquals('item', $this->queue->pop());
-        }, $eta, !$this->supportsExpiredEta);
+        } else {
+            t\freeze_time($eta);
+            $this->assertEquals('item', $this->queue->pop());
+            t\unfreeze_time();
+        }
+    }
+
+    public function testPushWithExpiredEta()
+    {
+        $this->queue->push('item', time() - 1);
+        $this->assertEquals('item', $this->queue->pop());
     }
 
     public function testCountAndClear()
@@ -135,33 +139,6 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->fail('An expected NoItemAvailableException has not been raised.');
-    }
-
-    protected function callInFuture(\Closure $func, $futureTime, $sleep = false)
-    {
-        if ($sleep) {
-            sleep($futureTime - time());
-            return $func();
-        }
-
-        self::$now = $futureTime;
-        $result = $func();
-        self::$now = null;
-
-        return $result;
-    }
-
-    private function stubTimeFunction()
-    {
-        $class = get_class($this->queue);
-        $namespace = substr($class, 0, strrpos($class, '\\'));
-
-        // this code should be evaluated directly after the queue class is loaded
-        // and before any queue method is called,
-        // see https://bugs.php.net/bug.php?id=64346
-        if (!is_callable("$namespace\\time")) {
-            eval('namespace '.$namespace.' { function time() { return \\'.__CLASS__.'::$now ?: \time(); }}');
-        }
     }
 
     /**
