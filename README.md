@@ -43,7 +43,7 @@ $item123 = $queue->pop();
 try {
     $item4 = $queue->pop();
 } catch (NoItemAvailableException $e) {
-    // item4 is not available yet
+    // item4 is not yet available
 }
 
 sleep(5);
