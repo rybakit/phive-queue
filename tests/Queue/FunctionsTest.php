@@ -5,6 +5,9 @@ namespace Phive\Queue\Tests\Queue;
 use Phive\Queue as q;
 use Phive\Queue\Tests as t;
 
+/**
+ * @requires extension uopz
+ */
 class FunctionsTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -30,8 +30,7 @@ install:
     - sudo apt-get install -y beanstalkd
     - sudo beanstalkd -d -l 127.0.0.1 -p 11300
 
-    - pecl install uopz
-
+    - bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then pecl install uopz; fi;'
     - bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then printf "extension = mongo.so\nextension = redis.so\nextension = tarantool.so" >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini; fi;'
 
 before_script:

@@ -58,6 +58,9 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('item1', $this->queue->pop());
     }
 
+    /**
+     * @requires extension uopz
+     */
     public function testPopDelay()
     {
         $eta = time() + 3;
