@@ -20,6 +20,7 @@ $ composer require rybakit/phive-queue:~0.5
 
 ```php
 use Phive\Queue\InMemoryQueue;
+use Phive\Queue\NoItemAvailableException;
 
 $queue = new InMemoryQueue();
 
@@ -38,7 +39,12 @@ $count = $queue->count(); // 5
 $item123 = $queue->pop();
 $item123 = $queue->pop();
 $item123 = $queue->pop();
-$item4 = $queue->pop(); // throws Phive\Queue\NoItemAvailableException
+
+try {
+    $item4 = $queue->pop();
+} catch (NoItemAvailableException $e) {
+    // item4 is not available yet
+}
 
 sleep(5);
 $item4 = $queue->pop();
