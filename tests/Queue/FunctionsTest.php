@@ -75,20 +75,4 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
             [[]],
         ];
     }
-
-    public function provideValidEtasWithDelay()
-    {
-        $date = new \DateTime();
-
-        return [
-            [0, -self::$now],
-            [-1, -1],
-            [null, self::$now],
-            [self::$now, self::$now],
-            ['@'.self::$now, self::$now],
-            [$date->format(\DateTime::ISO8601), self::$now],
-            ['+1 hour', self::$now],
-            [$date, self::$now],
-        ];
-    }
 }
