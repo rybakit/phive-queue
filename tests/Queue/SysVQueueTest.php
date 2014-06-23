@@ -26,7 +26,7 @@ class SysVQueueTest extends QueueTest
     /**
      * @dataProvider provideItemsOfVariousTypes
      */
-    public function testSupportedItemTypeLooseWithSerializer($item)
+    public function testSupportedItemTypeWithSerializerLoose($item)
     {
         $handler = self::getHandler();
         $key = $handler->getOption('key');
