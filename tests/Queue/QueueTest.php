@@ -58,9 +58,6 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('item1', $this->queue->pop());
     }
 
-    /**
-     * @requires extension uopz
-     */
     public function testPopDelay()
     {
         $eta = time() + 3;
@@ -68,14 +65,9 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->queue->push('item', $eta);
         $this->assertNoItemIsAvailable($this->queue);
 
-        if (!$this->supportsExpiredEta) {
-            sleep(3);
+        t\call_future(function() {
             $this->assertEquals('item', $this->queue->pop());
-        } else {
-            t\freeze_time($eta);
-            $this->assertEquals('item', $this->queue->pop());
-            t\unfreeze_time();
-        }
+        }, $eta, !$this->supportsExpiredEta);
     }
 
     public function testPushWithExpiredEta()
