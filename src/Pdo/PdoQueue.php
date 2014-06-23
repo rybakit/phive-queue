@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Pdo;
 
-use Phive\Queue as Q;
+use Phive\Queue as q;
 use Phive\Queue\Queue;
 
 abstract class PdoQueue implements Queue
@@ -41,7 +41,7 @@ abstract class PdoQueue implements Queue
     {
         $sql = sprintf('INSERT INTO %s (eta, item) VALUES (%d, %s)',
             $this->tableName,
-            Q\norm_eta($eta),
+            q\norm_eta($eta),
             $this->pdo->quote($item)
         );
 
