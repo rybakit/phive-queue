@@ -26,7 +26,7 @@ class SysVQueueTest extends QueueTest
     /**
      * @dataProvider provideItemsOfVariousTypes
      */
-    public function testSupportedItemTypeWithSerializerLoose($item)
+    public function testSupportItemTypeWithSerializerLoose($item)
     {
         $handler = self::getHandler();
         $key = $handler->getOption('key');
@@ -40,7 +40,7 @@ class SysVQueueTest extends QueueTest
     /**
      * @dataProvider provideQueueInterfaceMethods
      */
-    public function testQueueThrowsExceptionIfResourceIsNotExist($method)
+    public function testThrowExceptionOnMissingResource($method)
     {
         // force a resource creation
         $this->queue->count();

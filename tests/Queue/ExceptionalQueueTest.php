@@ -20,7 +20,7 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideQueueInterfaceMethods
      */
-    public function testQueueReturnsOriginalResult($method)
+    public function testReturnOriginalResult($method)
     {
         if (in_array($method, ['push', 'clear'], true)) {
             return;
@@ -38,7 +38,7 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideQueueInterfaceMethods
      * @expectedException \Phive\Queue\QueueException
      */
-    public function testQueueThrowsOriginalQueueException($method)
+    public function testThrowOriginalQueueException($method)
     {
         $mock = $this->getQueueMock();
         $exception = new QueueException($mock);
@@ -53,7 +53,7 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideQueueInterfaceMethods
      * @expectedException \Phive\Queue\QueueException
      */
-    public function testQueueThrowsWrappedQueueException($method)
+    public function testThrowWrappedQueueException($method)
     {
         $mock = $this->getQueueMock();
         $exception = new \Exception();

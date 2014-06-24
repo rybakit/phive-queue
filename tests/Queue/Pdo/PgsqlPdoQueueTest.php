@@ -5,12 +5,11 @@ namespace Phive\Queue\Tests\Queue\Pdo;
 use Phive\Queue\Tests\Handler\PdoHandler;
 use Phive\Queue\Tests\Queue\ConcurrencyTrait;
 use Phive\Queue\Tests\Queue\PerformanceTrait;
-use Phive\Queue\Tests\Queue\QueueTest;
 
 /**
  * @requires extension pdo_pgsql
  */
-class PgsqlPdoQueueTest extends QueueTest
+class PgsqlPdoQueueTest extends PdoQueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;

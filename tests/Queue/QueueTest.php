@@ -28,7 +28,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->queue = $this->createQueue();
     }
 
-    public function testQueueImplementsQueueInterface()
+    public function testImplementQueueInterface()
     {
         $this->assertInstanceOf('Phive\Queue\Queue', $this->queue);
     }
@@ -93,7 +93,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideItemsOfSupportedTypes
      */
-    public function testSupportedItemTypeLoose($item)
+    public function testSupportItemTypeLoose($item)
     {
         $this->queue->push($item);
         $this->assertEquals($item, $this->queue->pop());
