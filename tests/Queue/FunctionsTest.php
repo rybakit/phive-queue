@@ -3,33 +3,18 @@
 namespace Phive\Queue\Tests\Queue;
 
 use Phive\Queue as q;
-use Phive\Queue\Tests as t;
 
-/**
- * @requires extension uopz
- */
 class FunctionsTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var int Timestamp that will be returned by time().
-     */
-    private static $now = 1000000000;
-
-    public static function setUpBeforeClass()
-    {
-        t\freeze_time(self::$now);
-    }
-
-    public static function tearDownAfterClass()
-    {
-        t\unfreeze_time();
-    }
-
     /**
      * @dataProvider provideValidEtas
      */
     public function testNormEta($eta, $timestamp)
     {
+        if (is_callable($timestamp)) {
+            $timestamp = $timestamp();
+        }
+
         $this->assertEquals($timestamp, q\norm_eta($eta));
 
     }
@@ -54,16 +39,17 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     public function provideValidEtas()
     {
         $date = new \DateTime();
+        $now = $date->getTimestamp();
 
         return [
             [0, 0, 0],
             [-1, -1, 0],
-            [null, self::$now, 0],
-            [self::$now, self::$now, 0],
-            ['@'.self::$now, self::$now, 0],
-            [$date->format(\DateTime::ISO8601), self::$now, 0],
-            ['+1 hour', self::$now, 0],
-            [$date, self::$now, 0],
+            [null, function () { return time(); }, 0],
+            [$now, $now, 0],
+            ['@'.$now, $now, 0],
+            [$date->format(\DateTime::ISO8601), $now, 0],
+            ['+1 hour', function () { return time() + 3600; }, 3600],
+            [$date, $now, 0],
         ];
     }
 
