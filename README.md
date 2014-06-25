@@ -187,6 +187,8 @@ The `GenericPdoQueue` is intended for PDO drivers whose databases support stored
 The `GenericPdoQueue` requires [PDO](http://php.net/pdo) and a [PDO driver](http://php.net/manual/en/pdo.drivers.php) for a particular database be installed.
 On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
 
+SQL files to create the table and the stored routine can be found in the [res](res) directory.
+
 ##### Constructor
 
 ```php
@@ -215,6 +217,7 @@ $queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
 The `SqlitePdoQueue` requires [PDO](http://php.net/pdo) and [SQLite PDO driver](http://php.net/manual/en/ref.pdo-sqlite.php).
 On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
 
+SQL file to create the table can be found in the [res/sqlite](res/sqlite) directory.
 
 *Tip:* For performance reasons it's highly recommended to activate [WALL mode](http://www.sqlite.org/wal.html):
 
