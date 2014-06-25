@@ -72,7 +72,7 @@ Currently, there are the following queues available:
 The `MongoQueue` requires the [Mongo PECL](http://pecl.php.net/package/mongo) extension *(v1.3.0 or higher)*.
 
 
-*Note:* Before making use of the queue, it's highly recommended to create an index on a `eta` field:
+*Tip:* Before making use of the queue, it's highly recommended to create an index on a `eta` field:
 
 ```sh
 $ mongo my_db --eval 'db.my_coll.ensureIndex({ eta: 1 })'
@@ -187,6 +187,8 @@ The `GenericPdoQueue` is intended for PDO drivers whose databases support stored
 The `GenericPdoQueue` requires [PDO](http://php.net/pdo) and a [PDO driver](http://php.net/manual/en/pdo.drivers.php) for a particular database be installed.
 On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
 
+SQL files to create the table and the stored routine can be found in the [res](res) directory.
+
 ##### Constructor
 
 ```php
@@ -215,11 +217,11 @@ $queue = new GenericPdoQueue($pdo, 'my_table', 'my_routine');
 The `SqlitePdoQueue` requires [PDO](http://php.net/pdo) and [SQLite PDO driver](http://php.net/manual/en/ref.pdo-sqlite.php).
 On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
 
+SQL file to create the table can be found in the [res/sqlite](res/sqlite) directory.
 
-*Note:* For performance reasons it's highly recommended to activate [WALL mode](http://www.sqlite.org/wal.html):
+*Tip:* For performance reasons it's highly recommended to activate [WALL mode](http://www.sqlite.org/wal.html):
 
 ```php
-$pdo = new PDO('sqlite:/opt/databases/my_db.sq3');
 $pdo->exec('PRAGMA journal_mode=WAL');
 ```
 
@@ -241,6 +243,7 @@ use Phive\Queue\Pdo\SqlitePdoQueue;
 
 $pdo = new PDO('sqlite:/opt/databases/my_db.sq3');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$pdo->exec('PRAGMA journal_mode=WAL');
 
 $queue = new SqlitePdoQueue($pdo, 'my_table');
 ```
