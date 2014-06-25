@@ -219,7 +219,6 @@ On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXC
 *Note:* For performance reasons it's highly recommended to activate [WALL mode](http://www.sqlite.org/wal.html):
 
 ```php
-$pdo = new PDO('sqlite:/opt/databases/my_db.sq3');
 $pdo->exec('PRAGMA journal_mode=WAL');
 ```
 
@@ -241,6 +240,7 @@ use Phive\Queue\Pdo\SqlitePdoQueue;
 
 $pdo = new PDO('sqlite:/opt/databases/my_db.sq3');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$pdo->exec('PRAGMA journal_mode=WAL');
 
 $queue = new SqlitePdoQueue($pdo, 'my_table');
 ```
