@@ -2,6 +2,8 @@
 
 namespace Phive\Queue\Tests\Queue;
 
+use Phive\Queue\NoItemAvailableException;
+use Phive\Queue\QueueException;
 use Phive\Queue\RedisQueue;
 use Phive\Queue\Tests\Handler\RedisHandler;
 
@@ -12,6 +14,7 @@ class RedisQueueTest extends QueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;
+    use UtilTrait;
 
     public function getUnsupportedItemTypes()
     {
@@ -46,6 +49,30 @@ class RedisQueueTest extends QueueTest
             $queue->push($item);
             $this->assertEquals($item, $queue->pop());
         }
+    }
+
+    /**
+     * @dataProvider provideQueueInterfaceMethods
+     */
+    public function testThrowExceptionOnErrorResponse($method)
+    {
+        $mock = $this->getMock('Redis');
+
+        $redisMethods = get_class_methods('Redis');
+        foreach ($redisMethods as $redisMethod) {
+            $mock->expects($this->any())->method($redisMethod)->will($this->returnValue(false));
+        }
+
+        $queue = new RedisQueue($mock);
+
+        try {
+            $this->callQueueMethod($queue, $method);
+        } catch (NoItemAvailableException $e) {
+        } catch (QueueException $e) {
+            return;
+        }
+
+        $this->fail();
     }
 
     public static function createHandler(array $config)
