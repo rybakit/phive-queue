@@ -130,7 +130,7 @@ $queue = new RedisQueue($redis);
 
 #### TarantoolQueue
 
-To use the `TarantoolQueue` you have to install the [Tarantool PECL](https://github.com/tarantool/queue) extension and a [Lua script](https://github.com/tarantool/queue) for managing queues.
+To use the `TarantoolQueue` you have to install the [Tarantool PECL](https://github.com/tarantool/tarantool-php) extension and a [Lua script](https://github.com/tarantool/queue) for managing queues.
 
 ##### Constructor
 
