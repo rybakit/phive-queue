@@ -56,7 +56,7 @@ class TarantoolQueue implements Queue
             '0.00000001',
         ]);
 
-        if (empty($result['count'])) {
+        if (0 === $result['count']) {
             throw new NoItemAvailableException($this);
         }
 
@@ -79,10 +79,6 @@ class TarantoolQueue implements Queue
             $this->space,
             $this->tubeName,
         ]);
-
-        if (empty($result['tuples_list'][0])) {
-            throw new QueueException($this, 'Failed to count items.');
-        }
 
         $tuple = $result['tuples_list'][0];
         $index = array_search("space{$this->space}.{$this->tubeName}.tasks.total", $tuple, true);
