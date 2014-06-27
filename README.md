@@ -12,7 +12,7 @@ Phive Queue is a time-based scheduling queue with multiple backend support.
 The recommended way to install Phive Queue is through [Composer](http://getcomposer.org):
 
 ```sh
-$ composer require rybakit/phive-queue:~0.5
+$ composer require rybakit/phive-queue:~1.0@dev
 ```
 
 

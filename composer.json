@@ -35,5 +35,10 @@
         "files": [
             "src/functions.php"
         ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
