@@ -83,10 +83,6 @@ class TarantoolQueue implements Queue
         $tuple = $result['tuples_list'][0];
         $index = array_search("space{$this->space}.{$this->tubeName}.tasks.total", $tuple, true);
 
-        if (false === $index || !isset($tuple[$index + 1])) {
-            throw new QueueException($this, 'Failed to count items.');
-        }
-
         return (int) $tuple[$index + 1];
     }
 
