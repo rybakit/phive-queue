@@ -130,7 +130,8 @@ $queue = new RedisQueue($redis);
 
 #### TarantoolQueue
 
-To use the `TarantoolQueue` you have to install the [Tarantool PECL](https://github.com/tarantool/tarantool-php) extension and a [Lua script](https://github.com/tarantool/queue) for managing queues.
+To use the `TarantoolQueue` you have to install the [Tarantool PECL](https://github.com/tarantool/tarantool-php)
+extension and a [Lua script](https://github.com/tarantool/queue) for managing queues.
 
 ##### Constructor
 
@@ -155,7 +156,8 @@ $queue = new TarantoolQueue($tarantool, 'my_tube');
 
 #### PheanstalkQueue
 
-The `PheanstalkQueue` requires the [Pheanstalk](https://github.com/pda/pheanstalk) library ([Beanstalk](http://kr.github.io/beanstalkd) client) to be installed:
+The `PheanstalkQueue` requires the [Pheanstalk](https://github.com/pda/pheanstalk)
+library ([Beanstalk](http://kr.github.io/beanstalkd) client) to be installed:
 
 ```sh
 $ composer require pda/pheanstalk:~2.1
@@ -184,10 +186,12 @@ $queue = new PheanstalkQueue($pheanstalk, 'my_tube');
 
 #### GenericPdoQueue
 
-The `GenericPdoQueue` is intended for PDO drivers whose databases support stored procedures/functions (in fact all drivers except SQLite).
+The `GenericPdoQueue` is intended for PDO drivers whose databases support stored procedures/functions (in fact
+all drivers except SQLite).
 
-The `GenericPdoQueue` requires [PDO](http://php.net/pdo) and a [PDO driver](http://php.net/manual/en/pdo.drivers.php) for a particular database be installed.
-On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXCEPTION`).
+The `GenericPdoQueue` requires [PDO](http://php.net/pdo) and a [PDO driver](http://php.net/manual/en/pdo.drivers.php)
+for a particular database be installed. On top of that PDO error mode must be set to throw
+exceptions (`PDO::ERRMODE_EXCEPTION`).
 
 SQL files to create the table and the stored routine can be found in the [res](res) directory.
 
@@ -276,7 +280,8 @@ $queue = new SysVQueue(123456);
 
 #### InMemoryQueue
 
-As you might guess, the `InMemoryQueue` exists only in RAM and therefore operates faster than other queues. It can be useful in cases where the persistence is not necessary.
+The `InMemoryQueue` can be useful in cases where the persistence is not needed. It exists only in RAM and therefore
+operates faster than other queues.
 
 ##### Constructor
 
@@ -312,9 +317,11 @@ The following table details the various item types supported across queues.
 
 ## Exceptions
 
-Every queue method declared in the `Queue` interface will throw an exception if a run-time error occurs at the time the method is called.
+Every queue method declared in the `Queue` interface will throw an exception if a run-time error occurs at the time
+the method is called.
 
-For example, in the code below, the `push()` call will fail with a `MongoConnectionException` exception in a case a remote server unreachable:
+For example, in the code below, the `push()` call will fail with a `MongoConnectionException` exception in a case
+a remote server unreachable:
 
 ```php
 use Phive\Queue\MongoQueue;
@@ -360,7 +367,8 @@ try {
 
 ## Tests
 
-Phive Queue uses [PHPUnit](http://phpunit.de) for unit and acceptance testing. In order to run the tests, you'll first need to install the library dependencies using composer:
+Phive Queue uses [PHPUnit](http://phpunit.de) for unit and acceptance testing.
+In order to run the tests, you'll first need to install the library dependencies using composer:
 
 ```sh
 $ composer install
@@ -373,7 +381,8 @@ $ phpunit
 ```
 
 You may also wish to specify your own default values of some tests (db names, passwords, queue sizes, etc.).
-Just create your own `phpunit.xml` file by copying the `phpunit.xml.dist` file and customize to your needs.
+Just create your own `phpunit.xml` file by copying the [phpunit.xml.dist](phpunit.xml.dist) file
+and customize to your needs.
 
 
 #### Performance
@@ -413,12 +422,14 @@ RedisQueue::pop() (delayed)
    Time taken for test:   0.071 [sec]
 ```
 
-You may also change the number of items involved in the test by changing the `PHIVE_PERF_QUEUE_SIZE` value in your `phpunit.xml` file.
+You may also change the number of items involved in the test by changing the `PHIVE_PERF_QUEUE_SIZE` value
+in your `phpunit.xml` file.
 
 
 #### Concurrency
 
-In order to check the concurrency you'll have to install the [Gearman](http://gearman.org) server and the [German PECL](http://pecl.php.net/package/gearman) extension.
+In order to check the concurrency you'll have to install the [Gearman](http://gearman.org) server
+and the [German PECL](http://pecl.php.net/package/gearman) extension.
 Once the server has been installed and started, create a number of processes (workers) by running:
 
 ```sh
@@ -431,9 +442,11 @@ Then run the tests:
 $ phpunit --group concurrency
 ```
 
-This test inserts a number of items (100 by default) into a queue, and then each worker tries to retrieve them back in parallel.
+This test inserts a number of items (100 by default) into a queue, and then each worker tries to retrieve them
+in parallel.
 
-You may also change the number of items involved in the test by changing the `PHIVE_CONCUR_QUEUE_SIZE` value in your `phpunit.xml` file.
+You may also change the number of items involved in the test by changing the `PHIVE_CONCUR_QUEUE_SIZE` value
+in your `phpunit.xml` file.
 
 
 ## License
