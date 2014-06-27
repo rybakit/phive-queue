@@ -4,7 +4,7 @@ namespace Phive\Queue\Tests\Queue;
 
 use Phive\Queue as q;
 
-class FunctionsTest extends \PHPUnit_Framework_TestCase
+class UtilsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideValidEtas
