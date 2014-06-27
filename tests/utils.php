@@ -19,18 +19,18 @@ function unfreeze_time()
     uopz_restore('DateTime', 'getTimestamp');
 }
 
-function call_future(\Closure $func, $futureTime, $force_sleep = null)
+function call_at($timestamp, \Closure $func, $force_sleep = null)
 {
     if (!function_exists('uopz_function')) {
         $force_sleep = true;
     }
 
     if ($force_sleep) {
-        sleep(-time() + $futureTime);
+        sleep(-time() + $timestamp);
         return $func();
     }
 
-    freeze_time($futureTime);
+    freeze_time($timestamp);
     $result = $func();
     unfreeze_time();
 
