@@ -33,7 +33,7 @@
             "Phive\\Queue\\": "src/"
         },
         "files": [
-            "src/functions.php"
+            "src/utils.php"
         ]
     },
     "extra": {
