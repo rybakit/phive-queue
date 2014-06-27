@@ -35,7 +35,7 @@ $count = $queue->count(); // 5
 
 // pop items off the queue
 // note that is not guaranteed that the items with the same scheduled time 
-// will be recieved in the same order in which they were added
+// will be received in the same order in which they were added
 $item123 = $queue->pop();
 $item123 = $queue->pop();
 $item123 = $queue->pop();
