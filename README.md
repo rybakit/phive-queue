@@ -150,7 +150,7 @@ Parameters:
 ```php
 use Phive\Queue\TarantoolQueue;
 
-$tarantool = new Tarantool('127.0.0.1', 33013);
+$tarantool = new Tarantool('127.0.0.1', 33020);
 $queue = new TarantoolQueue($tarantool, 'my_tube');
 ```
 
@@ -317,7 +317,7 @@ The following table details the various item types supported across queues.
 
 ## Exceptions
 
-Every queue method declared in the `Queue` interface will throw an exception if a run-time error occurs at the time
+Every queue method declared in the [Queue](src/Queue.php) interface will throw an exception if a run-time error occurs at the time
 the method is called.
 
 For example, in the code below, the `push()` call will fail with a `MongoConnectionException` exception in a case
@@ -348,7 +348,7 @@ $queue = new ExceptionalQueue($queue);
 $queue->push('item'); // throws Phive\Queue\QueueException
 ```
 
-And then, to catch queue level exceptions use the `QueueException`:
+And then, to catch queue level exceptions use the `QueueException` class:
 
 ```php
 use Phive\Queue\QueueException;
