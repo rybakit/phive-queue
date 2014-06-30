@@ -80,7 +80,7 @@ class SysVQueueTest extends QueueTest
         try {
             $this->queue->pop();
         } catch (\Exception $e) {
-            if (7 === $e->getCode() && 'Argument list too long' === $e->getMessage()) {
+            if (7 === $e->getCode() && 'Argument list too long.' === $e->getMessage()) {
                 return;
             }
         }
