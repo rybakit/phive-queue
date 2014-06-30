@@ -57,7 +57,7 @@ class PheanstalkQueue implements Queue
     {
         $stats = $this->pheanstalk->statsTube($this->tubeName);
 
-        return $stats->current_jobs_ready;
+        return $stats['current-jobs-ready'];
     }
 
     /**
