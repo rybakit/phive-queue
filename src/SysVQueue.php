@@ -51,9 +51,9 @@ class SysVQueue implements Queue
     {
         $eta = norm_eta($eta);
 
-        $this->exceptional(function (&$errorCode) use ($item, $eta) {
-            return msg_send($this->getQueue(), $eta, $item, $this->serialize, false, $errorCode);
-        });
+        if (!msg_send($this->getQueue(), $eta, $item, $this->serialize, false, $errorCode)) {
+            throw new QueueException($this, posix_strerror($errorCode).'.', $errorCode);
+        }
     }
 
     /**
@@ -61,12 +61,11 @@ class SysVQueue implements Queue
      */
     public function pop()
     {
-        $item = null;
-
-        $this->exceptional(function (&$errorCode) use (&$item) {
-            return msg_receive($this->getQueue(), -time(), $eta, $this->itemMaxLength,
-                $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode);
-        });
+        if (!msg_receive($this->getQueue(), -time(), $eta, $this->itemMaxLength, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode)) {
+            throw (MSG_ENOMSG === $errorCode)
+                ? new NoItemAvailableException($this)
+                : new QueueException($this, posix_strerror($errorCode).'.', $errorCode);
+        }
 
         return $item;
     }
@@ -108,29 +107,5 @@ class SysVQueue implements Queue
         }
 
         return $this->queue;
-    }
-
-    private function exceptional(\Closure $func)
-    {
-        $message = null;
-        $code = null;
-
-        set_error_handler(function ($errNo, $errStr) use (&$message) { $message = $errStr; }, E_NOTICE | E_WARNING);
-        $result = $func($code);
-        restore_error_handler();
-
-        if ($result) {
-            return $result;
-        }
-
-        if (MSG_ENOMSG === $code) {
-            throw new NoItemAvailableException($this);
-        }
-
-        if (!$message) {
-            $message = $code ? posix_strerror($code).'.' : 'Unknown SysV error.';
-        }
-
-        throw new QueueException($this, $message, $code);
     }
 }

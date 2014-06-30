@@ -48,7 +48,9 @@ class SysVQueueTest extends QueueTest
         self::getHandler()->clear();
 
         try {
-            $this->callQueueMethod($this->queue, $method);
+            // suppress notices/warnings triggered by msg_* functions
+            // to avoid a PHPUnit_Framework_Error_Notice exception be thrown
+            @$this->callQueueMethod($this->queue, $method);
         } catch (NoItemAvailableException $e) {
         } catch (QueueException $e) {
             return;
