@@ -76,6 +76,15 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('item', $this->queue->pop());
     }
 
+    public function testPushEqualItems()
+    {
+        $this->queue->push('item');
+        $this->queue->push('item');
+
+        $this->assertEquals('item', $this->queue->pop());
+        $this->assertEquals('item', $this->queue->pop());
+    }
+
     public function testCountAndClear()
     {
         $this->assertEquals(0, $this->queue->count());
