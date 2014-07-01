@@ -60,7 +60,6 @@ Currently, there are the following queues available:
 
 * [MongoQueue](#mongoqueue)
 * [RedisQueue](#redisqueue)
-* [PredisQueue](#predisqueue)
 * [TarantoolQueue](#tarantoolqueue)
 * [PheanstalkQueue](#pheanstalkqueue)
 * [GenericPdoQueue](#genericpdoqueue)
@@ -125,31 +124,6 @@ $redis->setOption(Redis::OPT_PREFIX, 'my_prefix:');
 
 // Since the Redis client v2.2.5 the RedisQueue has the ability to utilize serialization:
 // $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-
-$queue = new RedisQueue($redis);
-```
-
-#### PredisQueue
-
-For the `PredisQueue` you have to install [Predis](https://github.com/nrk/predis)  *(v0.8.5 or higher)*.
-
-##### Constructor
-
-```php
-public PredisQueue::__construct(\Predis\Client $redis)
-```
-
-Parameters:
-
-> <b>redis</b> The Predis client instance<br>
-
-##### Example
-
-
-```php
-use Phive\Queue\PredisQueue;
-
-$redis = new \Predis\Client('tcp://127.0.0.1:6379');
 
 $queue = new RedisQueue($redis);
 ```
@@ -332,7 +306,6 @@ The following table details the various item types supported across queues.
 |---------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
 | [MongoQueue](#mongoqueue)             |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |
 | [RedisQueue](#redisqueue)             |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓*   |    ✓*   |
-| [PredisQueue](#predisqueue)           |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
 | [TarantoolQueue](#tarantoolqueue)     |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
 | [PheanstalkQueue](#pheanstalkqueue)   |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
 | [GenericPdoQueue](#genericpdoqueue)   |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
