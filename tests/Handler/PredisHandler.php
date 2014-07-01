@@ -10,25 +10,25 @@ class PredisHandler extends Handler
     /**
      * @var Client
      */
-    private $client;
+    private $redis;
     
     /**
      * @return \Phive\Queue\Queue
      */
     public function createQueue()
     {
-        return new PredisQueue($this->client);
+        return new PredisQueue($this->redis);
     }
 
     public function clear()
     {
-        $this->client->del('items');
+        $this->redis->del('items');
     }
 
     protected function configure()
     {
-        $conn = 'tcp://'.$this->getOption('host').':'.$this->getOption('port');
+        $connection = 'tcp://'.$this->getOption('host').':'.$this->getOption('port');
 
-        $this->client = new Client($conn, ['prefix' => $this->getOption('prefix')]);
+        $this->redis = new Client($connection, array('prefix' => $this->getOption('prefix')));
     }
 }

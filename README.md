@@ -136,22 +136,22 @@ For the `PredisQueue` you have to install [Predis](https://github.com/nrk/predis
 ##### Constructor
 
 ```php
-public PredisQueue::__construct(Predis\Client $client)
+public PredisQueue::__construct(\Predis\Client $redis)
 ```
 
 Parameters:
 
-> <b>client</b> The Predis\Client instance
+> <b>redis</b> The Predis client instance<br>
 
 ##### Example
 
 
 ```php
 use Phive\Queue\PredisQueue;
-use Predis\Client;
 
-$client = new Client('tcp://127.0.0.1:6379', ['prefix' => 'my_prefix:']);
-$queue = new RedisQueue($client);
+$redis = new \Predis\Client('tcp://127.0.0.1:6379');
+
+$queue = new RedisQueue($redis);
 ```
 
 #### TarantoolQueue

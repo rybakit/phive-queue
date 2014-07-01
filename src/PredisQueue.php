@@ -7,13 +7,13 @@ use Predis\Client;
 class PredisQueue implements Queue
 {
     /**
-     * @var Client
+     * @var \Predis\Client
      */
-    private $client;
+    private $redis;
 
-    public function __construct(Client $client)
+    public function __construct(Client $redis)
     {
-        $this->client = $client;
+        $this->redis = $redis;
     }
 
     /**
@@ -21,7 +21,9 @@ class PredisQueue implements Queue
      */
     public function push($item, $eta = null)
     {
-        $this->client->zadd('items', norm_eta($eta), $item);
+        $eta = norm_eta($eta);
+
+        $this->redis->zadd('items', $eta, $item);
     }
 
     /**
@@ -30,7 +32,7 @@ class PredisQueue implements Queue
     public function pop()
     {
         $result = $this->atomicPop('items');
-
+        
         if ($result === null) {
             throw new NoItemAvailableException($this);
         }
@@ -43,7 +45,7 @@ class PredisQueue implements Queue
      */
     public function clear()
     {
-        $this->client->del('items');
+        $this->redis->del('items');
     }
 
     /**
@@ -51,7 +53,7 @@ class PredisQueue implements Queue
      */
     public function count()
     {
-        return $this->client->zcard('items');
+        return $this->redis->zcard('items');
     }
 
     /**
@@ -65,18 +67,20 @@ class PredisQueue implements Queue
     private function atomicPop($key)
     {
         $element = null;
+        
         $options = ['cas' => true, 'watch' => $key, 'retry' => 100];
 
-        $this->client->transaction($options, function ($tx) use ($key, &$element) {
-            $params = ['withscores' => true, 'limit' => ['offset' => 0, 'count' => 1]];
+        $this->redis->transaction($options, function ($tx) use ($key, &$element) {
+                
+                $params = ['withscores' => true, 'limit' => ['offset' => 0, 'count' => 1]];
+                
+                @list($element) = $tx->zrangebyscore($key, '-inf', time(), $params);
 
-            @list($element) = $tx->zrangebyscore($key, '-inf', time(), $params);
-
-            if (isset($element) && is_array($element)) {
-                $tx->multi();
-                $tx->zrem($key, $element[0]);
-            }
-        });
+                if (isset($element) && is_array($element)) {
+                    $tx->multi();
+                    $tx->zrem($key, $element[0]);
+                }
+            });
 
         return $element ? $element[0] : null;
     }
