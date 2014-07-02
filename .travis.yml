@@ -91,10 +91,10 @@ before_script:
 
     - composer install
 
-    - php tests/worker.php >> worker.log 2>&1 &
-    - php tests/worker.php >> worker.log 2>&1 &
-    - php tests/worker.php >> worker.log 2>&1 &
-    - php tests/worker.php >> worker.log 2>&1 &
+    - php tests/worker.php >> worker.log &
+    - php tests/worker.php >> worker.log &
+    - php tests/worker.php >> worker.log &
+    - php tests/worker.php >> worker.log &
 
 script:
     #- vendor/bin/phpunit -v --coverage-clover coverage.clover
