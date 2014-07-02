@@ -16,7 +16,10 @@ trait ConcurrencyTrait
         }
 
         $client = new \GearmanClient();
-        $client->addServer('127.0.0.1');
+
+        if (!$client->addServer('127.0.0.1')) {
+            $this->markTestSkipped('Failed to add gearman job server (127.0.0.1).');
+        }
 
         $workerIds = [];
         $poppedItems = [];
@@ -36,7 +39,7 @@ trait ConcurrencyTrait
         });
 
         $queueSize = $this->getConcurrencyQueueSize();
-        $this->assertGreaterThan(1, $queueSize, 'Queue size is too small to test concurrency.');
+        $this->assertGreaterThan(10, $queueSize, 'Queue size is too small to test concurrency.');
 
         $workload = serialize(self::getHandler());
         for ($i = 1; $i <= $queueSize; $i++) {
