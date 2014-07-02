@@ -97,8 +97,8 @@ before_script:
     - php tests/worker.php >> worker.log 2>&1 &
 
 script:
-    - vendor/bin/phpunit -v --coverage-clover coverage.clover
-    - vendor/bin/phpunit -v --group concurrency
+    #- vendor/bin/phpunit -v --coverage-clover coverage.clover
+    - vendor/bin/phpunit --group concurrency tests/Queue/RedisQueueTest.php
 
 after_script:
     - cat worker.log
