@@ -16,8 +16,7 @@ trait ConcurrencyTrait
         }
 
         $client = new \GearmanClient();
-        $client->addServer();
-        //$client->setTimeout(30);
+        $client->addServer('127.0.0.1');
 
         $workerIds = [];
         $poppedItems = [];
