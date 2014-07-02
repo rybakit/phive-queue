@@ -17,15 +17,25 @@ services:
     - redis-server
 
 before_install:
+    # gearman
+    - sudo apt-get install python-software-properties
+    - sudo add-apt-repository -y ppa:gearman-developers/ppa
+
     # tarantool (http://stable.tarantool.org/download.html)
     - wget http://tarantool.org/dist/public.key
     - sudo apt-key add ./public.key
     - release=`lsb_release -c -s`
     - echo "deb http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list
     - echo "deb-src http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list
+
     - sudo apt-get update
 
 install:
+    # gearman
+    - sudo apt-get install gearman-job-server libgearman-dev
+    - pecl install gearman
+    - sudo service gearman-job-server restart
+
     # tarantool-lts
     - sudo apt-get install tarantool-lts tarantool-lts-client
     - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/init.lua
@@ -81,10 +91,18 @@ before_script:
 
     - composer install
 
+    - php tests/worker.php >> worker.log 2>&1 &
+    - php tests/worker.php >> worker.log 2>&1 &
+    - php tests/worker.php >> worker.log 2>&1 &
+    - php tests/worker.php >> worker.log 2>&1 &
+
 script:
     - vendor/bin/phpunit -v --coverage-clover coverage.clover
+    - vendor/bin/phpunit -v --group concurrency
 
 after_script:
+    - cat worker.log
+
     # code-coverage for scrutinizer-ci
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION == 5.4 ]]; then
