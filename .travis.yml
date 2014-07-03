@@ -92,18 +92,18 @@ before_script:
 
     - composer install
 
+    - php tests/worker.php >> worker.log &
+    - php tests/worker.php >> worker.log &
+    - php tests/worker.php >> worker.log &
+    - php tests/worker.php >> worker.log &
+
 script:
     - vendor/bin/phpunit -v --coverage-clover coverage.clover
-
-    # concurrency
-    - php tests/worker.php >> worker.log &
-    - php tests/worker.php >> worker.log &
-    - php tests/worker.php >> worker.log &
-    - php tests/worker.php >> worker.log &
     - vendor/bin/phpunit --group concurrency
-    - cat worker.log
 
 after_script:
+    - cat worker.log
+
     # code-coverage for scrutinizer-ci
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION == 5.4 ]]; then
