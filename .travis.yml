@@ -34,8 +34,9 @@ install:
     # gearman
     - sudo apt-get install gearman-job-server libgearman-dev
     - pecl install gearman
-    - sudo service gearman-job-server restart
-
+    #- sudo service gearman-job-server restart
+    - sudo gearmand -d
+    
     # tarantool-lts
     - sudo apt-get install tarantool-lts tarantool-lts-client
     - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/init.lua
