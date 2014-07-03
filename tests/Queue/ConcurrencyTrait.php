@@ -16,16 +16,13 @@ trait ConcurrencyTrait
         }
 
         $client = new \GearmanClient();
-
-        if (!$client->addServer('127.0.0.1')) {
-            $this->markTestSkipped('Failed to add gearman job server (127.0.0.1).');
-        }
+        $client->addServer();
 
         $workerIds = [];
         $poppedItems = [];
         $client->setCompleteCallback(function(\GearmanTask $task) use (&$workerIds, &$poppedItems) {
             $data = explode(':', $task->data(), 2);
-            if (!is_array($data) || 2 != count($data)) {
+            if (!is_array($data) || 2 !== count($data)) {
                 return;
             }
 

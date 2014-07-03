@@ -2,7 +2,9 @@
 
 include __DIR__.'/bootstrap.php';
 
-$worker = new \GearmanWorker('127.0.0.1');
+use Phive\Queue\Pdo\GenericPdoQueue;
+
+$worker = new \GearmanWorker();
 $worker->addServer();
 
 $workerId = uniqid(getmypid().'_', true);
@@ -11,9 +13,19 @@ $worker->addFunction('pop', function(\GearmanJob $job) use ($workerId) {
 
     $handler = unserialize($job->workload());
     $queue = $handler->createQueue();
+
+    $queueName = get_class($queue);
+    if ($queue instanceof GenericPdoQueue) {
+        $queueName .= '#'.$handler->getDriverName();
+    }
+
     $item = $queue->pop();
 
-    printf("%d: %s -> %s\n", ++$i, get_class($queue), $item);
+    printf("%s: %s item #%s\n",
+        str_pad(++$i, 4, ' ', STR_PAD_LEFT),
+        str_pad($queueName.' ', 50, '.'),
+        $item
+    );
 
     return $workerId.':'.$item;
 });

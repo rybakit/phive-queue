@@ -47,6 +47,11 @@ class PdoHandler extends Handler
         $this->pdo->exec('DELETE FROM '.$this->getOption('table_name'));
     }
 
+    public function getDriverName()
+    {
+        return $this->driverName;
+    }
+
     protected function configure()
     {
         $this->pdo = new \PDO(

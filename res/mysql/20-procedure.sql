@@ -4,6 +4,8 @@ BEGIN
     DECLARE found_id int;
     DECLARE found_item text;
 
+    START TRANSACTION;
+
     SELECT id, item INTO found_id, found_item
     FROM {{table_name}}
     WHERE eta <= now
@@ -18,4 +20,6 @@ BEGIN
     ELSE
         SELECT NULL LIMIT 0;
     END IF;
+
+    COMMIT;
 END

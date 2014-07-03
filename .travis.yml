@@ -34,7 +34,7 @@ install:
     # gearman
     - sudo apt-get install gearman-job-server libgearman-dev
     - pecl install gearman
-    #- sudo service gearman-job-server restart
+    - sudo service gearman-job-server stop
     - sudo gearmand -d
     
     # tarantool-lts
@@ -92,18 +92,18 @@ before_script:
 
     - composer install
 
-    - php tests/worker.php >> worker.log &
-    - php tests/worker.php >> worker.log &
-    - php tests/worker.php >> worker.log &
-    - php tests/worker.php >> worker.log &
-
 script:
-    #- vendor/bin/phpunit -v --coverage-clover coverage.clover
-    - vendor/bin/phpunit --group concurrency tests/Queue/RedisQueueTest.php
+    - vendor/bin/phpunit -v --coverage-clover coverage.clover
 
-after_script:
+    # concurrency
+    - php tests/worker.php >> worker.log &
+    - php tests/worker.php >> worker.log &
+    - php tests/worker.php >> worker.log &
+    - php tests/worker.php >> worker.log &
+    - vendor/bin/phpunit --group concurrency
     - cat worker.log
 
+after_script:
     # code-coverage for scrutinizer-ci
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION == 5.4 ]]; then
