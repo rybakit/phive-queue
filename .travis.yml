@@ -18,15 +18,21 @@ services:
 
 before_install:
     # gearman
-    - sudo apt-get install python-software-properties
-    - sudo add-apt-repository -y ppa:gearman-developers/ppa
+    - >
+        bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
+        sudo apt-get install python-software-properties;
+        sudo add-apt-repository -y ppa:gearman-developers/ppa;
+        fi;'
 
     # tarantool (http://stable.tarantool.org/download.html)
-    - wget http://tarantool.org/dist/public.key
-    - sudo apt-key add ./public.key
-    - release=`lsb_release -c -s`
-    - echo "deb http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list
-    - echo "deb-src http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list
+    - >
+        bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
+        wget http://tarantool.org/dist/public.key;
+        sudo apt-key add ./public.key;
+        release=`lsb_release -c -s`;
+        echo "deb http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list;
+        echo "deb-src http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list;
+        fi;'
 
     - sudo apt-get update
 
@@ -39,7 +45,7 @@ install:
         sudo service gearman-job-server stop;
         sudo gearmand -d;
         fi;'
-    
+
     # tarantool-lts
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
