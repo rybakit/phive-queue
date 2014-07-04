@@ -32,16 +32,22 @@ before_install:
 
 install:
     # gearman
-    - sudo apt-get install gearman-job-server libgearman-dev
-    - pecl install gearman
-    - sudo service gearman-job-server stop
-    - sudo gearmand -d
+    - >
+        bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
+        sudo apt-get install gearman-job-server libgearman-dev;
+        pecl install gearman;
+        sudo service gearman-job-server stop;
+        sudo gearmand -d;
+        fi;'
     
     # tarantool-lts
-    - sudo apt-get install tarantool-lts tarantool-lts-client
-    - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/init.lua
-    - sudo wget https://raw.githubusercontent.com/tarantool/queue/master/tarantool.cfg -O /etc/tarantool/instances.enabled/queue.cfg && echo 'script_dir = '`pwd` | sudo tee -a /etc/tarantool/instances.enabled/queue.cfg
-    - sudo service tarantool-lts restart
+    - >
+        bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
+        sudo apt-get install tarantool-lts tarantool-lts-client;
+        sudo wget https://raw.githubusercontent.com/tarantool/queue/master/init.lua;
+        sudo wget https://raw.githubusercontent.com/tarantool/queue/master/tarantool.cfg -O /etc/tarantool/instances.enabled/queue.cfg && echo 'script_dir = '`pwd` | sudo tee -a /etc/tarantool/instances.enabled/queue.cfg;
+        sudo service tarantool-lts restart;
+        fi;'
 
     #tarantool-php
     - >
@@ -92,17 +98,28 @@ before_script:
 
     - composer install
 
-    - php tests/worker.php >> worker.log &
-    - php tests/worker.php >> worker.log &
-    - php tests/worker.php >> worker.log &
-    - php tests/worker.php >> worker.log &
+    # gearman workers
+    - >
+        bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
+        php tests/worker.php >> worker.log &;
+        php tests/worker.php >> worker.log &;
+        php tests/worker.php >> worker.log &;
+        php tests/worker.php >> worker.log &;
+        fi;'
 
 script:
     - vendor/bin/phpunit -v --coverage-clover coverage.clover
-    - vendor/bin/phpunit --group concurrency
+
+    - >
+        bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
+        vendor/bin/phpunit --group concurrency;
+        fi;'
 
 after_script:
-    - cat worker.log
+    - >
+        bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
+        cat worker.log;
+        fi;'
 
     # code-coverage for scrutinizer-ci
     - >
