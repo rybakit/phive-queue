@@ -107,10 +107,10 @@ before_script:
     # gearman workers
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        php tests/worker.php >> worker.log &;
-        php tests/worker.php >> worker.log &;
-        php tests/worker.php >> worker.log &;
-        php tests/worker.php >> worker.log &;
+        (php tests/worker.php >> worker.log &);
+        (php tests/worker.php >> worker.log &);
+        (php tests/worker.php >> worker.log &);
+        (php tests/worker.php >> worker.log &);
         fi;'
 
 script:
