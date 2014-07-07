@@ -22,14 +22,11 @@ class RedisQueueTest extends QueueTest
     }
 
     /**
+     * @requires function Redis::_serialize
      * @dataProvider provideItemsOfVariousTypes
      */
     public function testSupportItemTypeWithSerializerLoose($item)
     {
-        if (!method_exists('Redis', '_serialize')) {
-            $this->markTestSkipped('Redis::_serialize() is required.');
-        }
-
         $handler = self::getHandler();
 
         $redis = new \Redis();
