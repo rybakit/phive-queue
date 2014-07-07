@@ -26,12 +26,12 @@ abstract class PdoQueue implements Queue
         $supportedDrivers = (array) $this->getSupportedDrivers();
         $driver = $pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
-        if (!in_array($driver, $supportedDrivers)) {
+        if (!in_array($driver, $supportedDrivers, true)) {
             throw new \InvalidArgumentException(sprintf('PDO driver "%s" is unsupported by "%s".', $driver, get_class($this)));
         }
 
         $this->pdo = $pdo;
-        $this->tableName = (string) $tableName;
+        $this->tableName = $tableName;
     }
 
     /**
