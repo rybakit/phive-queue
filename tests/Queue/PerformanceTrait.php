@@ -8,9 +8,9 @@ trait PerformanceTrait
 
     /**
      * @group performance
-     * @dataProvider providePerformanceData
+     * @dataProvider providePerformancePopDelay
      */
-    public function testPushPopPerformance($benchmarkMethod, $delay)
+    public function testPushPopPerformance($delay)
     {
         $queueSize = $this->getPerformanceQueueSize();
         $queueName = preg_replace('~^'.preg_quote(__NAMESPACE__).'\\\|Test$~', '', get_class($this));
@@ -18,7 +18,8 @@ trait PerformanceTrait
 
         printf("\n%s::push()%s\n", $queueName, $delay ? ' (delayed)' : '');
 
-        $this->printPerformanceResult($queueSize, $this->$benchmarkMethod($queueSize, $item));
+        $runtime = $this->benchmarkPush($queueSize, $item, $delay);
+        $this->printPerformanceResult($queueSize, $runtime);
 
         if ($delay) {
             sleep($delay);
@@ -34,29 +35,18 @@ trait PerformanceTrait
         $this->printPerformanceResult($queueSize, microtime(true) - $start);
     }
 
-    public function providePerformanceData()
+    public function providePerformancePopDelay()
     {
-        return [
-            ['benchmarkPush', 0],
-            ['benchmarkPushDelayed', 1],
-        ];
+        return [[0], [1]];
     }
 
-    public function benchmarkPush($queueSize, $item)
+    protected function benchmarkPush($queueSize, $item, $delay)
     {
+        $eta = $delay ? time() + $delay : null;
+
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
-            $this->queue->push($item);
-        }
-
-        return microtime(true) - $start;
-    }
-
-    public function benchmarkPushDelayed($queueSize, $item)
-    {
-        $start = microtime(true);
-        for ($i = $queueSize; $i; $i--) {
-            $this->queue->push($item, time() + 1);
+            $this->queue->push($item, $eta);
         }
 
         return microtime(true) - $start;
