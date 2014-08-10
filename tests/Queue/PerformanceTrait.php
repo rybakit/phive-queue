@@ -16,7 +16,7 @@ trait PerformanceTrait
         $queueName = preg_replace('~^'.preg_quote(__NAMESPACE__).'\\\|Test$~', '', get_class($this));
         $item = str_repeat('x', static::$performanceItemLength);
 
-        echo sprintf("\n%s::push()%s\n", $queueName, $delay ? ' (delayed)' : '');
+        printf("\n%s::push()%s\n", $queueName, $delay ? ' (delayed)' : '');
 
         $this->printPerformanceResult($queueSize, $this->$benchmarkMethod($queueSize, $item));
 
@@ -24,7 +24,7 @@ trait PerformanceTrait
             sleep($delay);
         }
 
-        echo sprintf("\n%s::pop()%s\n", $queueName, $delay ? ' (delayed)' : '');
+        printf("\n%s::pop()%s\n", $queueName, $delay ? ' (delayed)' : '');
 
         $start = microtime(true);
         for ($i = $queueSize; $i; $i--) {
@@ -64,10 +64,10 @@ trait PerformanceTrait
 
     protected function printPerformanceResult($total, $runtime)
     {
-        echo sprintf("   Total operations:      %d\n", $total);
-        echo sprintf("   Operations per second: %01.3f [#/sec]\n", $total / $runtime);
-        echo sprintf("   Time per operation:    %01.3f [ms]\n", ($runtime / $total) * 1000000);
-        echo sprintf("   Time taken for test:   %01.3f [sec]\n", $runtime);
+        printf("   Total operations:      %d\n", $total);
+        printf("   Operations per second: %01.3f [#/sec]\n", $total / $runtime);
+        printf("   Time per operation:    %01.3f [ms]\n", ($runtime / $total) * 1000000);
+        printf("   Time taken for test:   %01.3f [sec]\n", $runtime);
     }
 
     protected function getPerformanceQueueSize()
