@@ -1,6 +1,6 @@
 <?php
 
-include __DIR__.'/bootstrap.php';
+require __DIR__.'/../vendor/autoload.php';
 
 use Phive\Queue\Pdo\GenericPdoQueue;
 

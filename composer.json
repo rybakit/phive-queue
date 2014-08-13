@@ -36,6 +36,14 @@
             "src/utils.php"
         ]
     },
+    "autoload-dev" : {
+        "psr-4": {
+            "Phive\\Queue\\Tests\\": "tests/"
+        },
+        "files": [
+            "tests/utils.php"
+        ]
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
