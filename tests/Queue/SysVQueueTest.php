@@ -109,7 +109,7 @@ class SysVQueueTest extends QueueTest
         exec('sysctl kernel.msgmnb 2> /dev/null', $output);
 
         if (!$output) {
-            $this->markTestSkipped('Unable to determine the max size of the System V queue.');
+            $this->markTestSkipped('Unable to determine the maximum size of the System V queue.');
         }
 
         $maxSizeInBytes = (int) str_replace('kernel.msgmnb = ', '', $output[0]);
