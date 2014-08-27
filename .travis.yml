@@ -92,9 +92,8 @@ before_script:
 
     # PHPUnit
     # https://github.com/sebastianbergmann/phpunit/pull/1289
-    - composer require phpunit/php-code-coverage:3.0.*@dev
     - composer require phpunit/phpunit-mock-objects 2.3.*@dev
-    - composer require phpunit/phpunit:dev-master
+    - composer require phpunit/phpunit:4.3.x-dev
 
     # Mongofill
     - >
@@ -114,7 +113,7 @@ before_script:
         fi;'
 
 script:
-    - vendor/bin/phpunit -v --coverage-clover coverage.clover
+    - vendor/bin/phpunit --debug --coverage-clover coverage.clover
 
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
