@@ -129,6 +129,14 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function provideItemsOfUnsupportedTypes()
+    {
+        return array_intersect_key(
+            $this->provideItemsOfVariousTypes(),
+            array_fill_keys($this->getUnsupportedItemTypes(), false)
+        );
+    }
+
     public function getUnsupportedItemTypes()
     {
         return [];

@@ -52,7 +52,7 @@ class SysVQueue implements Queue
         $eta = norm_eta($eta);
 
         if (!msg_send($this->getQueue(), $eta, $item, $this->serialize, false, $errorCode)) {
-            throw new QueueException($this, posix_strerror($errorCode).'.', $errorCode);
+            throw new QueueException($this, self::getErrorMessage($errorCode), $errorCode);
         }
     }
 
@@ -64,7 +64,7 @@ class SysVQueue implements Queue
         if (!msg_receive($this->getQueue(), -time(), $eta, $this->itemMaxLength, $item, $this->serialize, MSG_IPC_NOWAIT, $errorCode)) {
             throw (MSG_ENOMSG === $errorCode)
                 ? new NoItemAvailableException($this)
-                : new QueueException($this, posix_strerror($errorCode).'.', $errorCode);
+                : new QueueException($this, self::getErrorMessage($errorCode), $errorCode);
         }
 
         return $item;
@@ -107,5 +107,19 @@ class SysVQueue implements Queue
         }
 
         return $this->queue;
+    }
+
+    private static function getErrorMessage($errorCode)
+    {
+        if ($errorCode) {
+            return posix_strerror($errorCode).'.';
+        }
+
+        $error = error_get_last();
+        if (0 === strpos($error['message'], 'msg_')) {
+            return preg_replace('/^msg_[^(]+?\(\)\:\s*/', '', $error['message']);
+        }
+
+        return 'Unknown error';
     }
 }
