@@ -16,6 +16,16 @@ class PheanstalkQueueTest extends QueueTest
         return ['array', 'object'];
     }
 
+    /**
+     * @dataProvider provideItemsOfUnsupportedTypes
+     * @expectedException \PHPUnit_Framework_Error_Warning
+     * @expectedExceptionMessage expects parameter 1 to be string
+     */
+    public function testGetErrorOnUnsupportedItemType($item)
+    {
+        $this->queue->push($item);
+    }
+
     public static function createHandler(array $config)
     {
         return new PheanstalkHandler([

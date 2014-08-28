@@ -17,6 +17,16 @@ class MongoQueueTest extends QueueTest
         return ['object'];
     }
 
+    /**
+     * @dataProvider provideItemsOfUnsupportedTypes
+     * @expectedException \MongoException
+     * @expectedExceptionMessage zero-length keys are not allowed, did you use $ with double quotes?
+     */
+    public function testGetErrorOnUnsupportedItemType($item)
+    {
+        $this->queue->push($item);
+    }
+
     public static function createHandler(array $config)
     {
         return new MongoHandler([

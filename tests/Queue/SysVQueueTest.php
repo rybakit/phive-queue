@@ -24,6 +24,16 @@ class SysVQueueTest extends QueueTest
     }
 
     /**
+     * @dataProvider provideItemsOfUnsupportedTypes
+     * @expectedException \Phive\Queue\QueueException
+     * @expectedExceptionMessage Message parameter must be either a string or a number.
+     */
+    public function testGetErrorOnUnsupportedItemType($item)
+    {
+        @$this->queue->push($item);
+    }
+
+    /**
      * @dataProvider provideItemsOfVariousTypes
      */
     public function testSupportItemTypeWithSerializerLoose($item)
@@ -57,16 +67,6 @@ class SysVQueueTest extends QueueTest
         }
 
         $this->fail();
-    }
-
-    /**
-     * @dataProvider provideItemsOfUnsupportedTypes
-     * @expectedException \Phive\Queue\QueueException
-     * @expectedExceptionMessage Message parameter must be either a string or a number.
-     */
-    public function testThrowExceptionOnUnsupportedItemType($item)
-    {
-        @$this->queue->push($item);
     }
 
     public function testSetPermissions()

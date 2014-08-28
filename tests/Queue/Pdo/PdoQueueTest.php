@@ -4,14 +4,31 @@ namespace Phive\Queue\Tests\Queue\Pdo;
 
 use Phive\Queue\NoItemAvailableException;
 use Phive\Queue\Tests\Handler\PdoHandler;
-use Phive\Queue\Tests\Queue\PersistenceTrait;
+use Phive\Queue\Tests\Queue\ConcurrencyTrait;
+use Phive\Queue\Tests\Queue\PerformanceTrait;
 use Phive\Queue\Tests\Queue\QueueTest;
 use Phive\Queue\Tests\Queue\UtilTrait;
 
 abstract class PdoQueueTest extends QueueTest
 {
-    use PersistenceTrait;
+    use ConcurrencyTrait;
+    use PerformanceTrait;
     use UtilTrait;
+
+    public function getUnsupportedItemTypes()
+    {
+        return ['array', 'object'];
+    }
+
+    /**
+     * @dataProvider provideItemsOfUnsupportedTypes
+     * @expectedException \PHPUnit_Framework_Error
+     * @expectedExceptionMessage PDO::quote() expects parameter 1 to be string
+     */
+    public function testGetErrorOnUnsupportedItemType($item)
+    {
+        $this->queue->push($item);
+    }
 
     /**
      * @dataProvider provideQueueInterfaceMethods

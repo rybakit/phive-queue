@@ -117,7 +117,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
             'float'     => [1.5],
             'string'    => ['string'],
             'array'     => [['a','r','r','a','y']],
-            'object'    => [new \stdClass()],
+            'object'    => [new \EmptyIterator()],
         ];
     }
 

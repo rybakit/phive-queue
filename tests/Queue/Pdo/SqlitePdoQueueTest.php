@@ -3,22 +3,12 @@
 namespace Phive\Queue\Tests\Queue\Pdo;
 
 use Phive\Queue\Tests\Handler\PdoHandler;
-use Phive\Queue\Tests\Queue\ConcurrencyTrait;
-use Phive\Queue\Tests\Queue\PerformanceTrait;
 
 /**
  * @requires extension pdo_sqlite
  */
 class SqlitePdoQueueTest extends PdoQueueTest
 {
-    use PerformanceTrait;
-    use ConcurrencyTrait;
-
-    public function getUnsupportedItemTypes()
-    {
-        return ['array', 'object'];
-    }
-
     public static function createHandler(array $config)
     {
         // Generate a new db file on every method call to prevent

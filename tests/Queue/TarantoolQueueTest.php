@@ -20,6 +20,16 @@ class TarantoolQueueTest extends QueueTest
     }
 
     /**
+     * @dataProvider provideItemsOfUnsupportedTypes
+     * @expectedException \Exception
+     * @expectedExceptionMessage /(could not be converted to string)|(Array to string conversion|unsupported field type)/
+     */
+    public function testGetErrorOnUnsupportedItemType($item)
+    {
+        $this->queue->push($item);
+    }
+
+    /**
      * @see https://github.com/tarantool/tarantool/issues/336
      */
     public function testItemsOfDifferentLength()
