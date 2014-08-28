@@ -309,7 +309,7 @@ The following table details the various item types supported across queues.
 | [TarantoolQueue](#tarantoolqueue)     |    ✓    |       ✓       |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
 | [PheanstalkQueue](#pheanstalkqueue)   |    ✓    |       ✓       |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
 | [GenericPdoQueue](#genericpdoqueue)   |    ✓    |    ✓ MySQL    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
-| [SqlitePdoQueue](#sqlitepdoqueue)     |    ✓    |       ✓       |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
+| [SqlitePdoQueue](#sqlitepdoqueue)     |    ✓    |               |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
 | [SysVQueue](#sysvqueue)               |    ✓    |       ✓       |    ✓*   |    ✓    |    ✓    |    ✓    |    ✓*   |    ✓*   |
 | [InMemoryQueue](#inmemoryqueue)       |    ✓    |       ✓       |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |
 
