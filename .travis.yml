@@ -93,8 +93,9 @@ before_script:
 
     # PHPUnit
     # https://github.com/sebastianbergmann/phpunit/pull/1289
-    - composer require phpunit/phpunit-mock-objects 2.3.*@dev
-    - composer require phpunit/phpunit:4.3.x-dev
+    #- composer require phpunit/phpunit-mock-objects 2.3.*@dev
+    #- composer require phpunit/phpunit:4.3.x-dev
+    - composer require phpunit/phpunit:~4.2
 
     # Mongofill
     - >
