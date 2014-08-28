@@ -302,16 +302,16 @@ $queue = new InMemoryQueue();
 
 The following table details the various item types supported across queues.
 
-|              Queue/Type               | string  |  null   |  bool   |   int   |  float  |  array  | object  |
-|---------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-| [MongoQueue](#mongoqueue)             |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |
-| [RedisQueue](#redisqueue)             |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓*   |    ✓*   |
-| [TarantoolQueue](#tarantoolqueue)     |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
-| [PheanstalkQueue](#pheanstalkqueue)   |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
-| [GenericPdoQueue](#genericpdoqueue)   |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
-| [SqlitePdoQueue](#sqlitepdoqueue)     |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
-| [SysVQueue](#sysvqueue)               |    ✓    |    ✓*   |    ✓    |    ✓    |    ✓    |    ✓*   |    ✓*   |
-| [InMemoryQueue](#inmemoryqueue)       |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |
+|              Queue/Type               | string  | binary string |  null   |  bool   |   int   |  float  |  array  | object  |
+|---------------------------------------|:-------:|:-------------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| [MongoQueue](#mongoqueue)             |    ✓    |               |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |         |
+| [RedisQueue](#redisqueue)             |    ✓    |       ✓       |    ✓    |    ✓    |    ✓    |    ✓    |    ✓*   |    ✓*   |
+| [TarantoolQueue](#tarantoolqueue)     |    ✓    |       ✓       |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
+| [PheanstalkQueue](#pheanstalkqueue)   |    ✓    |       ✓       |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
+| [GenericPdoQueue](#genericpdoqueue)   |    ✓    |    ✓ MySQL    |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
+| [SqlitePdoQueue](#sqlitepdoqueue)     |    ✓    |       ✓       |    ✓    |    ✓    |    ✓    |    ✓    |         |         |
+| [SysVQueue](#sysvqueue)               |    ✓    |       ✓       |    ✓*   |    ✓    |    ✓    |    ✓    |    ✓*   |    ✓*   |
+| [InMemoryQueue](#inmemoryqueue)       |    ✓    |       ✓       |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |    ✓    |
 
 > ✓*  — supported if the serializer is enabled.
 

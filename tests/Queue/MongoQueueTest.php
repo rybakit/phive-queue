@@ -14,17 +14,21 @@ class MongoQueueTest extends QueueTest
 
     public function getUnsupportedItemTypes()
     {
-        return ['object'];
+        return [Types::TYPE_BINARY_STRING, Types::TYPE_OBJECT];
     }
 
     /**
      * @dataProvider provideItemsOfUnsupportedTypes
-     * @expectedException \MongoException
-     * @expectedExceptionMessage zero-length keys are not allowed, did you use $ with double quotes?
+     * @expectedException \Exception
+     * @expectedExceptionMessage /(zero-length keys are not allowed)|(non-utf8 string)|(Objects are not identical)/
      */
-    public function testGetErrorOnUnsupportedItemType($item)
+    public function testUnsupportedItemType($item, $type)
     {
         $this->queue->push($item);
+
+        if (Types::TYPE_OBJECT === $type && $item !== $this->queue->pop()) {
+            throw new \Exception('Objects are not identical');
+        }
     }
 
     public static function createHandler(array $config)

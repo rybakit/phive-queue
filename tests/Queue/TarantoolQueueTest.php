@@ -16,7 +16,7 @@ class TarantoolQueueTest extends QueueTest
 
     public function getUnsupportedItemTypes()
     {
-        return ['array', 'object'];
+        return [Types::TYPE_ARRAY, Types::TYPE_OBJECT];
     }
 
     /**
@@ -24,7 +24,7 @@ class TarantoolQueueTest extends QueueTest
      * @expectedException \Exception
      * @expectedExceptionMessage /(could not be converted to string)|(Array to string conversion|unsupported field type)/
      */
-    public function testGetErrorOnUnsupportedItemType($item)
+    public function testUnsupportedItemType($item)
     {
         $this->queue->push($item);
     }

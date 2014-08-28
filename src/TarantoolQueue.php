@@ -32,7 +32,7 @@ class TarantoolQueue implements Queue
     public function push($item, $eta = null)
     {
         // see https://github.com/tarantool/tarantool/issues/336
-        $item = pack('a9', $item);
+        $item .= '         ';
 
         $this->tarantool->call('queue.put', [
             $this->space,
@@ -67,7 +67,7 @@ class TarantoolQueue implements Queue
             $tuple[0],
         ]);
 
-        return rtrim($tuple[3], "\0");
+        return substr($tuple[3], 0, -9);
     }
 
     /**

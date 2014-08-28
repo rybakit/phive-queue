@@ -102,23 +102,28 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideItemsOfSupportedTypes
      */
-    public function testSupportItemTypeLoose($item)
+    public function testSupportItemType($item, $type)
     {
         $this->queue->push($item);
-        $this->assertEquals($item, $this->queue->pop());
+
+        if (Types::TYPE_BINARY_STRING === $type) {
+            // strict comparison
+            $this->assertSame($item, $this->queue->pop());
+        } else {
+            // loose comparison
+            $this->assertEquals($item, $this->queue->pop());
+        }
     }
 
     public function provideItemsOfVariousTypes()
     {
-        return [
-            'null'      => [null],
-            'bool'      => [true],
-            'int'       => [42],
-            'float'     => [1.5],
-            'string'    => ['string'],
-            'array'     => [['a','r','r','a','y']],
-            'object'    => [$this],
-        ];
+        $data = [];
+
+        foreach (Types::getAll() as $type => $item) {
+            $data[$type] = [$item, $type];
+        }
+
+        return $data;
     }
 
     public function provideItemsOfSupportedTypes()

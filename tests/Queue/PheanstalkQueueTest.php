@@ -13,7 +13,7 @@ class PheanstalkQueueTest extends QueueTest
 
     public function getUnsupportedItemTypes()
     {
-        return ['array', 'object'];
+        return [Types::TYPE_ARRAY, Types::TYPE_OBJECT];
     }
 
     /**
@@ -21,7 +21,7 @@ class PheanstalkQueueTest extends QueueTest
      * @expectedException \PHPUnit_Framework_Error_Warning
      * @expectedExceptionMessage expects parameter 1 to be string
      */
-    public function testGetErrorOnUnsupportedItemType($item)
+    public function testUnsupportedItemType($item)
     {
         $this->queue->push($item);
     }

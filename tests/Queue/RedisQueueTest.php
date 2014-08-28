@@ -18,7 +18,7 @@ class RedisQueueTest extends QueueTest
 
     public function getUnsupportedItemTypes()
     {
-        return ['array', 'object'];
+        return [Types::TYPE_ARRAY, Types::TYPE_OBJECT];
     }
 
     /**
@@ -26,7 +26,7 @@ class RedisQueueTest extends QueueTest
      * @expectedException \PHPUnit_Framework_Error
      * @expectedExceptionMessage /(could not be converted to string)|(Array to string conversion)/
      */
-    public function testGetErrorOnUnsupportedItemType($item)
+    public function testUnsupportedItemType($item)
     {
         $this->queue->push($item);
     }

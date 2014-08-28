@@ -20,7 +20,7 @@ class SysVQueueTest extends QueueTest
 
     public function getUnsupportedItemTypes()
     {
-        return ['null', 'array', 'object'];
+        return [Types::TYPE_NULL, Types::TYPE_ARRAY, Types::TYPE_OBJECT];
     }
 
     /**
@@ -28,7 +28,7 @@ class SysVQueueTest extends QueueTest
      * @expectedException \Phive\Queue\QueueException
      * @expectedExceptionMessage Message parameter must be either a string or a number.
      */
-    public function testGetErrorOnUnsupportedItemType($item)
+    public function testUnsupportedItemType($item)
     {
         @$this->queue->push($item);
     }

@@ -7,6 +7,7 @@ use Phive\Queue\Tests\Handler\PdoHandler;
 use Phive\Queue\Tests\Queue\ConcurrencyTrait;
 use Phive\Queue\Tests\Queue\PerformanceTrait;
 use Phive\Queue\Tests\Queue\QueueTest;
+use Phive\Queue\Tests\Queue\Types;
 use Phive\Queue\Tests\Queue\UtilTrait;
 
 abstract class PdoQueueTest extends QueueTest
@@ -17,17 +18,21 @@ abstract class PdoQueueTest extends QueueTest
 
     public function getUnsupportedItemTypes()
     {
-        return ['array', 'object'];
+        return [Types::TYPE_BINARY_STRING, Types::TYPE_ARRAY, Types::TYPE_OBJECT];
     }
 
     /**
      * @dataProvider provideItemsOfUnsupportedTypes
-     * @expectedException \PHPUnit_Framework_Error
-     * @expectedExceptionMessage PDO::quote() expects parameter 1 to be string
+     * @expectedException \Exception
+     * @expectedExceptionMessage /(expects parameter 1 to be string)|(Binary strings are not identical)/
      */
-    public function testGetErrorOnUnsupportedItemType($item)
+    public function testUnsupportedItemType($item, $type)
     {
         $this->queue->push($item);
+
+        if (Types::TYPE_BINARY_STRING === $type && $item !== $this->queue->pop()) {
+            throw new \Exception('Binary strings are not identical');
+        }
     }
 
     /**
