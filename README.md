@@ -10,7 +10,7 @@ Phive Queue is a time-based scheduling queue with multiple backend support.
 ## Table of contents
 
  * [Installation](#installation)
- * [Usage example](#usageexample)
+ * [Usage example](#usage-example)
  * [Queues](#queues)
     * [MongoQueue](#mongoqueue)
     * [RedisQueue](#redisqueue)
@@ -20,7 +20,7 @@ Phive Queue is a time-based scheduling queue with multiple backend support.
     * [SqlitePdoQueue](#sqlitepdoqueue)
     * [SysVQueue](#sysvqueue)
     * [InMemoryQueue](#inmemoryqueue)
- * [Item types](#itemtypes)
+ * [Item types](#item-types)
  * [Exceptions](#exceptions)
  * [Tests](#tests)
     * [Performance](#performance)
