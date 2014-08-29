@@ -29,4 +29,36 @@ trait UtilTrait
 
         return $queue->$method();
     }
+
+    public function provideItemsOfVariousTypes()
+    {
+        $data = [];
+
+        foreach (Types::getAll() as $type => $item) {
+            $data[$type] = [$item, $type];
+        }
+
+        return $data;
+    }
+
+    public function provideItemsOfSupportedTypes()
+    {
+        return array_diff_key(
+            $this->provideItemsOfVariousTypes(),
+            array_fill_keys($this->getUnsupportedItemTypes(), false)
+        );
+    }
+
+    public function provideItemsOfUnsupportedTypes()
+    {
+        return array_intersect_key(
+            $this->provideItemsOfVariousTypes(),
+            array_fill_keys($this->getUnsupportedItemTypes(), false)
+        );
+    }
+
+    protected function getUnsupportedItemTypes()
+    {
+        return [];
+    }
 }

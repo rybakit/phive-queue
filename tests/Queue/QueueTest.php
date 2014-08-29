@@ -8,6 +8,8 @@ use Phive\Queue\Tests as t;
 
 abstract class QueueTest extends \PHPUnit_Framework_TestCase
 {
+    use UtilTrait;
+
     /**
      * @var Queue
      */
@@ -113,38 +115,6 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
             // loose comparison
             $this->assertEquals($item, $this->queue->pop());
         }
-    }
-
-    public function provideItemsOfVariousTypes()
-    {
-        $data = [];
-
-        foreach (Types::getAll() as $type => $item) {
-            $data[$type] = [$item, $type];
-        }
-
-        return $data;
-    }
-
-    public function provideItemsOfSupportedTypes()
-    {
-        return array_diff_key(
-            $this->provideItemsOfVariousTypes(),
-            array_fill_keys($this->getUnsupportedItemTypes(), false)
-        );
-    }
-
-    public function provideItemsOfUnsupportedTypes()
-    {
-        return array_intersect_key(
-            $this->provideItemsOfVariousTypes(),
-            array_fill_keys($this->getUnsupportedItemTypes(), false)
-        );
-    }
-
-    public function getUnsupportedItemTypes()
-    {
-        return [];
     }
 
     protected function assertNoItemIsAvailable(Queue $queue)

@@ -14,9 +14,8 @@ class RedisQueueTest extends QueueTest
 {
     use PerformanceTrait;
     use ConcurrencyTrait;
-    use UtilTrait;
 
-    public function getUnsupportedItemTypes()
+    protected function getUnsupportedItemTypes()
     {
         return [Types::TYPE_ARRAY, Types::TYPE_OBJECT];
     }

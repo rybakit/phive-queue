@@ -16,9 +16,8 @@ class SysVQueueTest extends QueueTest
         PerformanceTrait::testPushPopPerformance as baseTestPushPopPerformance;
     }
     use ConcurrencyTrait;
-    use UtilTrait;
 
-    public function getUnsupportedItemTypes()
+    protected function getUnsupportedItemTypes()
     {
         return [Types::TYPE_NULL, Types::TYPE_ARRAY, Types::TYPE_OBJECT];
     }

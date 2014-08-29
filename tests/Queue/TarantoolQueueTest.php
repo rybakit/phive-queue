@@ -14,7 +14,7 @@ class TarantoolQueueTest extends QueueTest
 
     protected $supportsExpiredEta = false;
 
-    public function getUnsupportedItemTypes()
+    protected function getUnsupportedItemTypes()
     {
         return [Types::TYPE_ARRAY, Types::TYPE_OBJECT];
     }

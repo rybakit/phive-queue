@@ -12,7 +12,7 @@ class MongoQueueTest extends QueueTest
     use PerformanceTrait;
     use ConcurrencyTrait;
 
-    public function getUnsupportedItemTypes()
+    protected function getUnsupportedItemTypes()
     {
         return [Types::TYPE_BINARY_STRING, Types::TYPE_OBJECT];
     }

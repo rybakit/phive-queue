@@ -8,9 +8,11 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
 {
     use UtilTrait;
 
-    public function testPush()
+    /**
+     * @dataProvider provideItemsOfSupportedTypes
+     */
+    public function testPush($item)
     {
-        $item = (object) ['foo' => 'bar'];
         $serializedItem = null;
 
         $mock = $this->getQueueMock();
