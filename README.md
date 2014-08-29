@@ -7,6 +7,27 @@ Phive Queue
 Phive Queue is a time-based scheduling queue with multiple backend support.
 
 
+## Table of contents
+
+[Installation](#installation)
+[Usage example](#usageexample)
+[Queues](#queues)
+  * [MongoQueue](#mongoqueue)
+  * [RedisQueue](#redisqueue)
+  * [TarantoolQueue](#tarantoolqueue)
+  * [PheanstalkQueue](#pheanstalkqueue)
+  * [GenericPdoQueue](#genericpdoqueue)
+  * [SqlitePdoQueue](#sqlitepdoqueue)
+  * [SysVQueue](#sysvqueue)
+  * [InMemoryQueue](#inmemoryqueue)
+[Item types](#itemtypes)
+[Exceptions](#exceptions)
+[Tests](#tests)
+  * [Performance](#performance)
+  * [Concurrency](#concurrency)
+[License](#license)
+
+
 ## Installation
 
 The recommended way to install Phive Queue is through [Composer](http://getcomposer.org):
@@ -58,14 +79,14 @@ $queue->clear();
 
 Currently, there are the following queues available:
 
-* [MongoQueue](#mongoqueue)
-* [RedisQueue](#redisqueue)
-* [TarantoolQueue](#tarantoolqueue)
-* [PheanstalkQueue](#pheanstalkqueue)
-* [GenericPdoQueue](#genericpdoqueue)
-* [SqlitePdoQueue](#sqlitepdoqueue)
-* [SysVQueue](#sysvqueue)
-* [InMemoryQueue](#inmemoryqueue)
+ * [MongoQueue](#mongoqueue)
+ * [RedisQueue](#redisqueue)
+ * [TarantoolQueue](#tarantoolqueue)
+ * [PheanstalkQueue](#pheanstalkqueue)
+ * [GenericPdoQueue](#genericpdoqueue)
+ * [SqlitePdoQueue](#sqlitepdoqueue)
+ * [SysVQueue](#sysvqueue)
+ * [InMemoryQueue](#inmemoryqueue)
 
 #### MongoQueue
 
@@ -298,7 +319,7 @@ $queue = new InMemoryQueue();
 ```
 
 
-## Item Types
+## Item types
 
 The following table details the various item types supported across queues.
 
