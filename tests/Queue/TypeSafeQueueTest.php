@@ -20,7 +20,7 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
             ->with($this->callback(function ($subject) use (&$serializedItem) {
                 $serializedItem = $subject;
 
-                return is_string($subject) && !preg_match('/[\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f]/', $subject);
+                return is_string($subject) && ctype_print($subject);
             }));
 
         $queue = new TypeSafeQueue($mock);
