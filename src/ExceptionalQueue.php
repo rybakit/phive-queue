@@ -11,11 +11,6 @@ class ExceptionalQueue implements Queue
         $this->queue = $queue;
     }
 
-    public function getInnerQueue()
-    {
-        return $this->queue;
-    }
-
     /**
      * {@inheritdoc}
      */

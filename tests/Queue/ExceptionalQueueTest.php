@@ -9,14 +9,6 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
 {
     use UtilTrait;
 
-    public function testGetInnerQueue()
-    {
-        $mock = $this->getQueueMock();
-        $queue = new ExceptionalQueue($mock);
-
-        $this->assertEquals($mock, $queue->getInnerQueue());
-    }
-
     /**
      * @dataProvider provideQueueInterfaceMethods
      */
