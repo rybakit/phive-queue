@@ -4,6 +4,9 @@ namespace Phive\Queue;
 
 class ExceptionalQueue implements Queue
 {
+    /**
+     * @var Queue
+     */
     private $queue;
 
     public function __construct(Queue $queue)
