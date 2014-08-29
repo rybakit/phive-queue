@@ -336,8 +336,8 @@ The following table details the various item types supported across queues.
 
 > ✓*  — supported if the serializer is enabled.
 
-Have in mind that some queues throw exceptions, while others just trigger PHP errors, warnings, or notices
-when pushing an item of an invalid type. It's your responsibility to handle such errors.
+Have in mind that some queues throw exceptions, others trigger catchable fatal errors, and others just trigger warnings
+and internally convert items to a string (or an array). It's your responsibility to handle such situations.
 
 
 ## Exceptions
