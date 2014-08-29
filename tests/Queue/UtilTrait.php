@@ -6,6 +6,9 @@ use Phive\Queue\Queue;
 
 trait UtilTrait
 {
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     public function getQueueMock()
     {
         return $this->getMock('Phive\Queue\Queue');
