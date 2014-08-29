@@ -10,11 +10,6 @@ use Phive\Queue\Tests\Queue\Types;
  */
 class MysqlPdoQueueTest extends PdoQueueTest
 {
-    public function getUnsupportedItemTypes()
-    {
-        return [Types::TYPE_ARRAY, Types::TYPE_OBJECT];
-    }
-
     public static function createHandler(array $config)
     {
         return new PdoHandler([
