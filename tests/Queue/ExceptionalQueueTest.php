@@ -9,43 +9,46 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
 {
     use UtilTrait;
 
+    protected $mock;
+    protected $queue;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->mock = $this->getQueueMock();
+        $this->queue = new ExceptionalQueue($this->mock);
+    }
+
     public function testPush()
     {
         $item = 'foo';
 
-        $mock = $this->getQueueMock();
-        $mock->expects($this->once())->method('push')->with($this->equalTo($item));
+        $this->mock->expects($this->once())->method('push')
+            ->with($this->equalTo($item));
 
-        $queue = new ExceptionalQueue($mock);
-        $queue->push($item);
+        $this->queue->push($item);
     }
 
     public function testPop()
     {
-        $mock = $this->getQueueMock();
-        $mock->expects($this->once())->method('pop');
-
-        $queue = new ExceptionalQueue($mock);
-        $queue->pop();
+        $this->mock->expects($this->once())->method('pop');
+        $this->queue->pop();
     }
 
     public function testCount()
     {
-        $mock = $this->getQueueMock();
-        $mock->expects($this->once())->method('count')->will($this->returnValue(42));
+        $this->mock->expects($this->once())->method('count')
+            ->will($this->returnValue(42));
 
-        $queue = new ExceptionalQueue($mock);
-
-        $this->assertSame(42, $queue->count());
+        $this->assertSame(42, $this->queue->count());
     }
 
     public function testClear()
     {
-        $mock = $this->getQueueMock();
-        $mock->expects($this->once())->method('clear');
-
-        $queue = new ExceptionalQueue($mock);
-        $queue->clear();
+        $this->mock->expects($this->once())->method('clear');
+        $this->queue->clear();
     }
 
     /**
@@ -54,13 +57,10 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowOriginalQueueException($method)
     {
-        $mock = $this->getQueueMock();
-        $exception = new QueueException($mock);
-        $mock->expects($this->once())->method($method)->will($this->throwException($exception));
+        $this->mock->expects($this->once())->method($method)
+            ->will($this->throwException(new QueueException($this->mock)));
 
-        $queue = new ExceptionalQueue($mock);
-
-        $this->callQueueMethod($queue, $method);
+        $this->callQueueMethod($this->queue, $method);
     }
 
     /**
@@ -69,12 +69,9 @@ class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowWrappedQueueException($method)
     {
-        $mock = $this->getQueueMock();
-        $exception = new \Exception();
-        $mock->expects($this->once())->method($method)->will($this->throwException($exception));
+        $this->mock->expects($this->once())->method($method)
+            ->will($this->throwException(new \Exception()));
 
-        $queue = new ExceptionalQueue($mock);
-
-        $this->callQueueMethod($queue, $method);
+        $this->callQueueMethod($this->queue, $method);
     }
 }

@@ -8,6 +8,18 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
 {
     use UtilTrait;
 
+    protected $mock;
+    protected $queue;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->mock = $this->getQueueMock();
+        $this->queue = new TypeSafeQueue($this->mock);
+    }
+
     /**
      * @dataProvider provideItemsOfSupportedTypes
      */
@@ -15,16 +27,14 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
     {
         $serializedItem = null;
 
-        $mock = $this->getQueueMock();
-        $mock->expects($this->once())->method('push')
+        $this->mock->expects($this->once())->method('push')
             ->with($this->callback(function ($subject) use (&$serializedItem) {
                 $serializedItem = $subject;
 
                 return is_string($subject) && ctype_print($subject);
             }));
 
-        $queue = new TypeSafeQueue($mock);
-        $queue->push($item);
+        $this->queue->push($item);
 
         return ['original' => $item, 'serialized' => $serializedItem];
     }
@@ -34,31 +44,23 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testPop($data)
     {
-        $mock = $this->getQueueMock();
-        $mock->expects($this->once())->method('pop')
+        $this->mock->expects($this->once())->method('pop')
             ->will($this->returnValue($data['serialized']));
 
-        $queue = new TypeSafeQueue($mock);
-
-        $this->assertEquals($data['original'], $queue->pop());
+        $this->assertEquals($data['original'], $this->queue->pop());
     }
 
     public function testCount()
     {
-        $mock = $this->getQueueMock();
-        $mock->expects($this->once())->method('count')->will($this->returnValue(42));
+        $this->mock->expects($this->once())->method('count')
+            ->will($this->returnValue(42));
 
-        $queue = new TypeSafeQueue($mock);
-
-        $this->assertSame(42, $queue->count());
+        $this->assertSame(42, $this->queue->count());
     }
 
     public function testClear()
     {
-        $mock = $this->getQueueMock();
-        $mock->expects($this->once())->method('clear');
-
-        $queue = new TypeSafeQueue($mock);
-        $queue->clear();
+        $this->mock->expects($this->once())->method('clear');
+        $this->queue->clear();
     }
 }
