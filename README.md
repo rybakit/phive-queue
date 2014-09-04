@@ -417,7 +417,15 @@ $ phpunit
 ```
 
 You may also wish to specify your own default values of some tests (db names, passwords, queue sizes, etc.).
-Just create your own `phpunit.xml` file by copying the [phpunit.xml.dist](phpunit.xml.dist) file
+You can do it by setting environment variables from the command line:
+
+```sh
+$ export PHIVE_PDO_PGSQL_PASSWORD="pgsql_password"
+$ export PHIVE_PDO_MYSQL_PASSWORD="mysql_password"
+$ phpunit
+```
+
+You may also create your own `phpunit.xml` file by copying the [phpunit.xml.dist](phpunit.xml.dist) file
 and customize to your needs.
 
 
@@ -459,7 +467,11 @@ RedisQueue::pop() (delayed)
 ```
 
 You may also change the number of items involved in the test by changing the `PHIVE_PERF_QUEUE_SIZE` value
-in your `phpunit.xml` file.
+in your `phpunit.xml` file or by setting the environment variable from the command line:
+
+```sh
+$ PHIVE_PERF_QUEUE_SIZE=5000 phpunit --group performance
+```
 
 
 #### Concurrency
@@ -482,7 +494,11 @@ This test inserts a number of items (100 by default) into a queue, and then each
 in parallel.
 
 You may also change the number of items involved in the test by changing the `PHIVE_CONCUR_QUEUE_SIZE` value
-in your `phpunit.xml` file.
+in your `phpunit.xml` file or by setting the environment variable from the command line:
+
+```sh
+$ PHIVE_CONCUR_QUEUE_SIZE=500 phpunit --group concurrency
+```
 
 
 ## License
