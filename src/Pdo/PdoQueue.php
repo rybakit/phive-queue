@@ -19,10 +19,6 @@ abstract class PdoQueue implements Queue
 
     public function __construct(\PDO $pdo, $tableName)
     {
-        if (\PDO::ERRMODE_EXCEPTION !== $pdo->getAttribute(\PDO::ATTR_ERRMODE)) {
-            throw new \InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw exceptions.', get_class($this)));
-        }
-
         $supportedDrivers = (array) $this->getSupportedDrivers();
         $driver = $pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
