@@ -48,9 +48,9 @@ class GenericPdoQueue extends PdoQueue
         return $result;
     }
 
-    public function getSupportedDrivers()
+    protected function supportsDriver($driverName)
     {
-        return array_keys(static::$popSqls);
+        return isset(static::$popSqls[$driverName]);
     }
 
     protected function getPopSql()

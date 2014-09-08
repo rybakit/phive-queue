@@ -42,8 +42,8 @@ class SqlitePdoQueue extends PdoQueue
         throw new NoItemAvailableException($this);
     }
 
-    public function getSupportedDrivers()
+    protected function supportsDriver($driverName)
     {
-        return ['sqlite'];
+        return 'sqlite' === $driverName;
     }
 }

@@ -19,11 +19,10 @@ abstract class PdoQueue implements Queue
 
     public function __construct(\PDO $pdo, $tableName)
     {
-        $supportedDrivers = (array) $this->getSupportedDrivers();
-        $driver = $pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $driverName = $pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
-        if (!in_array($driver, $supportedDrivers, true)) {
-            throw new \InvalidArgumentException(sprintf('PDO driver "%s" is unsupported by "%s".', $driver, get_class($this)));
+        if (!$this->supportsDriver($driverName)) {
+            throw new \InvalidArgumentException(sprintf('PDO driver "%s" is unsupported by "%s".', $driverName, get_class($this)));
         }
 
         $this->pdo = $pdo;
@@ -65,7 +64,9 @@ abstract class PdoQueue implements Queue
     }
 
     /**
-     * @return array
+     * @param string $driverName
+     *
+     * @return bool
      */
-    abstract public function getSupportedDrivers();
+    abstract protected function supportsDriver($driverName);
 }
