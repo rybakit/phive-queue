@@ -58,7 +58,7 @@ abstract class PdoQueueTest extends QueueTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage /PDO driver ".+?" is unsupported/
+     * @expectedExceptionMessage PDO driver "unsupported_driver" is unsupported
      */
     public function testThrowExceptionOnUnsupportedDriver()
     {
