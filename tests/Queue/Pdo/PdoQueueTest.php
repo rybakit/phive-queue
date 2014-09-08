@@ -58,6 +58,7 @@ abstract class PdoQueueTest extends QueueTest
 
     /**
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage /PDO driver ".+?" is unsupported/
      */
     public function testThrowExceptionOnUnsupportedDriver()
     {
@@ -68,28 +69,5 @@ abstract class PdoQueueTest extends QueueTest
         $class = $handler->getQueueClass();
 
         new $class($pdo, $handler->getOption('table_name'));
-    }
-
-    /**
-     * @dataProvider provideUnsupportedErrorModes
-     * @expectedException \InvalidArgumentException
-     */
-    public function testThrowExceptionOnUnsupportedErrorMode($errorMode)
-    {
-        $pdo = new MockPdo();
-        $pdo->errorMode = $errorMode;
-
-        $handler = self::getHandler();
-        $class = $handler->getQueueClass();
-
-        new $class($pdo, $handler->getOption('table_name'));
-    }
-
-    public function provideUnsupportedErrorModes()
-    {
-        return [
-            [\PDO::ERRMODE_SILENT],
-            [\PDO::ERRMODE_WARNING],
-        ];
     }
 }
