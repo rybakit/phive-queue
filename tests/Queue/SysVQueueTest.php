@@ -25,7 +25,7 @@ class SysVQueueTest extends QueueTest
     /**
      * @dataProvider provideItemsOfUnsupportedTypes
      * @expectedException \Phive\Queue\QueueException
-     * @expectedExceptionMessage Message parameter must be either a string or a number.
+     * @expectedExceptionMessage /^Message parameter must be either a string or a number\./
      */
     public function testUnsupportedItemType($item)
     {

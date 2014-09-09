@@ -117,7 +117,7 @@ class SysVQueue implements Queue
 
         $error = error_get_last();
         if ($error && 0 === strpos($error['message'], 'msg_')) {
-            return preg_replace('/^msg_[^(]+?\(\)\:\s*/', '', $error['message']);
+            return preg_replace('/^msg_[^:]+?\:\s/', '', $error['message']);
         }
 
         return 'Unknown error.';
