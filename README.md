@@ -181,24 +181,24 @@ The `PheanstalkQueue` requires the [Pheanstalk](https://github.com/pda/pheanstal
 library ([Beanstalk](http://kr.github.io/beanstalkd) client) to be installed:
 
 ```sh
-$ composer require pda/pheanstalk:~2.1
+$ composer require pda/pheanstalk:~3.0
 ```
 
 ##### Constructor
 
 ```php
-public PheanstalkQueue::__construct(Pheanstalk_Pheanstalk $pheanstalk, string $tubeName)
+public PheanstalkQueue::__construct(Pheanstalk\PheanstalkInterface $pheanstalk, string $tubeName)
 ```
 
 Parameters:
 
-> <b>pheanstalk</b> The Pheanstalk_Pheanstalk instance<br>
+> <b>pheanstalk</b> The Pheanstalk\PheanstalkInterface instance<br>
 > <b>tubeName</b>   The tube name<br>
 
 ##### Example
 
 ```php
-use Pheanstalk_Pheanstalk as Pheanstalk;
+use Pheanstalk\Pheanstalk;
 use Phive\Queue\PheanstalkQueue;
 
 $pheanstalk = new Pheanstalk('127.0.0.1');

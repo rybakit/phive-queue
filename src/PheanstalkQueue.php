@@ -2,13 +2,13 @@
 
 namespace Phive\Queue;
 
-use Pheanstalk_Exception_ServerException as ServerException;
-use Pheanstalk_PheanstalkInterface as Pheanstalk;
+use Pheanstalk\Exception\ServerException;
+use Pheanstalk\PheanstalkInterface;
 
 class PheanstalkQueue implements Queue
 {
     /**
-     * @var Pheanstalk
+     * @var PheanstalkInterface
      */
     private $pheanstalk;
 
@@ -17,7 +17,7 @@ class PheanstalkQueue implements Queue
      */
     private $tubeName;
 
-    public function __construct(Pheanstalk $pheanstalk, $tubeName)
+    public function __construct(PheanstalkInterface $pheanstalk, $tubeName)
     {
         $this->pheanstalk = $pheanstalk;
         $this->tubeName = $tubeName;
@@ -31,7 +31,7 @@ class PheanstalkQueue implements Queue
         $this->pheanstalk->putInTube(
             $this->tubeName,
             $item,
-            Pheanstalk::DEFAULT_PRIORITY,
+            PheanstalkInterface::DEFAULT_PRIORITY,
             calc_delay($eta)
         );
     }
