@@ -36,12 +36,7 @@ class RedisQueueTest extends QueueTest
      */
     public function testSupportItemTypeWithSerializerLoose($item)
     {
-        $handler = self::getHandler();
-
-        $redis = new \Redis();
-        $redis->connect($handler->getOption('host'), $handler->getOption('port'));
-        $redis->setOption(\Redis::OPT_PREFIX, $handler->getOption('prefix'));
-
+        $redis = self::getHandler()->createRedis();
         $queue = new RedisQueue($redis);
 
         $serializers = [\Redis::SERIALIZER_PHP];
