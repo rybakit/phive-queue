@@ -44,6 +44,7 @@
         <env name="PHIVE_CONCUR_QUEUE_SIZE" value="100" />
 
         <env name="PHIVE_PERF_QUEUE_SIZE" value="1000" />
+        <env name="PHIVE_PERF_ITEM_LENGTH" value="128" />
     </php>
 
     <testsuites>

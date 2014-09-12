@@ -4,17 +4,15 @@ namespace Phive\Queue\Tests\Queue;
 
 trait PerformanceTrait
 {
-    protected static $performanceItemLength = 16;
-
     /**
      * @group performance
      * @dataProvider providePerformancePopDelay
      */
     public function testPushPopPerformance($delay)
     {
-        $queueSize = $this->getPerformanceQueueSize();
+        $queueSize = static::getPerformanceQueueSize();
         $queueName = preg_replace('~^'.preg_quote(__NAMESPACE__).'\\\|Test$~', '', get_class($this));
-        $item = str_repeat('x', static::$performanceItemLength);
+        $item = str_repeat('x', static::getPerformanceItemLength());
 
         printf("\n%s::push()%s\n", $queueName, $delay ? ' (delayed)' : '');
 
@@ -60,8 +58,13 @@ trait PerformanceTrait
         printf("   Time taken for test:   %01.3f [sec]\n", $runtime);
     }
 
-    protected function getPerformanceQueueSize()
+    protected static function getPerformanceQueueSize()
     {
         return (int) getenv('PHIVE_PERF_QUEUE_SIZE');
+    }
+
+    protected static function getPerformanceItemLength()
+    {
+        return (int) getenv('PHIVE_PERF_ITEM_LENGTH');
     }
 }
