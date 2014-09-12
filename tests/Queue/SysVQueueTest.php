@@ -68,6 +68,33 @@ class SysVQueueTest extends QueueTest
         $this->fail();
     }
 
+    /**
+     * @requires uopz
+     * @dataProvider provideQueueInterfaceMethods
+     */
+    public function testThrowExceptionOnInabilityToCreateResource($method)
+    {
+        uopz_backup('msg_get_queue');
+        uopz_function('msg_get_queue', function () { return false; });
+
+        $failed = true;
+
+        try {
+            // suppress notices/warnings triggered by msg_* functions
+            // to avoid a PHPUnit_Framework_Error_Notice exception be thrown
+            @$this->callQueueMethod($this->queue, $method);
+        } catch (NoItemAvailableException $e) {
+        } catch (QueueException $e) {
+            $failed = false;
+        }
+
+        uopz_restore('msg_get_queue');
+
+        if ($failed) {
+            $this->fail();
+        }
+    }
+
     public function testSetPermissions()
     {
         $handler = self::getHandler();
