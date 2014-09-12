@@ -69,7 +69,7 @@ class SysVQueueTest extends QueueTest
     }
 
     /**
-     * @requires uopz
+     * @requires extension uopz
      * @dataProvider provideQueueInterfaceMethods
      */
     public function testThrowExceptionOnInabilityToCreateResource($method)
@@ -77,7 +77,7 @@ class SysVQueueTest extends QueueTest
         uopz_backup('msg_get_queue');
         uopz_function('msg_get_queue', function () { return false; });
 
-        $failed = true;
+        $passed = false;
 
         try {
             // suppress notices/warnings triggered by msg_* functions
@@ -85,12 +85,13 @@ class SysVQueueTest extends QueueTest
             @$this->callQueueMethod($this->queue, $method);
         } catch (NoItemAvailableException $e) {
         } catch (QueueException $e) {
-            $failed = false;
+            $this->assertSame('Failed to create/attach to the queue.', $e->getMessage());
+            $passed = true;
         }
 
         uopz_restore('msg_get_queue');
 
-        if ($failed) {
+        if (!$passed) {
             $this->fail();
         }
     }
