@@ -28,10 +28,17 @@ class RedisHandler extends Handler
         }
     }
 
+    public function createRedis()
+    {
+        $redis = new \Redis();
+        $redis->connect($this->getOption('host'), $this->getOption('port'));
+        $redis->setOption(\Redis::OPT_PREFIX, $this->getOption('prefix'));
+
+        return $redis;
+    }
+
     protected function configure()
     {
-        $this->redis = new \Redis();
-        $this->redis->connect($this->getOption('host'), $this->getOption('port'));
-        $this->redis->setOption(\Redis::OPT_PREFIX, $this->getOption('prefix'));
+        $this->redis = $this->createRedis();
     }
 }
