@@ -101,9 +101,9 @@ class SysVQueueTest extends QueueTest
 
     /**
      * @group performance
-     * @dataProvider providePerformanceData
+     * @dataProvider providePerformancePopDelay
      */
-    public function testPushPopPerformance($benchmarkMethod, $delay)
+    public function testPushPopPerformance($delay)
     {
         exec('sysctl kernel.msgmnb 2> /dev/null', $output);
 
@@ -123,7 +123,7 @@ class SysVQueueTest extends QueueTest
             ));
         }
 
-        self::baseTestPushPopPerformance($benchmarkMethod, $delay);
+        self::baseTestPushPopPerformance($delay);
     }
 
     public static function createHandler(array $config)
