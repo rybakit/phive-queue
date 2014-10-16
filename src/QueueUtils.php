@@ -2,7 +2,7 @@
 
 namespace Phive\Queue;
 
-class QueueUtils
+abstract class QueueUtils
 {
     /**
      * @param mixed $eta

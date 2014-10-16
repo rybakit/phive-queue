@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests;
 
-class TimeUtils
+abstract class TimeUtils
 {
     public static function setTime($timestamp)
     {
