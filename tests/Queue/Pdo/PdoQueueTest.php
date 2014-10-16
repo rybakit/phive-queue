@@ -23,15 +23,15 @@ abstract class PdoQueueTest extends QueueTest
 
     /**
      * @dataProvider provideItemsOfUnsupportedTypes
-     * @expectedException \Exception
-     * @expectedExceptionMessage /(expects parameter 1 to be string)|(Binary strings are not identical)/
+     * @expectedException PHPUnit_Framework_Exception
+     * @expectedExceptionMessageRegExp /expects parameter 1 to be string|Binary strings are not identical/
      */
     public function testUnsupportedItemType($item, $type)
     {
         $this->queue->push($item);
 
         if (Types::TYPE_BINARY_STRING === $type && $item !== $this->queue->pop()) {
-            throw new \Exception('Binary strings are not identical');
+            $this->fail('Binary strings are not identical');
         }
     }
 
@@ -57,13 +57,13 @@ abstract class PdoQueueTest extends QueueTest
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage PDO driver "unsupported_driver" is unsupported
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage PDO driver "foobar" is unsupported
      */
     public function testThrowExceptionOnUnsupportedDriver()
     {
         $pdo = new MockPdo();
-        $pdo->driverName = 'unsupported_driver';
+        $pdo->driverName = 'foobar';
 
         $handler = self::getHandler();
         $class = $handler->getQueueClass();

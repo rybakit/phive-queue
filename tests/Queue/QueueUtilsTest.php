@@ -21,7 +21,7 @@ class QueueUtilsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideInvalidEtas
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      * @expectedExceptionMessage The eta parameter is not valid.
      */
     public function testNormalizeEtaThrowsException($eta)

@@ -21,8 +21,8 @@ class TarantoolQueueTest extends QueueTest
 
     /**
      * @dataProvider provideItemsOfUnsupportedTypes
-     * @expectedException \Exception
-     * @expectedExceptionMessage /(could not be converted to string)|(Array to string conversion|unsupported field type)/
+     * @expectedException PHPUnit_Framework_Exception
+     * @expectedExceptionMessageRegExp /could not be converted to string|Array to string conversion|unsupported field type/
      */
     public function testUnsupportedItemType($item)
     {

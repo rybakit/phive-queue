@@ -19,8 +19,8 @@ class MongoQueueTest extends QueueTest
 
     /**
      * @dataProvider provideItemsOfUnsupportedTypes
-     * @expectedException \Exception
-     * @expectedExceptionMessage /(zero-length keys are not allowed)|(non-utf8 string)|(Objects are not identical)/
+     * @expectedException Exception
+     * @expectedExceptionMessageRegExp /zero-length keys are not allowed|non-utf8 string|Objects are not identical/
      */
     public function testUnsupportedItemType($item, $type)
     {
