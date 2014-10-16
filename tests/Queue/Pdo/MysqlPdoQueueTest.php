@@ -3,7 +3,6 @@
 namespace Phive\Queue\Tests\Queue\Pdo;
 
 use Phive\Queue\Tests\Handler\PdoHandler;
-use Phive\Queue\Tests\Queue\Types;
 
 /**
  * @requires extension pdo_mysql
