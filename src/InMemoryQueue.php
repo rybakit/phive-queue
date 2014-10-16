@@ -25,7 +25,7 @@ class InMemoryQueue implements Queue
      */
     public function push($item, $eta = null)
     {
-        $eta = norm_eta($eta);
+        $eta = QueueUtils::normalizeEta($eta);
         $this->queue->insert($item, [-$eta, $this->queueOrder--]);
     }
 

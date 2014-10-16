@@ -4,7 +4,7 @@ namespace Phive\Queue\Tests\Queue;
 
 use Phive\Queue\NoItemAvailableException;
 use Phive\Queue\Queue;
-use Phive\Queue\Tests as t;
+use Phive\Queue\Tests\TimeUtils;
 
 abstract class QueueTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,7 +67,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->queue->push('item', $eta);
         $this->assertNoItemIsAvailable($this->queue);
 
-        t\call_at($eta, function() {
+        TimeUtils::callAt($eta, function() {
             $this->assertEquals('item', $this->queue->pop());
         }, !$this->supportsExpiredEta);
     }

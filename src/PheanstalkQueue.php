@@ -32,7 +32,7 @@ class PheanstalkQueue implements Queue
             $this->tubeName,
             $item,
             PheanstalkInterface::DEFAULT_PRIORITY,
-            calc_delay($eta)
+            QueueUtils::calculateDelay($eta)
         );
     }
 

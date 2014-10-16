@@ -33,11 +33,12 @@ class TarantoolQueue implements Queue
     {
         // see https://github.com/tarantool/tarantool/issues/336
         $item .= '         ';
+        $eta = QueueUtils::calculateDelay($eta);
 
         $this->tarantool->call('queue.put', [
             $this->space,
             $this->tubeName,
-            (string) calc_delay($eta),
+            (string) $eta,
             '0',
             '0',
             '0',

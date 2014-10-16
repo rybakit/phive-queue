@@ -31,18 +31,12 @@
     "autoload": {
         "psr-4": {
             "Phive\\Queue\\": "src/"
-        },
-        "files": [
-            "src/utils.php"
-        ]
+        }
     },
     "autoload-dev" : {
         "psr-4": {
             "Phive\\Queue\\Tests\\": "tests/"
-        },
-        "files": [
-            "tests/utils.php"
-        ]
+        }
     },
     "extra": {
         "branch-alias": {

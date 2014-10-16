@@ -2,30 +2,31 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-use Phive\Queue as q;
+use Phive\Queue\QueueUtils;
 
-class UtilsTest extends \PHPUnit_Framework_TestCase
+class QueueUtilsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideValidEtas
      */
-    public function testNormEta($eta, $timestamp)
+    public function testNormalizeEta($eta, $timestamp)
     {
         if (is_callable($timestamp)) {
             $timestamp = $timestamp();
         }
 
-        $this->assertEquals($timestamp, q\norm_eta($eta));
+        $this->assertEquals($timestamp, QueueUtils::normalizeEta($eta));
 
     }
 
     /**
      * @dataProvider provideInvalidEtas
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The eta parameter is not valid.
      */
-    public function testNormEtaThrowsException($eta)
+    public function testNormalizeEtaThrowsException($eta)
     {
-        q\norm_eta($eta);
+        QueueUtils::normalizeEta($eta);
     }
 
     /**
@@ -33,7 +34,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalcDelay($eta, $_, $delay)
     {
-        $this->assertEquals($delay, q\calc_delay($eta));
+        $this->assertEquals($delay, QueueUtils::calculateDelay($eta));
     }
 
     public function provideValidEtas()
