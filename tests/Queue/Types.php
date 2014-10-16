@@ -2,8 +2,6 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-use Phive\Queue\InMemoryQueue;
-
 class Types
 {
     const TYPE_NULL             = 1;
