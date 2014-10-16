@@ -91,12 +91,6 @@ before_script:
     - mysql -e 'create database phive_tests;'
     - psql -c 'create database phive_tests;' -U postgres
 
-    # PHPUnit
-    # https://github.com/sebastianbergmann/phpunit/pull/1289
-    #- composer require phpunit/phpunit-mock-objects 2.3.*@dev
-    #- composer require phpunit/phpunit:4.3.x-dev
-    - composer require phpunit/phpunit:~4.2
-
     # Mongofill
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION == hhvm* ]]; then
