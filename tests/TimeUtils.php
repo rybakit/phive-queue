@@ -21,13 +21,13 @@ class TimeUtils
         uopz_restore('DateTime', 'getTimestamp');
     }
 
-    public static function callAt($timestamp, \Closure $func, $force_sleep = null)
+    public static function callAt($timestamp, \Closure $func, $forceSleep = null)
     {
         if (!function_exists('uopz_function')) {
-            $force_sleep = true;
+            $forceSleep = true;
         }
 
-        if ($force_sleep) {
+        if ($forceSleep) {
             sleep(-time() + $timestamp);
 
             return $func();
