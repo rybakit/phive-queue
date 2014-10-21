@@ -336,8 +336,8 @@ The following table details the various item types supported across queues.
 
 > ✓*  — supported if the serializer is enabled.
 
-To bypass the limitation of unsupported types you need to convert an item to a non-binary string before pushing it
-to a queue. The library ships with the `TypeSafeQueue` decorator which does that for you:
+To bypass the limitation of unsupported types for the particular queue you could convert an item to a non-binary string
+before pushing it. The library ships with the `TypeSafeQueue` decorator which does that for you:
 
 ```php
 use Phive\Queue\GenericPdoQueue;
