@@ -34,7 +34,7 @@
         <env name="PHIVE_PDO_PGSQL_PASSWORD" value="" />
         <env name="PHIVE_PDO_PGSQL_TABLE_NAME" value="queue" />
 
-        <env name="PHIVE_PDO_MYSQL_DSN" value="mysql:host=127.0.0.1;port=3306;dbname=phive_tests" />
+        <env name="PHIVE_PDO_MYSQL_DSN" value="mysql:host=127.0.0.1;port=3306;dbname=phive_tests;charset=utf8mb4" />
         <env name="PHIVE_PDO_MYSQL_USERNAME" value="root" />
         <env name="PHIVE_PDO_MYSQL_PASSWORD" value="" />
         <env name="PHIVE_PDO_MYSQL_TABLE_NAME" value="queue" />
