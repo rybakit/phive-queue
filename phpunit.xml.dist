@@ -12,6 +12,8 @@
          bootstrap="vendor/autoload.php"
 >
     <php>
+        <ini name="date.timezone" value="UTC" />
+
         <env name="PHIVE_MONGO_SERVER" value="mongodb://127.0.0.1:27017" />
         <env name="PHIVE_MONGO_DB_NAME" value="phive_tests" />
         <env name="PHIVE_MONGO_COLL_NAME" value="queue" />
