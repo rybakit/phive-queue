@@ -8,7 +8,7 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
 {
     use UtilTrait;
 
-    protected $mock;
+    protected $innerQueue;
     protected $queue;
 
     /**
@@ -16,8 +16,8 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->mock = $this->getQueueMock();
-        $this->queue = new TypeSafeQueue($this->mock);
+        $this->innerQueue = $this->getQueueMock();
+        $this->queue = new TypeSafeQueue($this->innerQueue);
     }
 
     /**
@@ -27,7 +27,7 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
     {
         $serializedItem = null;
 
-        $this->mock->expects($this->once())->method('push')
+        $this->innerQueue->expects($this->once())->method('push')
             ->with($this->callback(function ($subject) use (&$serializedItem) {
                 $serializedItem = $subject;
 
@@ -44,7 +44,7 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testPop($data)
     {
-        $this->mock->expects($this->once())->method('pop')
+        $this->innerQueue->expects($this->once())->method('pop')
             ->will($this->returnValue($data['serialized']));
 
         $this->assertEquals($data['original'], $this->queue->pop());
@@ -52,7 +52,7 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testCount()
     {
-        $this->mock->expects($this->once())->method('count')
+        $this->innerQueue->expects($this->once())->method('count')
             ->will($this->returnValue(42));
 
         $this->assertSame(42, $this->queue->count());
@@ -60,7 +60,7 @@ class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testClear()
     {
-        $this->mock->expects($this->once())->method('clear');
+        $this->innerQueue->expects($this->once())->method('clear');
         $this->queue->clear();
     }
 }
