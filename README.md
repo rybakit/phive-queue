@@ -403,7 +403,7 @@ try {
 
 ## Tests
 
-Phive Queue uses [PHPUnit](http://phpunit.de) for unit and acceptance testing.
+Phive Queue uses [PHPUnit](http://phpunit.de) for unit and integration testing.
 In order to run the tests, you'll first need to install the library dependencies using composer:
 
 ```sh
