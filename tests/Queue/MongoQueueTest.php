@@ -5,7 +5,7 @@ namespace Phive\Queue\Tests\Queue;
 use Phive\Queue\Tests\Handler\MongoHandler;
 
 /**
- * @requires extension mongo
+ * @requires function MongoClient::connect
  */
 class MongoQueueTest extends QueueTest
 {

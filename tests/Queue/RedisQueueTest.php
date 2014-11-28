@@ -8,7 +8,7 @@ use Phive\Queue\RedisQueue;
 use Phive\Queue\Tests\Handler\RedisHandler;
 
 /**
- * @requires extension redis
+ * @requires function Redis::connect
  */
 class RedisQueueTest extends QueueTest
 {
