@@ -58,7 +58,7 @@ class SysVQueueTest extends QueueTest
 
         try {
             // suppress notices/warnings triggered by msg_* functions
-            // to avoid a PHPUnit_Framework_Error_Notice exception be thrown
+            // to avoid a PHPUnit_Framework_Error_Notice to be thrown
             @$this->callQueueMethod($this->queue, $method);
         } catch (NoItemAvailableException $e) {
         } catch (QueueException $e) {
@@ -81,7 +81,7 @@ class SysVQueueTest extends QueueTest
 
         try {
             // suppress notices/warnings triggered by msg_* functions
-            // to avoid a PHPUnit_Framework_Error_Notice exception be thrown
+            // to avoid a PHPUnit_Framework_Error_Notice to be thrown
             @$this->callQueueMethod($this->queue, $method);
         } catch (NoItemAvailableException $e) {
         } catch (QueueException $e) {
