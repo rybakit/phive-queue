@@ -36,6 +36,20 @@ before_install:
 
     - sudo apt-get update
 
+    # hphpize
+    # https://github.com/facebook/hhvm/wiki/building-and-installing-hhvm-on-ubuntu-12.04
+    - >
+        bash -c 'if [[ $TRAVIS_PHP_VERSION == hhvm* ]]; then
+        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
+        sudo add-apt-repository -y ppa:mapnik/boost;
+        sudo apt-get update;
+        sudo apt-get install -y gcc-4.8 g++-4.8 hhvm-dev;
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8;
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 40 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6;
+        sudo update-alternatives --set gcc /usr/bin/gcc-4.8;
+        sudo apt-get install libboost1.49-dev libboost-regex1.49-dev libboost-system1.49-dev libboost-program-options1.49-dev libboost-filesystem1.49-dev libboost-thread1.49-dev;
+        fi;'
+
 install:
     # gearman
     - >
@@ -85,6 +99,18 @@ install:
         extension = redis.so\n
         extension = tarantool.so\n
         " >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini;
+        fi;'
+
+    # hhvm-pgsql
+    - >
+        bash -c 'if [[ $TRAVIS_PHP_VERSION == hhvm* ]]; then
+        git clone https://github.com/PocketRent/hhvm-pgsql.git;
+        cd hhvm-pgsql;
+        hphpize;
+        cmake .;
+        make;
+        echo "hhvm.dynamic_extension_path = `pwd`" | sudo tee -a /etc/hhvm/php.ini;
+        echo "hhvm.dynamic_extensions[pgsql] = pgsql.so" | sudo tee -a /etc/hhvm/php.ini;
         fi;'
 
 before_script:
