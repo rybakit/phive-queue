@@ -48,6 +48,13 @@ before_install:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 40 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6;
         sudo update-alternatives --set gcc /usr/bin/gcc-4.8;
         sudo apt-get install libboost1.49-dev libboost-regex1.49-dev libboost-system1.49-dev libboost-program-options1.49-dev libboost-filesystem1.49-dev libboost-thread1.49-dev;
+
+        svn checkout http://google-glog.googlecode.com/svn/trunk/ google-glog;
+        cd google-glog;
+        ./configure --prefix=$CMAKE_PREFIX_PATH;
+        make;
+        sudo make install;
+        cd ..;
         fi;'
 
 install:
