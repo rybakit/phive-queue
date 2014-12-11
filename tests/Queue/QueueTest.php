@@ -67,7 +67,7 @@ abstract class QueueTest extends \PHPUnit_Framework_TestCase
         $this->queue->push('item', $eta);
         $this->assertNoItemIsAvailable($this->queue);
 
-        TimeUtils::callAt($eta, function() {
+        TimeUtils::callAt($eta, function () {
             $this->assertEquals('item', $this->queue->pop());
         }, !$this->supportsExpiredEta);
     }

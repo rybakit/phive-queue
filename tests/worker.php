@@ -6,7 +6,7 @@ $worker = new \GearmanWorker();
 $worker->addServer();
 
 $workerId = uniqid(getmypid().'_', true);
-$worker->addFunction('pop', function(\GearmanJob $job) use ($workerId) {
+$worker->addFunction('pop', function (\GearmanJob $job) use ($workerId) {
     static $i = 0;
 
     $handler = unserialize($job->workload());

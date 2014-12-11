@@ -16,7 +16,6 @@ class QueueUtilsTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals($timestamp, QueueUtils::normalizeEta($eta));
-
     }
 
     /**

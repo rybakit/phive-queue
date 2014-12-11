@@ -20,7 +20,7 @@ trait ConcurrencyTrait
 
         $workerIds = [];
         $poppedItems = [];
-        $client->setCompleteCallback(function(\GearmanTask $task) use (&$workerIds, &$poppedItems) {
+        $client->setCompleteCallback(function (\GearmanTask $task) use (&$workerIds, &$poppedItems) {
             $data = explode(':', $task->data(), 2);
             if (!is_array($data) || 2 !== count($data)) {
                 return;

@@ -7,8 +7,8 @@ interface Queue extends \Countable
     /**
      * Adds an item to the queue.
      *
-     * @param mixed $item   An item to be added.
-     * @param mixed $eta    The earliest time that an item can be popped.
+     * @param mixed $item An item to be added.
+     * @param mixed $eta  The earliest time that an item can be popped.
      */
     public function push($item, $eta = null);
 
