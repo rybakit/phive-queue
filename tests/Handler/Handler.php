@@ -2,6 +2,8 @@
 
 namespace Phive\Queue\Tests\Handler;
 
+use Phive\Queue\Queue;
+
 abstract class Handler implements \Serializable
 {
     /**
@@ -50,6 +52,11 @@ abstract class Handler implements \Serializable
         $this->configure();
     }
 
+    public function getQueueName(Queue $queue)
+    {
+        return get_class($queue);
+    }
+
     public function reset()
     {
     }
@@ -63,7 +70,7 @@ abstract class Handler implements \Serializable
     }
 
     /**
-     * @return \Phive\Queue\Queue
+     * @return Queue
      */
     abstract public function createQueue();
 }

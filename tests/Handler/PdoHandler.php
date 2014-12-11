@@ -2,6 +2,8 @@
 
 namespace Phive\Queue\Tests\Handler;
 
+use Phive\Queue\Queue;
+
 class PdoHandler extends Handler
 {
     /**
@@ -13,6 +15,11 @@ class PdoHandler extends Handler
      * @var string
      */
     private $driverName;
+
+    public function getQueueName(Queue $queue)
+    {
+        return parent::getQueueName($queue).'#'.$this->driverName;
+    }
 
     public function getQueueClass()
     {
@@ -45,11 +52,6 @@ class PdoHandler extends Handler
     public function clear()
     {
         $this->pdo->exec('DELETE FROM '.$this->getOption('table_name'));
-    }
-
-    public function getDriverName()
-    {
-        return $this->driverName;
     }
 
     protected function configure()

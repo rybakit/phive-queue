@@ -2,8 +2,6 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use Phive\Queue\Pdo\GenericPdoQueue;
-
 $worker = new \GearmanWorker();
 $worker->addServer();
 
@@ -13,11 +11,7 @@ $worker->addFunction('pop', function(\GearmanJob $job) use ($workerId) {
 
     $handler = unserialize($job->workload());
     $queue = $handler->createQueue();
-
-    $queueName = get_class($queue);
-    if ($queue instanceof GenericPdoQueue) {
-        $queueName .= '#'.$handler->getDriverName();
-    }
+    $queueName = $handler->getQueueName($queue);
 
     $item = $queue->pop();
 
