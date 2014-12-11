@@ -246,7 +246,7 @@ On top of that PDO error mode must be set to throw exceptions (`PDO::ERRMODE_EXC
 
 SQL file to create the table can be found in the [res/sqlite](res/sqlite) directory.
 
-*Tip:* For performance reasons it's highly recommended to activate [WALL mode](http://www.sqlite.org/wal.html):
+*Tip:* For performance reasons it's highly recommended to activate [WAL mode](http://www.sqlite.org/wal.html):
 
 ```php
 $pdo->exec('PRAGMA journal_mode=WAL');
