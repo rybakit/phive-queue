@@ -12,8 +12,8 @@ use Phive\Queue\Tests\Handler\RedisHandler;
  */
 class RedisQueueTest extends QueueTest
 {
-    use PerformanceTrait;
-    use ConcurrencyTrait;
+    use Performance;
+    use Concurrency;
 
     protected function getUnsupportedItemTypes()
     {
@@ -23,7 +23,7 @@ class RedisQueueTest extends QueueTest
     /**
      * @dataProvider provideItemsOfUnsupportedTypes
      * @expectedException PHPUnit_Framework_Exception
-     * @expectedExceptionMessageRegExp /could not be converted to string|Array to string conversion/
+     * @expectedExceptionMessageRegExp /could not be converted to s tring|Array to string conversion/
      */
     public function testUnsupportedItemType($item)
     {

@@ -2,9 +2,9 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-trait ConcurrencyTrait
+trait Concurrency
 {
-    use PersistenceTrait;
+    use Persistence;
 
     /**
      * @group concurrency

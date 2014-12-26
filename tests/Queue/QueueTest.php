@@ -8,7 +8,7 @@ use Phive\Queue\Tests\TimeUtils;
 
 abstract class QueueTest extends \PHPUnit_Framework_TestCase
 {
-    use UtilTrait;
+    use Util;
 
     /**
      * @var Queue

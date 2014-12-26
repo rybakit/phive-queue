@@ -4,7 +4,7 @@ namespace Phive\Queue\Tests\Queue;
 
 use Phive\Queue\Queue;
 
-trait UtilTrait
+trait Util
 {
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject

@@ -6,7 +6,7 @@ use Phive\Queue\TypeSafeQueue;
 
 class TypeSafeQueueTest extends \PHPUnit_Framework_TestCase
 {
-    use UtilTrait;
+    use Util;
 
     protected $innerQueue;
     protected $queue;

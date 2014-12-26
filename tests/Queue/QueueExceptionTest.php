@@ -6,7 +6,7 @@ use Phive\Queue\QueueException;
 
 class QueueExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    use UtilTrait;
+    use Util;
 
     /**
      * @var \Phive\Queue\Queue

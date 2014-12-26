@@ -12,10 +12,10 @@ use Phive\Queue\Tests\Handler\SysVHandler;
  */
 class SysVQueueTest extends QueueTest
 {
-    use PerformanceTrait {
-        PerformanceTrait::testPushPopPerformance as baseTestPushPopPerformance;
+    use Performance {
+        Performance::testPushPopPerformance as baseTestPushPopPerformance;
     }
-    use ConcurrencyTrait;
+    use Concurrency;
 
     protected function getUnsupportedItemTypes()
     {

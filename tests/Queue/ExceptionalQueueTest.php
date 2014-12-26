@@ -7,7 +7,7 @@ use Phive\Queue\QueueException;
 
 class ExceptionalQueueTest extends \PHPUnit_Framework_TestCase
 {
-    use UtilTrait;
+    use Util;
 
     protected $innerQueue;
     protected $queue;

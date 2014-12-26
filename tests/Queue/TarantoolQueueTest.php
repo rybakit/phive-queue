@@ -9,8 +9,8 @@ use Phive\Queue\Tests\Handler\TarantoolHandler;
  */
 class TarantoolQueueTest extends QueueTest
 {
-    use PerformanceTrait;
-    use ConcurrencyTrait;
+    use Performance;
+    use Concurrency;
 
     protected $supportsExpiredEta = false;
 

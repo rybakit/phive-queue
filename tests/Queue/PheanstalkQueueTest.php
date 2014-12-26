@@ -6,8 +6,8 @@ use Phive\Queue\Tests\Handler\PheanstalkHandler;
 
 class PheanstalkQueueTest extends QueueTest
 {
-    use PerformanceTrait;
-    use ConcurrencyTrait;
+    use Performance;
+    use Concurrency;
 
     protected $supportsExpiredEta = false;
 

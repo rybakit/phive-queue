@@ -9,8 +9,8 @@ use Phive\Queue\Tests\Handler\MongoHandler;
  */
 class MongoQueueTest extends QueueTest
 {
-    use PerformanceTrait;
-    use ConcurrencyTrait;
+    use Performance;
+    use Concurrency;
 
     protected function getUnsupportedItemTypes()
     {

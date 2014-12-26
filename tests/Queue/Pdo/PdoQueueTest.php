@@ -4,17 +4,17 @@ namespace Phive\Queue\Tests\Queue\Pdo;
 
 use Phive\Queue\NoItemAvailableException;
 use Phive\Queue\Tests\Handler\PdoHandler;
-use Phive\Queue\Tests\Queue\ConcurrencyTrait;
-use Phive\Queue\Tests\Queue\PerformanceTrait;
+use Phive\Queue\Tests\Queue\Concurrency;
+use Phive\Queue\Tests\Queue\Performance;
 use Phive\Queue\Tests\Queue\QueueTest;
 use Phive\Queue\Tests\Queue\Types;
-use Phive\Queue\Tests\Queue\UtilTrait;
+use Phive\Queue\Tests\Queue\Util;
 
 abstract class PdoQueueTest extends QueueTest
 {
-    use ConcurrencyTrait;
-    use PerformanceTrait;
-    use UtilTrait;
+    use Concurrency;
+    use Performance;
+    use Util;
 
     public function getUnsupportedItemTypes()
     {

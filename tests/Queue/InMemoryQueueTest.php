@@ -6,7 +6,7 @@ use Phive\Queue\InMemoryQueue;
 
 class InMemoryQueueTest extends QueueTest
 {
-    use PerformanceTrait;
+    use Performance;
 
     public function createQueue()
     {

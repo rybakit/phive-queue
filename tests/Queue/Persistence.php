@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-trait PersistenceTrait
+trait Persistence
 {
     /**
      * @var \Phive\Queue\Tests\Handler\Handler

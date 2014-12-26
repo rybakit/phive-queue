@@ -2,7 +2,7 @@
 
 namespace Phive\Queue\Tests\Queue;
 
-trait PerformanceTrait
+trait Performance
 {
     /**
      * @group performance
