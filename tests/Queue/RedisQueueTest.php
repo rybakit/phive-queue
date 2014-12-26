@@ -23,7 +23,7 @@ class RedisQueueTest extends QueueTest
     /**
      * @dataProvider provideItemsOfUnsupportedTypes
      * @expectedException PHPUnit_Framework_Exception
-     * @expectedExceptionMessageRegExp /could not be converted to s tring|Array to string conversion/
+     * @expectedExceptionMessageRegExp /could not be converted to string|Array to string conversion/
      */
     public function testUnsupportedItemType($item)
     {
