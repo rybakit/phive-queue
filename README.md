@@ -55,7 +55,7 @@ $queue->push('item5', 'next Monday');
 $count = $queue->count(); // 5
 
 // pop items off the queue
-// note that is not guaranteed that the items with the same scheduled time 
+// note that is not guaranteed that the items with the same scheduled time
 // will be received in the same order in which they were added
 $item123 = $queue->pop();
 $item123 = $queue->pop();
@@ -207,8 +207,8 @@ $queue = new PheanstalkQueue($pheanstalk, 'my_tube');
 
 #### GenericPdoQueue
 
-The `GenericPdoQueue` is intended for PDO drivers whose databases support stored procedures/functions (in fact
-all drivers except SQLite).
+The `GenericPdoQueue` is intended for PDO drivers whose databases support stored procedures/functions
+(in fact all drivers except SQLite).
 
 The `GenericPdoQueue` requires [PDO](http://php.net/pdo) and a [PDO driver](http://php.net/manual/en/pdo.drivers.php)
 for a particular database be installed. On top of that PDO error mode must be set to throw
@@ -301,8 +301,8 @@ $queue = new SysVQueue(123456);
 
 #### InMemoryQueue
 
-The `InMemoryQueue` can be useful in cases where the persistence is not needed. It exists only in RAM and therefore
-operates faster than other queues.
+The `InMemoryQueue` can be useful in cases where the persistence is not needed. It exists only in RAM
+and therefore operates faster than other queues.
 
 ##### Constructor
 
@@ -336,8 +336,9 @@ The following table details the various item types supported across queues.
 
 > ✓*  — supported if the serializer is enabled.
 
-To bypass the limitation of unsupported types for the particular queue you could convert an item to a non-binary string
-before pushing it. The library ships with the `TypeSafeQueue` decorator which does that for you:
+To bypass the limitation of unsupported types for the particular queue you could convert an item
+to a non-binary string before pushing it and then back after popping. The library ships with
+the `TypeSafeQueue` decorator which does that for you:
 
 ```php
 use Phive\Queue\GenericPdoQueue;
@@ -353,11 +354,11 @@ $array = $queue->pop(); // ['foo' => 'bar'];
 
 ## Exceptions
 
-Every queue method declared in the [Queue](src/Queue.php) interface will throw an exception if a run-time error occurs at the time
-the method is called.
+Every queue method declared in the [Queue](src/Queue.php) interface will throw an exception
+if a run-time error occurs at the time the method is called.
 
-For example, in the code below, the `push()` call will fail with a `MongoConnectionException` exception in a case
-a remote server unreachable:
+For example, in the code below, the `push()` call will fail with a `MongoConnectionException`
+exception in a case a remote server unreachable:
 
 ```php
 use Phive\Queue\MongoQueue;
@@ -425,8 +426,8 @@ $ export PHIVE_PDO_MYSQL_PASSWORD="mysql_password"
 $ phpunit
 ```
 
-You may also create your own `phpunit.xml` file by copying the [phpunit.xml.dist](phpunit.xml.dist) file
-and customize to your needs.
+You may also create your own `phpunit.xml` file by copying the [phpunit.xml.dist](phpunit.xml.dist)
+file and customize to your needs.
 
 
 #### Performance
@@ -466,8 +467,8 @@ RedisQueue::pop() (delayed)
    Time taken for test:   0.071 [sec]
 ```
 
-You may also change the number of items involved in the test by changing the `PHIVE_PERF_QUEUE_SIZE` value
-in your `phpunit.xml` file or by setting the environment variable from the command line:
+You may also change the number of items involved in the test by changing the `PHIVE_PERF_QUEUE_SIZE`
+value in your `phpunit.xml` file or by setting the environment variable from the command line:
 
 ```sh
 $ PHIVE_PERF_QUEUE_SIZE=5000 phpunit --group performance
@@ -490,11 +491,11 @@ Then run the tests:
 $ phpunit --group concurrency
 ```
 
-This test inserts a number of items (100 by default) into a queue, and then each worker tries to retrieve them
-in parallel.
+This test inserts a number of items (100 by default) into a queue, and then each worker tries
+to retrieve them in parallel.
 
-You may also change the number of items involved in the test by changing the `PHIVE_CONCUR_QUEUE_SIZE` value
-in your `phpunit.xml` file or by setting the environment variable from the command line:
+You may also change the number of items involved in the test by changing the `PHIVE_CONCUR_QUEUE_SIZE`
+value in your `phpunit.xml` file or by setting the environment variable from the command line:
 
 ```sh
 $ PHIVE_CONCUR_QUEUE_SIZE=500 phpunit --group concurrency
