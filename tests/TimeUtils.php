@@ -6,13 +6,12 @@ abstract class TimeUtils
 {
     public static function setTime($timestamp)
     {
-        uopz_function('time', function () use ($timestamp) {
+        $handler = function () use ($timestamp) {
             return $timestamp;
-        });
+        };
 
-        uopz_function('DateTime', 'getTimestamp', function () use ($timestamp) {
-            return $timestamp;
-        });
+        uopz_function('time', $handler);
+        uopz_function('DateTime', 'getTimestamp', $handler);
     }
 
     public static function unsetTime()
