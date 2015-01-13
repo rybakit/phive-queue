@@ -17,7 +17,14 @@ abstract class TimeUtils
         }
 
         self::setTime($timestamp);
-        $result = $func();
+
+        try {
+            $result = $func();
+        } catch (\Exception $e) {
+            self::unsetTime();
+            throw $e;
+        }
+
         self::unsetTime();
 
         return $result;
