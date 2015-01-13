@@ -38,5 +38,4 @@ abstract class TimeUtils
         uopz_restore('time');
         uopz_restore('DateTime', 'getTimestamp');
     }
-
 }
