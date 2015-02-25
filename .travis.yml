@@ -88,9 +88,9 @@ install:
         fi;'
 
     # hhvm-pgsql
+    # http://stackoverflow.com/questions/19386651/how-to-fix-usr-lib-libstdc-so-6-version-glibcxx-3-4-15-not-found/21192519#21192519
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION == hhvm* ]]; then
-        # http://stackoverflow.com/questions/19386651/how-to-fix-usr-lib-libstdc-so-6-version-glibcxx-3-4-15-not-found/21192519#21192519
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
         sudo apt-get update;
         sudo apt-get install libstdc++6-4.7-dev;
