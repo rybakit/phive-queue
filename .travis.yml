@@ -109,7 +109,10 @@ before_script:
         fi;'
 
 script:
-    - phpunit -v --coverage-clover coverage.clover
+    - >
+        bash -c 'if [[ 5.6 == $TRAVIS_PHP_VERSION ]]; then
+            phpunit -v --coverage-clover coverage.clover
+        fi;'
 
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
@@ -124,7 +127,7 @@ after_script:
 
     # code-coverage for scrutinizer-ci
     - >
-        bash -c 'if [[ $TRAVIS_PHP_VERSION == 5.4 ]]; then
+        bash -c 'if [[ -f coverage.clover ]]; then
         wget https://scrutinizer-ci.com/ocular.phar;
         php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
         fi;'
