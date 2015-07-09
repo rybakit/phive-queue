@@ -111,7 +111,9 @@ before_script:
 script:
     - >
         bash -c 'if [[ 5.6 == $TRAVIS_PHP_VERSION ]]; then
-            phpunit --coverage-clover coverage.clover
+            phpunit --coverage-clover coverage.clover;
+        else
+            phpunit;
         fi;'
 
     - >
