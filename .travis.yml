@@ -20,18 +20,18 @@ before_install:
     # gearman
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        sudo apt-get install python-software-properties;
-        sudo add-apt-repository -y ppa:gearman-developers/ppa;
+            sudo apt-get install python-software-properties;
+            sudo add-apt-repository -y ppa:gearman-developers/ppa;
         fi;'
 
     # tarantool (http://stable.tarantool.org/download.html)
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        wget http://tarantool.org/dist/public.key;
-        sudo apt-key add ./public.key;
-        release=`lsb_release -c -s`;
-        echo "deb http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list;
-        echo "deb-src http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list;
+            wget http://tarantool.org/dist/public.key;
+            sudo apt-key add ./public.key;
+            release=`lsb_release -c -s`;
+            echo "deb http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list;
+            echo "deb-src http://tarantool.org/dist/stable/ubuntu/ $release main" | sudo tee -a /etc/apt/sources.list.d/tarantool.list;
         fi;'
 
     - sudo apt-get update
@@ -40,31 +40,31 @@ install:
     # gearman
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        sudo apt-get install gearman-job-server libgearman-dev;
-        pecl install gearman;
-        sudo service gearman-job-server stop;
-        sudo gearmand -d;
+            sudo apt-get install gearman-job-server libgearman-dev;
+            pecl install gearman;
+            sudo service gearman-job-server stop;
+            sudo gearmand -d;
         fi;'
 
     # tarantool-lts
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        sudo apt-get install tarantool-lts tarantool-lts-client;
-        sudo wget https://raw.githubusercontent.com/tarantool/queue/stable/init.lua;
-        sudo wget https://raw.githubusercontent.com/tarantool/queue/stable/tarantool.cfg -O /etc/tarantool/instances.enabled/queue.cfg && echo "script_dir = "`pwd` | sudo tee -a /etc/tarantool/instances.enabled/queue.cfg;
-        sudo service tarantool-lts restart;
+            sudo apt-get install tarantool-lts tarantool-lts-client;
+            sudo wget https://raw.githubusercontent.com/tarantool/queue/stable/init.lua;
+            sudo wget https://raw.githubusercontent.com/tarantool/queue/stable/tarantool.cfg -O /etc/tarantool/instances.enabled/queue.cfg && echo "script_dir = "`pwd` | sudo tee -a /etc/tarantool/instances.enabled/queue.cfg;
+            sudo service tarantool-lts restart;
         fi;'
 
     #tarantool-php
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        git clone https://github.com/tarantool/tarantool-php.git;
-        cd ./tarantool-php;
-        git checkout stable;
-        phpize;
-        ./configure;
-        make;
-        sudo make install;
+            git clone https://github.com/tarantool/tarantool-php.git;
+            cd ./tarantool-php;
+            git checkout stable;
+            phpize;
+            ./configure;
+            make;
+            sudo make install;
         fi;'
 
     # beanstalk
@@ -74,17 +74,17 @@ install:
     # uopz
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        pecl install uopz;
+            pecl install uopz;
         fi;'
 
     # php.ini
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        printf "
-        extension = mongo.so\n
-        extension = redis.so\n
-        extension = tarantool.so\n
-        " >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini;
+            printf "
+            extension = mongo.so\n
+            extension = redis.so\n
+            extension = tarantool.so\n
+            " >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/php.ini;
         fi;'
 
 before_script:
@@ -94,7 +94,7 @@ before_script:
     # Mongofill
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION == hhvm* ]]; then
-        composer require mongofill/mongofill:dev-master;
+            composer require mongofill/mongofill:dev-master;
         fi;'
 
     - composer install
@@ -102,32 +102,32 @@ before_script:
     # gearman workers
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        (php tests/worker.php >> worker.log &);
-        (php tests/worker.php >> worker.log &);
-        (php tests/worker.php >> worker.log &);
-        (php tests/worker.php >> worker.log &);
+            (php tests/worker.php >> worker.log &);
+            (php tests/worker.php >> worker.log &);
+            (php tests/worker.php >> worker.log &);
+            (php tests/worker.php >> worker.log &);
         fi;'
 
 script:
     - >
         bash -c 'if [[ 5.6 == $TRAVIS_PHP_VERSION ]]; then
-            phpunit -v --coverage-clover coverage.clover
+            phpunit --coverage-clover coverage.clover
         fi;'
 
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        phpunit --group concurrency;
+            phpunit --group concurrency;
         fi;'
 
 after_script:
     - >
         bash -c 'if [[ $TRAVIS_PHP_VERSION != hhvm* ]]; then
-        cat worker.log;
+            cat worker.log;
         fi;'
 
     # code-coverage for scrutinizer-ci
     - >
         bash -c 'if [[ -f coverage.clover ]]; then
-        wget https://scrutinizer-ci.com/ocular.phar;
-        php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
+            wget https://scrutinizer-ci.com/ocular.phar;
+            php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
         fi;'
