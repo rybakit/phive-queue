@@ -108,7 +108,7 @@ before_script:
 
 script:
     - >
-        if [[ 5.6 == $TRAVIS_PHP_VERSION ]]; then
+        if [[ $TRAVIS_PHP_VERSION == 5.6 ]]; then
             phpunit --coverage-clover coverage.clover;
         else
             phpunit;
