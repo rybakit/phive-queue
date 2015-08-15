@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Tarantool Queue package.
+ * This file is part of the Phive Queue package.
  *
  * (c) Eugene Leonovich <gen.work@gmail.com>
  *
